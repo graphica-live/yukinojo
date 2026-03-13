@@ -27,14 +27,14 @@ const AboutSection = () => {
     {
       icon: <Code size={32} weight="duotone" className="text-primary" />,
       title: "SE経歴",
-      subtitle: "IT業界で12年",
-      description: "インフラシステムの開発、PM、フリーランスを経験。プロジェクトマネージャ、情報処理安全確保支援士などの資格を保有しています。",
+      subtitle: "IT業界で10年以上",
+      description: "インフラシステムの開発、PM、フリーランスを経験。プロジェクトマネージャ、情報セキュリティスペシャリストなどの資格を保有しています。",
     },
     {
       icon: <Martini size={32} weight="duotone" className="text-accent" />,
       title: "ホスト経験",
-      subtitle: "歌舞伎町で4年",
-      description: "リアルな接客のプロフェッショナル。「club yellow」にてイレギュラー出勤中。ネットの世界にも極上のホスピタリティを。",
+      subtitle: "歌舞伎町",
+      description: "「club yellow」にてリクエスト出勤中。",
     },
     {
       icon: <MicrophoneStage size={32} weight="duotone" className="text-secondary" />,

@@ -14,7 +14,7 @@ const branchCards = [
   },
   {
     title: 'TikRing',
-    description: '透過フレームをアップロードして、着せ替えURLを発行する',
+    description: '透過フレームをアップロードして、リスナー向け着せ替えURLを発行する',
     href: 'https://tikting.graphica-produce.com',
     isExternal: true,
     accent: 'from-cyan-400/75 to-rose-500/70',

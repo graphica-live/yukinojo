@@ -90,22 +90,13 @@ const HeroSection = () => {
           ))}
         </motion.h1>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-xl md:text-2xl font-light text-white/80 mb-6 uppercase tracking-[0.2em]"
-        >
-          TikTok ライバー
-        </motion.h2>
-
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.8 }}
           className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto font-light leading-relaxed"
         >
-          High Quality <span className="text-primary italic">×</span> Entertainment
+          High Quality <span className="text-primary italic">×</span> Entertainment <span className="text-primary italic">×</span> Engineering
           <br />
           <span className="text-sm mt-2 block">1日の始まりと終わりの場所に。</span>
         </motion.p>
