@@ -20,11 +20,11 @@ const HeroSection = () => {
   };
 
   const letter: Variants = {
-    hidden: { opacity: 0, y: 50, rotateX: 90 },
+    hidden: { opacity: 0, y: 40, scale: 0.92 },
     visible: {
       opacity: 1,
       y: 0,
-      rotateX: 0,
+      scale: 1,
       transition: { type: 'spring', damping: 12, stiffness: 200 },
     },
   };
@@ -78,7 +78,7 @@ const HeroSection = () => {
             <motion.span
               key={index}
               variants={letter}
-              className={`inline-block ${char === 'ょ' || char === 'ー' ? 'text-gradient' : ''}`}
+              className={`inline-block ${char === 'ょ' || char === 'ー' ? 'text-gradient glyph-safe' : ''}`}
             >
               {char}
             </motion.span>

@@ -29,6 +29,16 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+
+  .glyph-safe {
+    display: inline-block;
+    line-height: 1;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
