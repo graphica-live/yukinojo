@@ -67,7 +67,7 @@ const HeroSection = () => {
           <motion.img 
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            src="/images/hero-profile.jpg" 
+            src="/images/hero-profile.webp" 
             alt="Yukinojo Profile" 
             className="w-full h-full object-cover rounded-full border-4 border-background"
           />
