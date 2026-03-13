@@ -14,8 +14,8 @@ export default {
         accent: '#00e5ff',  // Cyan for neon touches
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Outfit', 'sans-serif'],
+        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+        display: ['Outfit', 'Noto Sans JP', 'sans-serif'],
       },
       animation: {
         'gradient-x': 'gradient-x 15s ease infinite',
