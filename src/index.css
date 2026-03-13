@@ -36,7 +36,7 @@
   .ua-chrome .text-gradient {
     background-image: none;
     -webkit-text-fill-color: currentColor;
-    color: #e1bee7;
+    color: #fff;
   }
 
   .glyph-safe {
