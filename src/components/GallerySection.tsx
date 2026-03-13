@@ -1,4 +1,4 @@
-import { motion, type Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const GallerySection = () => {
   // We will assume 5 images as provided by the user (indexed 1 to 5)
