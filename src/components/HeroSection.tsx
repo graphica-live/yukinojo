@@ -32,7 +32,7 @@ const HeroSection = () => {
   const titleText = "ゆきのじょー";
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden" id="hero">
       <motion.div 
         className="absolute inset-0 z-0 opacity-40"
         style={{ y: backgroundY }}
