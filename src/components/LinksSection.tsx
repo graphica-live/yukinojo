@@ -56,7 +56,7 @@ const LinksSection = () => {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-display font-bold mb-4"
           >
-            Links & <span className="text-gradient">Support</span>
+            SNS <span className="text-gradient">Links</span>
           </motion.h2>
           <motion.div 
             initial={{ opacity: 0, scaleX: 0 }}
