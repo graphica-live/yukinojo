@@ -1,11 +1,16 @@
 
+import { useRef } from 'react';
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
 
 const HeroSection = () => {
-  const { scrollY } = useScroll();
-  const backgroundY = useTransform(scrollY, [0, 500], ['0%', '20%']);
-  const textY = useTransform(scrollY, [0, 500], ['0%', '50%']);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['-6%', '18%']);
+  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '24%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.8, 1], [1, 1, 0.3]);
 
   // Spring animations for text splitting
   const sentence = {
@@ -32,7 +37,7 @@ const HeroSection = () => {
   const titleText = "ゆきのじょー";
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden" id="hero">
+    <section ref={sectionRef} className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden" id="hero">
       <motion.div 
         className="absolute inset-0 z-0 opacity-40"
         style={{ y: backgroundY }}

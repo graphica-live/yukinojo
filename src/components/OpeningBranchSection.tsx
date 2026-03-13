@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkle, PlayCircle } from '@phosphor-icons/react';
+import { ArrowRight, PlayCircle } from '@phosphor-icons/react';
 
 const branchCards = [
   {
@@ -18,7 +18,7 @@ const branchCards = [
     href: '/frame',
     isExternal: false,
     accent: 'from-cyan-400/75 to-rose-500/70',
-    chip: 'Frame Studio',
+    chip: 'Frame Fitter',
     buttonText: 'Open TikRing',
     icon: <PlayCircle size={20} weight="fill" />,
   },
@@ -28,25 +28,6 @@ const OpeningBranchSection = () => {
   return (
     <section className="relative min-h-[72svh] flex items-center px-4 sm:px-6 lg:px-8 pt-24 pb-14" id="opening-branch">
       <div className="max-w-6xl mx-auto w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-10"
-        >
-          <p className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.24em] uppercase text-white/65 mb-4 px-3 py-1 rounded-full border border-white/20 bg-white/5">
-            <Sparkle size={14} weight="fill" />
-            Choose Your Route
-          </p>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold leading-tight text-white">
-            Start
-            <span className="text-gradient"> with intent</span>
-          </h1>
-          <p className="mt-4 text-sm sm:text-base text-white/65 max-w-xl mx-auto">
-            Yukinojoの世界を見るか、TikRingでフレームを作るか。最初の一歩を選ぼう。
-          </p>
-        </motion.div>
-
         <div className="grid md:grid-cols-2 gap-5 sm:gap-7">
           {branchCards.map((card, index) => (
             <motion.a
