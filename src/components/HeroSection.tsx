@@ -72,15 +72,15 @@ const HeroSection = () => {
           variants={sentence}
           initial="hidden"
           animate="visible"
-          className="text-5xl md:text-7xl font-display font-bold mb-4 tracking-tight flex items-center justify-center space-x-1"
+          className="text-5xl md:text-7xl font-display font-bold mb-4 tracking-tight leading-tight flex items-center justify-center space-x-1"
         >
           {titleText.split('').map((char, index) => (
-            <motion.span key={index} variants={letter} className="inline-block">
-              {char === 'ょ' || char === 'ー' ? (
-                <span className="text-gradient">{char}</span>
-              ) : (
-                char
-              )}
+            <motion.span
+              key={index}
+              variants={letter}
+              className={`inline-block ${char === 'ょ' || char === 'ー' ? 'text-gradient' : ''}`}
+            >
+              {char}
             </motion.span>
           ))}
         </motion.h1>
