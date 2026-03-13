@@ -61,16 +61,6 @@ const OpeningBranchSection = () => {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
-          className="text-center mt-10"
-        >
-          <a href="#hero" className="text-white/50 hover:text-white/80 text-sm tracking-wide transition-colors">
-            Scroll to Hero
-          </a>
-        </motion.div>
       </div>
     </section>
   );
