@@ -4,7 +4,7 @@ import { ArrowRight, PlayCircle } from '@phosphor-icons/react';
 const branchCards = [
   {
     title: 'About Yukinojo',
-    description: 'プロフィール、ギャラリー、配信リンクをこのままチェック',
+    description: 'ゆきのじょーのプロフィール、各種リンク',
     href: '#hero',
     isExternal: false,
     accent: 'from-sky-500/70 to-blue-600/70',
