@@ -1,43 +1,49 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, ArrowSquareOut } from '@phosphor-icons/react';
+import { ArrowRight, Sparkle, PlayCircle } from '@phosphor-icons/react';
 
 const branchCards = [
   {
-    title: 'ゆきのじょー紹介サイト',
-    description: 'プロフィール、ギャラリー、各種リンクをこのまま見る',
+    title: 'About Yukinojo',
+    description: 'プロフィール、ギャラリー、配信リンクをこのままチェック',
     href: '#hero',
     isExternal: false,
-    accent: 'from-cyan-400/70 to-sky-500/70',
-    buttonText: 'このサイトへ進む',
+    accent: 'from-sky-500/70 to-blue-600/70',
+    chip: 'Profile',
+    buttonText: 'View About',
     icon: <ArrowRight size={20} weight="bold" />,
   },
   {
-    title: 'graphica-live/frame',
-    description: '別プロジェクトへ移動して詳細を確認する',
-    href: 'https://github.com/graphica-live/frame',
-    isExternal: true,
-    accent: 'from-emerald-400/70 to-teal-500/70',
-    buttonText: 'frame を開く',
-    icon: <ArrowSquareOut size={20} weight="bold" />,
+    title: 'TikRing',
+    description: '透過フレームをアップロードして、着せ替えURLを発行する',
+    href: '/frame',
+    isExternal: false,
+    accent: 'from-cyan-400/75 to-rose-500/70',
+    chip: 'Frame Studio',
+    buttonText: 'Open TikRing',
+    icon: <PlayCircle size={20} weight="fill" />,
   },
 ];
 
 const OpeningBranchSection = () => {
   return (
-    <section className="relative min-h-[100svh] flex items-center px-4 sm:px-6 lg:px-8 py-16" id="opening-branch">
+    <section className="relative min-h-[72svh] flex items-center px-4 sm:px-6 lg:px-8 pt-24 pb-14" id="opening-branch">
       <div className="max-w-6xl mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-12"
+          className="text-center mb-10"
         >
-          <p className="text-xs sm:text-sm tracking-[0.28em] uppercase text-white/55 mb-3">Entrance</p>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold leading-tight text-white">
-            開幕リンク分岐
+          <p className="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.24em] uppercase text-white/65 mb-4 px-3 py-1 rounded-full border border-white/20 bg-white/5">
+            <Sparkle size={14} weight="fill" />
+            Choose Your Route
+          </p>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold leading-tight text-white">
+            Start
+            <span className="text-gradient"> with intent</span>
           </h1>
-          <p className="mt-4 text-sm sm:text-base text-white/65 max-w-2xl mx-auto">
-            どちらへ進むかを最初に選べる入口です。
+          <p className="mt-4 text-sm sm:text-base text-white/65 max-w-xl mx-auto">
+            Yukinojoの世界を見るか、TikRingでフレームを作るか。最初の一歩を選ぼう。
           </p>
         </motion.div>
 
@@ -53,14 +59,17 @@ const OpeningBranchSection = () => {
               transition={{ duration: 0.6, delay: 0.1 + index * 0.12, ease: 'easeOut' }}
               whileHover={{ y: -6, scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              className="group relative overflow-hidden rounded-3xl border border-white/15 bg-black/30 backdrop-blur-xl p-7 sm:p-9"
+              className="group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 backdrop-blur-xl p-7 sm:p-9"
             >
-              <div className={`absolute inset-0 opacity-25 group-hover:opacity-40 transition-opacity duration-300 bg-gradient-to-br ${card.accent}`} />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent_45%)]" />
+              <div className={`absolute inset-0 opacity-20 group-hover:opacity-35 transition-opacity duration-300 bg-gradient-to-br ${card.accent}`} />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_45%)]" />
 
               <div className="relative z-10">
+                <p className="inline-block text-[11px] tracking-[0.18em] uppercase text-white/65 border border-white/20 rounded-full px-2.5 py-1 mb-4">
+                  {card.chip}
+                </p>
                 <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-3">{card.title}</h2>
-                <p className="text-white/70 leading-relaxed min-h-14">{card.description}</p>
+                <p className="text-white/70 leading-relaxed min-h-14 sm:min-h-16">{card.description}</p>
 
                 <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white group-hover:bg-white/20 transition-colors">
                   {card.buttonText}
@@ -70,6 +79,17 @@ const OpeningBranchSection = () => {
             </motion.a>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
+          className="text-center mt-10"
+        >
+          <a href="#hero" className="text-white/50 hover:text-white/80 text-sm tracking-wide transition-colors">
+            Scroll to Hero
+          </a>
+        </motion.div>
       </div>
     </section>
   );
