@@ -22,14 +22,14 @@ const LinksSection = () => {
       url: 'https://line.me/ti/g2/BTEbz2kKwB2NbZhj4Rf4GAmSITXAigTxm_cAFw',
       icon: <ChatCircleText size={32} weight="fill" />,
       color: 'from-[#00c300] to-[#00a300]',
-      desc: 'コミュニティの最新情報や告知'
+      desc: 'TikTokLIVEでの活動や配信通知を発信中'
     },
     {
       name: 'TikTok コイン カスタムチャージ',
       url: 'https://www.tiktok.com/coin',
       icon: <Coin size={32} weight="fill" />,
       color: 'from-[#f6d365] to-[#fda085]',
-      desc: '配信を直接サポート'
+      desc: '手数料なしでTikTokのコインをチャージ'
     }
   ];
 
