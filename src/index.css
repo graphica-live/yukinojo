@@ -33,6 +33,12 @@
     background-size: 100% 100%;
   }
 
+  .ua-chrome .text-gradient {
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+    color: #e1bee7;
+  }
+
   .glyph-safe {
     display: inline-block;
     line-height: 1;

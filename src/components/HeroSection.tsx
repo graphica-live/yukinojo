@@ -30,9 +30,6 @@ const HeroSection = () => {
   };
 
   const titleText = "ゆきのじょー";
-  const isChrome = typeof navigator !== 'undefined'
-    && /Chrome/.test(navigator.userAgent)
-    && !/Edg|OPR|Brave/.test(navigator.userAgent);
 
   return (
     <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -77,26 +74,15 @@ const HeroSection = () => {
           animate="visible"
           className="text-5xl md:text-7xl font-display font-bold mb-4 tracking-tight leading-tight flex items-center justify-center space-x-1"
         >
-          {titleText.split('').map((char, index) => {
-            const isSpecial = char === 'ょ' || char === 'ー';
-
-            if (isSpecial) {
-              return (
-                <span
-                  key={index}
-                  className={`inline-block glyph-safe ${isChrome ? 'text-secondary' : 'text-gradient'}`}
-                >
-                  {char}
-                </span>
-              );
-            }
-
-            return (
-              <motion.span key={index} variants={letter} className="inline-block">
-                {char}
-              </motion.span>
-            );
-          })}
+          {titleText.split('').map((char, index) => (
+            <motion.span
+              key={index}
+              variants={letter}
+              className={`inline-block ${char === 'ょ' || char === 'ー' ? 'text-gradient glyph-safe' : ''}`}
+            >
+              {char}
+            </motion.span>
+          ))}
         </motion.h1>
 
         <motion.h2
