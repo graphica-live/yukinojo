@@ -5,7 +5,7 @@ const branchCards = [
   {
     title: 'About Yukinojo',
     description: 'ゆきのじょーのプロフィール、各種リンク',
-    href: '#hero',
+    href: '/about-yukinojo',
     isExternal: false,
     accent: 'from-sky-500/70 to-blue-600/70',
     chip: 'Profile',

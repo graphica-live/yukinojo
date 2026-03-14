@@ -4,7 +4,12 @@ import AboutSection from './components/AboutSection';
 import LinksSection from './components/LinksSection';
 import OpeningBranchSection from './components/OpeningBranchSection';
 
+const ABOUT_PAGE_PATH = '/about-yukinojo';
+
 function App() {
+  const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/';
+  const isAboutPage = normalizedPath === ABOUT_PAGE_PATH;
+
   return (
     <div className="min-h-screen bg-background text-white selection:bg-primary/30 selection:text-white">
       {/* Dynamic Glamorous Background */}
@@ -28,10 +33,15 @@ function App() {
       </div>
 
       <main className="relative z-10">
-        <OpeningBranchSection />
-        <HeroSection />
-        <AboutSection />
-        <LinksSection />
+        {isAboutPage ? (
+          <>
+            <HeroSection />
+            <AboutSection />
+            <LinksSection />
+          </>
+        ) : (
+          <OpeningBranchSection />
+        )}
       </main>
 
       <footer className="relative z-10 py-8 text-center border-t border-white/5 mt-20 glass">

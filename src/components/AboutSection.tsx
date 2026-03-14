@@ -26,15 +26,15 @@ const AboutSection = () => {
   const traits = [
     {
       icon: <Code size={32} weight="duotone" className="text-primary" />,
-      title: "SE経歴",
+      title: "SE",
       subtitle: "IT業界で10年以上",
       description: "インフラシステムの開発、PM、フリーランスを経験。プロジェクトマネージャ、情報セキュリティスペシャリストなどの資格を保有しています。",
     },
     {
       icon: <Martini size={32} weight="duotone" className="text-accent" />,
-      title: "ホスト経験",
+      title: "ホスト",
       subtitle: "歌舞伎町",
-      description: "「club yellow」にてリクエスト出勤中。",
+      description: "gd-colors 「club yellow」 にてリクエスト出勤中。",
     },
     {
       icon: <MicrophoneStage size={32} weight="duotone" className="text-secondary" />,
