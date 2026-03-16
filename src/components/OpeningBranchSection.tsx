@@ -1,5 +1,26 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, PlayCircle } from '@phosphor-icons/react';
+import { ArrowRight, PlayCircle, WarningCircle } from '@phosphor-icons/react';
+
+const TIKTOK_IN_APP_MARKERS = [
+  'tiktok',
+  'musical_ly',
+  'bytedancewebview',
+  'ttwebview',
+  'aweme',
+  'trill',
+];
+
+const detectTikTokInAppBrowser = () => {
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  const vendor = window.navigator.vendor.toLowerCase();
+  const referrer = document.referrer.toLowerCase();
+
+  return TIKTOK_IN_APP_MARKERS.some((marker) => userAgent.includes(marker))
+    || vendor.includes('bytedance')
+    || referrer.includes('tiktok.com')
+    || referrer.includes('tiktokv.com');
+};
 
 const branchCards = [
   {
@@ -25,9 +46,41 @@ const branchCards = [
 ];
 
 const OpeningBranchSection = () => {
+  const [isTikTokInAppBrowser, setIsTikTokInAppBrowser] = useState(() => detectTikTokInAppBrowser());
+
+  useEffect(() => {
+    setIsTikTokInAppBrowser(detectTikTokInAppBrowser());
+  }, []);
+
   return (
     <section className="relative min-h-[72svh] flex items-center px-4 sm:px-6 lg:px-8 pt-24 pb-14" id="opening-branch">
       <div className="max-w-6xl mx-auto w-full">
+        {isTikTokInAppBrowser ? (
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
+            className="mb-6 sm:mb-8 overflow-hidden rounded-3xl border border-amber-300/25 bg-amber-500/10 backdrop-blur-xl"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.2),transparent_42%)]" />
+            <div className="relative flex flex-col gap-4 p-5 text-left sm:flex-row sm:items-start sm:gap-5 sm:p-6">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-amber-200/20 bg-amber-300/15 text-amber-100">
+                <WarningCircle size={26} weight="fill" />
+              </div>
+
+              <div className="flex-1">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-amber-100/75">TikTok In-App Browser</p>
+                <h2 className="mt-2 text-xl font-display font-bold text-white sm:text-2xl">
+                  TikTokアプリ内ブラウザでは、ページや外部リンクが正常に開かない場合があります
+                </h2>
+                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/78 sm:text-[15px]">
+                  続けて開く場合は、右上のメニューから「ブラウザで開く」または「Safari / Chromeで開く」を選択してください。外部ブラウザで開くと、各ページやリンクをより安定して利用できます。
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
+
         <div className="grid md:grid-cols-2 gap-5 sm:gap-7">
           {branchCards.map((card, index) => (
             <motion.a
