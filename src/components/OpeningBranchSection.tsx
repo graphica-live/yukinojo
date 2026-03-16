@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowBendRightUp, ArrowRight, Browser, Compass, DotsThreeCircle, PlayCircle, ShareNetwork } from '@phosphor-icons/react';
+import { ArrowBendRightUp, ArrowRight, Browser, Compass, DotsThreeCircle, PlayCircle } from '@phosphor-icons/react';
 
 const TIKTOK_IN_APP_MARKERS = [
   'tiktok',
@@ -100,7 +100,7 @@ const OpeningBranchSection = () => {
                   <div className="flex flex-col">
                     <span className="text-xs text-white/50 uppercase tracking-wider">Step 1</span>
                     <div className="text-sm font-medium text-white flex items-center gap-2 flex-wrap">
-                      右上の <DotsThreeCircle size={20} weight="fill" className="text-white/80" /> または <ShareNetwork size={18} weight="fill" className="text-white/80" /> をタップ
+                      右上の <DotsThreeCircle size={20} weight="fill" className="text-white/80" /> をタップ
                     </div>
                   </div>
                 </div>
