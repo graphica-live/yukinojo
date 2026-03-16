@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, PlayCircle, WarningCircle } from '@phosphor-icons/react';
+import { ArrowBendRightUp, ArrowRight, Browser, Compass, DotsThreeCircle, PlayCircle, ShareNetwork } from '@phosphor-icons/react';
 
 const TIKTOK_IN_APP_MARKERS = [
   'tiktok',
@@ -57,25 +57,66 @@ const OpeningBranchSection = () => {
       <div className="max-w-6xl mx-auto w-full">
         {isTikTokInAppBrowser ? (
           <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
-            className="mb-6 sm:mb-8 overflow-hidden rounded-3xl border border-amber-300/25 bg-amber-500/10 backdrop-blur-xl"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="relative mb-8 overflow-hidden rounded-3xl border border-amber-300/30 bg-black/60 shadow-2xl backdrop-blur-xl"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.2),transparent_42%)]" />
-            <div className="relative flex flex-col gap-4 p-5 text-left sm:flex-row sm:items-start sm:gap-5 sm:p-6">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-amber-200/20 bg-amber-300/15 text-amber-100">
-                <WarningCircle size={26} weight="fill" />
+            {/* 背景装飾 */}
+            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-amber-500/20 blur-3xl" />
+            <div className="absolute right-0 top-0 p-4 sm:p-6 z-10 pointer-events-none">
+              <motion.div
+                animate={{ y: [0, -6, 0], x: [0, 4, 0] }}
+                transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                className="flex flex-col items-center gap-1"
+              >
+                <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300 drop-shadow-md">Tap Menu</span>
+                <ArrowBendRightUp size={36} weight="fill" className="text-amber-400 rotate-12 drop-shadow-lg" />
+              </motion.div>
+            </div>
+
+            <div className="relative flex flex-col gap-6 p-6 sm:p-8">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                <div className="hidden sm:flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400/20 to-orange-500/20 text-amber-300 ring-1 ring-inset ring-amber-400/30">
+                  <Browser size={28} weight="duotone" />
+                </div>
+                <div className="flex-1 pr-14 sm:pr-0">
+                  <h2 className="text-lg font-bold text-white sm:text-2xl">
+                    外部ブラウザで開いてください
+                  </h2>
+                  <p className="mt-2 text-sm leading-relaxed text-amber-100/80">
+                    現在のアプリ内ブラウザ（TikTok等）では正常に動作しない機能があります。<br className="hidden sm:block" />
+                    以下の手順でSafariまたはChromeで開き直してください。
+                  </p>
+                </div>
               </div>
 
-              <div className="flex-1">
-                <p className="text-[11px] uppercase tracking-[0.22em] text-amber-100/75">TikTok In-App Browser</p>
-                <h2 className="mt-2 text-xl font-display font-bold text-white sm:text-2xl">
-                  TikTokアプリ内ブラウザでは、ページや外部リンクが正常に開かない場合があります
-                </h2>
-                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/78 sm:text-[15px]">
-                  続けて開く場合は、右上のメニューから「ブラウザで開く」または「Safari / Chromeで開く」を選択してください。外部ブラウザで開くと、各ページやリンクをより安定して利用できます。
-                </p>
+              {/* 手順ステップ */}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 p-3 pr-4 transition-colors hover:bg-white/10">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-sm font-bold text-amber-300">
+                    1
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-white/50 uppercase tracking-wider">Step 1</span>
+                    <div className="text-sm font-medium text-white flex items-center gap-2 flex-wrap">
+                      右上の <DotsThreeCircle size={20} weight="fill" className="text-white/80" /> または <ShareNetwork size={18} weight="fill" className="text-white/80" /> をタップ
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 p-3 pr-4 transition-colors hover:bg-white/10">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-sm font-bold text-amber-300">
+                    2
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-white/50 uppercase tracking-wider">Step 2</span>
+                    <div className="text-sm font-medium text-white flex items-center gap-2">
+                      <Compass size={18} weight="fill" className="text-white/80" />
+                      「ブラウザで開く」を選択
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
