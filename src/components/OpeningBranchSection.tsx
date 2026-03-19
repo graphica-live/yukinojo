@@ -47,7 +47,7 @@ const branchCards = [
     title: 'TikRing',
     description: '透過フレームをアップロードして、リスナー向け着せ替えURLを発行。誰でも簡単にアイコンフレームの着せ替えが可能なサービスです。',
     href: 'https://tikring.graphica-produce.com',
-    isExternal: true,
+    isExternal: false,
     accent: 'from-cyan-400/75 to-rose-500/70',
     chip: 'Frame Fitter',
     buttonText: 'Open TikRing',
@@ -63,13 +63,6 @@ const OpeningBranchSection = () => {
   }, []);
 
   const getOptimizedHref = (card: typeof branchCards[0]) => {
-    if (!isTikTokInAppBrowser) return card.href;
-
-    // AndroidかつTikRingの場合、Chromeで開くIntentを試みる（外部ブラウザ強制）
-    if (card.title === 'TikRing' && /android/i.test(navigator.userAgent)) {
-      return card.href.replace('https://', 'intent://') + '#Intent;scheme=https;package=com.android.chrome;end';
-    }
-
     return card.href;
   };
 
