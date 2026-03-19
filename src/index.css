@@ -48,6 +48,22 @@
   }
 }
 
+.ua-low-effects .glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.ua-low-effects .glass-hover:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ua-low-effects .text-gradient {
+  background-image: none;
+  -webkit-text-fill-color: currentColor;
+  color: #fff;
+}
+
 /* Custom Scrollbar for Webkit */
 ::-webkit-scrollbar {
   width: 8px;

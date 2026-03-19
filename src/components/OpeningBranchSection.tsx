@@ -1,26 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowBendRightUp, ArrowRight, Browser, Compass, DotsThreeCircle, PlayCircle } from '@phosphor-icons/react';
-
-const TIKTOK_IN_APP_MARKERS = [
-  'tiktok',
-  'musical_ly',
-  'bytedancewebview',
-  'ttwebview',
-  'aweme',
-  'trill',
-];
-
-const detectTikTokInAppBrowser = () => {
-  const userAgent = window.navigator.userAgent.toLowerCase();
-  const vendor = window.navigator.vendor.toLowerCase();
-  const referrer = document.referrer.toLowerCase();
-
-  return TIKTOK_IN_APP_MARKERS.some((marker) => userAgent.includes(marker))
-    || vendor.includes('bytedance')
-    || referrer.includes('tiktok.com')
-    || referrer.includes('tiktokv.com');
-};
+import { detectTikTokInAppBrowser, shouldUseLowEffectsMode } from '../utils/browser';
 
 const branchCards = [
   {
@@ -57,6 +38,7 @@ const branchCards = [
 
 const OpeningBranchSection = () => {
   const [isTikTokInAppBrowser, setIsTikTokInAppBrowser] = useState(() => detectTikTokInAppBrowser());
+  const useLowEffectsMode = shouldUseLowEffectsMode();
 
   useEffect(() => {
     setIsTikTokInAppBrowser(detectTikTokInAppBrowser());
@@ -74,7 +56,7 @@ const OpeningBranchSection = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="relative mb-8 overflow-hidden rounded-3xl border border-amber-300/30 bg-black/60 shadow-2xl backdrop-blur-xl"
+            className={`relative mb-8 overflow-hidden rounded-3xl border border-amber-300/30 bg-black/60 shadow-2xl ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
           >
             {/* 背景装飾 */}
             <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-amber-500/20 blur-3xl" />
@@ -150,10 +132,12 @@ const OpeningBranchSection = () => {
                 transition={{ duration: 0.6, delay: 0.1 + index * 0.12, ease: 'easeOut' }}
                 whileHover={{ y: -6, scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                className="group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 backdrop-blur-xl p-7 sm:p-9"
+                className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 p-7 sm:p-9 ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
               >
                 <div className={`absolute inset-0 opacity-20 group-hover:opacity-35 transition-opacity duration-300 bg-gradient-to-br ${card.accent}`} />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_45%)]" />
+                {useLowEffectsMode ? null : (
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_45%)]" />
+                )}
 
                 <div className="relative z-10">
                   <p className="inline-block text-[11px] tracking-[0.18em] uppercase text-white/65 border border-white/20 rounded-full px-2.5 py-1 mb-4">

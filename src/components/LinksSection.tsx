@@ -1,7 +1,9 @@
 import { motion, type Variants } from 'framer-motion';
 import { TiktokLogo, InstagramLogo, ChatCircleText, Coin } from '@phosphor-icons/react';
+import { shouldUseLowEffectsMode } from '../utils/browser';
 
 const LinksSection = () => {
+  const useLowEffectsMode = shouldUseLowEffectsMode();
   const links = [
     {
       name: 'TikTok',
@@ -83,7 +85,9 @@ const LinksSection = () => {
               whileHover={{ 
                 scale: 1.05,
                 y: -5,
-                boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.1)",
+                boxShadow: useLowEffectsMode
+                  ? '0 20px 40px -14px rgba(0, 0, 0, 0.55)'
+                  : "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.1)",
                 transition: { type: "spring", stiffness: 400, damping: 17 }
               }}
               whileTap={{ scale: 0.98 }}

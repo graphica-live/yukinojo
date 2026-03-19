@@ -1,8 +1,10 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
+import { shouldUseLowEffectsMode } from '../utils/browser';
 
 const HeroSection = () => {
+  const useLowEffectsMode = shouldUseLowEffectsMode();
   const sectionRef = useRef<HTMLElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -45,7 +47,7 @@ const HeroSection = () => {
         <img 
           src="/images/hero-bg.jpg" 
           alt="Hero Background" 
-          className="w-full h-full object-cover object-center mix-blend-overlay"
+          className={`w-full h-full object-cover object-center ${useLowEffectsMode ? 'opacity-20' : 'mix-blend-overlay'}`}
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = 'none';
           }}

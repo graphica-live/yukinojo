@@ -1,7 +1,9 @@
 import { motion, type Variants } from 'framer-motion';
 import { Code, Martini, MicrophoneStage } from '@phosphor-icons/react';
+import { shouldUseLowEffectsMode } from '../utils/browser';
 
 const AboutSection = () => {
+  const useLowEffectsMode = shouldUseLowEffectsMode();
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -79,14 +81,16 @@ const AboutSection = () => {
                 scale: 1.05, 
                 rotateY: 2,
                 rotateX: -2,
-                boxShadow: "0 25px 50px -12px rgba(0, 229, 255, 0.15), 0 0 30px rgba(123, 31, 162, 0.2)",
+                boxShadow: useLowEffectsMode
+                  ? '0 20px 36px -18px rgba(0, 0, 0, 0.6)'
+                  : "0 25px 50px -12px rgba(0, 229, 255, 0.15), 0 0 30px rgba(123, 31, 162, 0.2)",
                 transition: { type: "spring", stiffness: 300, damping: 20 }
               }}
               className="glass glass-hover p-8 rounded-2xl flex flex-col items-start relative overflow-hidden group perspective-1000"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10 group-hover:bg-primary/20 transition-colors duration-500 group-hover:scale-150" />
               
-              <div className="mb-6 p-4 rounded-xl bg-white/5 backdrop-blur-sm inline-block">
+              <div className={`mb-6 p-4 rounded-xl bg-white/5 inline-block ${useLowEffectsMode ? '' : 'backdrop-blur-sm'}`}>
                 {trait.icon}
               </div>
               
