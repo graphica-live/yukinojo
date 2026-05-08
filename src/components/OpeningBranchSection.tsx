@@ -15,16 +15,6 @@ const branchCards = [
     icon: <ArrowRight size={20} weight="bold" />,
   },
   {
-    title: 'GRAPHICA',
-    description: 'TikTok LIVE向けの高画質PC配信環境を、機材選定からOBS設定、訪問セットアップまで一括でプロデュース。',
-    href: 'https://graphica-produce.com/',
-    isExternal: true,
-    accent: 'from-sky-400/70 to-indigo-500/70',
-    chip: 'Live Produce',
-    buttonText: 'Open GRAPHICA',
-    icon: <ArrowRight size={20} weight="bold" />,
-  },
-  {
     title: 'TikRing',
     description: '透過フレームをアップロードして、リスナー向け着せ替えURLを発行。誰でも簡単にアイコンフレームの着せ替えが可能なサービスです。',
     href: 'https://tikring.graphica-produce.com',
