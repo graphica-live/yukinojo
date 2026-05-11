@@ -24,6 +24,16 @@ const branchCards = [
     buttonText: 'Open TikRing',
     icon: <PlayCircle size={20} weight="fill" />,
   },
+  {
+    title: 'TikGradation',
+    description: '自作エフェクトに美しいグラデーション透過をかけよう。',
+    href: 'https://tikgradation.graphica-produce.com/',
+    isExternal: false,
+    accent: 'from-purple-400/75 to-pink-500/70',
+    chip: 'Gradation',
+    buttonText: 'Open TikGradation',
+    icon: <PlayCircle size={20} weight="fill" />,
+  },
 ];
 
 const OpeningBranchSection = () => {
