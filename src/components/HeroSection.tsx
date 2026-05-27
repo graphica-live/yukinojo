@@ -188,20 +188,20 @@ const HeroSection = () => {
             >
               <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-3xl -mr-12 -mt-12 group-hover:bg-primary/20 transition-colors duration-500 group-hover:scale-150" />
 
-              <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              <div className="relative z-10 grid grid-cols-3 gap-2 sm:gap-3 md:gap-8">
                 {traits.map((trait, index) => (
                   <div
                     key={index}
-                    className={`flex flex-col items-start py-2 md:py-4 ${index < traits.length - 1 ? 'border-b border-white/10 md:border-b-0 md:border-r md:pr-8' : ''} ${index > 0 ? 'md:pl-8' : ''}`}
+                    className={`flex flex-col items-start py-2 md:py-4 ${index < traits.length - 1 ? 'border-r border-white/10 pr-3 md:pr-8' : ''} ${index > 0 ? 'pl-3 md:pl-8' : ''}`}
                   >
-                    <div className={`mb-5 p-3 rounded-xl bg-white/5 inline-block ${useLowEffectsMode ? '' : 'backdrop-blur-sm'}`}>
+                    <div className={`mb-3 md:mb-5 p-2 md:p-3 rounded-xl bg-white/5 inline-block ${useLowEffectsMode ? '' : 'backdrop-blur-sm'}`}>
                       {trait.icon}
                     </div>
 
-                    <h3 className="text-2xl font-bold font-display mb-1">{trait.title}</h3>
-                    <p className="text-accent text-sm font-medium mb-4 uppercase tracking-wider">{trait.subtitle}</p>
+                    <h3 className="text-sm sm:text-base md:text-2xl font-bold font-display mb-1 leading-tight">{trait.title}</h3>
+                    <p className="text-accent text-[9px] sm:text-[10px] md:text-sm font-medium mb-2 md:mb-4 uppercase tracking-[0.14em] sm:tracking-[0.18em] md:tracking-wider leading-tight">{trait.subtitle}</p>
 
-                    <p className="text-white/70 font-light leading-relaxed">
+                    <p className="text-[10px] sm:text-xs md:text-base text-white/70 font-light leading-snug md:leading-relaxed text-left text-balance">
                       {trait.description}
                     </p>
                   </div>

@@ -164,7 +164,7 @@ const OpeningBranchSection = ({ embedded = false }: OpeningBranchSectionProps) =
           </motion.div>
         ) : null}
 
-        <div className="grid gap-5 sm:gap-7 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
           {branchCards.map((card, index) => {
             const optimizedHref = getOptimizedHref(card);
             const cardBody = (
@@ -175,13 +175,13 @@ const OpeningBranchSection = ({ embedded = false }: OpeningBranchSectionProps) =
                 )}
 
                 <div className="relative z-10">
-                  <p className="inline-block text-[11px] tracking-[0.18em] uppercase text-white/65 border border-white/20 rounded-full px-2.5 py-1 mb-4">
+                  <p className="inline-block text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.14em] sm:tracking-[0.18em] uppercase text-white/65 border border-white/20 rounded-full px-2 py-1 sm:px-2.5 mb-3 sm:mb-4">
                     {card.chip}
                   </p>
-                  <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-3 whitespace-pre-line">{card.title}</h2>
-                  <p className="text-white/70 leading-relaxed min-h-14 sm:min-h-16">{card.description}</p>
+                  <h2 className="text-lg sm:text-2xl md:text-3xl font-display font-bold text-white mb-2 sm:mb-3 leading-tight whitespace-pre-line">{card.title}</h2>
+                  <p className="text-xs sm:text-sm md:text-base text-white/70 leading-relaxed min-h-16 sm:min-h-16">{card.description}</p>
 
-                  <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white group-hover:bg-white/20 transition-colors">
+                  <span className="mt-6 sm:mt-8 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3 sm:px-4 py-2 text-[11px] sm:text-sm font-semibold text-white group-hover:bg-white/20 transition-colors leading-none">
                     {card.buttonText}
                     <span className="group-hover:translate-x-1 transition-transform">{card.icon}</span>
                   </span>
@@ -200,7 +200,7 @@ const OpeningBranchSection = ({ embedded = false }: OpeningBranchSectionProps) =
                 transition={{ duration: 0.6, delay: 0.1 + index * 0.12, ease: 'easeOut' }}
                 whileHover={{ y: -6, scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 p-7 sm:p-9 ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
+                className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 p-5 sm:p-7 md:p-9 ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
               >
                 {cardBody}
               </motion.a>
@@ -211,7 +211,7 @@ const OpeningBranchSection = ({ embedded = false }: OpeningBranchSectionProps) =
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 + index * 0.12, ease: 'easeOut' }}
                 whileHover={{ y: -6, scale: 1.01 }}
-                className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 p-7 sm:p-9 ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
+                className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 p-5 sm:p-7 md:p-9 ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
               >
                 {cardBody}
               </motion.div>
