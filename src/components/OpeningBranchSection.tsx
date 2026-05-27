@@ -1,21 +1,45 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowBendRightUp, ArrowRight, Browser, Compass, DotsThreeCircle, PlayCircle } from '@phosphor-icons/react';
+import { ArrowBendRightUp, Browser, Compass, DotsThreeCircle, PlayCircle } from '@phosphor-icons/react';
 import { detectTikTokInAppBrowser, shouldUseLowEffectsMode } from '../utils/browser';
 
-const branchCards = [
+type OpeningBranchSectionProps = {
+  embedded?: boolean;
+};
+
+type BranchCard = {
+  title: string;
+  description: string;
+  href?: string;
+  isExternal: boolean;
+  accent: string;
+  chip: string;
+  buttonText: string;
+  icon: React.ReactNode;
+};
+
+const branchCards: BranchCard[] = [
   {
-    title: 'About Yukinojo',
-    description: 'ゆきのじょーのプロフィール、各種SNSリンク',
-    href: '/about-yukinojo',
-    isExternal: false,
-    accent: 'from-sky-500/70 to-blue-600/70',
-    chip: 'Profile',
-    buttonText: 'View About',
-    icon: <ArrowRight size={20} weight="bold" />,
+    title: '高画質セットアップコンサル',
+    description: 'TikTok高画質セットアップについてDMで質問する。',
+    href: 'https://www.tiktok.com/@yu_ki_nojo',
+    isExternal: true,
+    accent: 'from-emerald-400/75 to-cyan-500/70',
+    chip: 'Consulting',
+    buttonText: 'Open TikTok Profile',
+    icon: <PlayCircle size={20} weight="fill" />,
   },
   {
-    title: 'TikRing',
+    title: 'PC配信総合支援ツール「TikEffect」',
+    description: '各種オーバーレイ、読み上げ、字幕など',
+    isExternal: false,
+    accent: 'from-fuchsia-400/75 to-sky-500/70',
+    chip: 'Streaming Tool',
+    buttonText: '開発中',
+    icon: <PlayCircle size={20} weight="fill" />,
+  },
+  {
+    title: 'アイコンフレーム装着サービス\n【TikRing】',
     description: '透過フレームをアップロードして、リスナー向け着せ替えURLを発行。誰でも簡単にアイコンフレームの着せ替えが可能なサービスです。',
     href: 'https://tikring.graphica-produce.com',
     isExternal: false,
@@ -25,7 +49,7 @@ const branchCards = [
     icon: <PlayCircle size={20} weight="fill" />,
   },
   {
-    title: 'TikGradation',
+    title: 'ギフトエフェクト動画透過サービス\n【TikGradation】',
     description: '自作エフェクトに美しいグラデーション透過をかけよう。',
     href: 'https://tikgradation.graphica-produce.com/',
     isExternal: false,
@@ -36,7 +60,7 @@ const branchCards = [
   },
 ];
 
-const OpeningBranchSection = () => {
+const OpeningBranchSection = ({ embedded = false }: OpeningBranchSectionProps) => {
   const [isTikTokInAppBrowser, setIsTikTokInAppBrowser] = useState(() => detectTikTokInAppBrowser());
   const useLowEffectsMode = shouldUseLowEffectsMode();
 
@@ -44,19 +68,41 @@ const OpeningBranchSection = () => {
     setIsTikTokInAppBrowser(detectTikTokInAppBrowser());
   }, []);
 
-  const getOptimizedHref = (card: typeof branchCards[0]) => {
+  const getOptimizedHref = (card: BranchCard) => {
     return card.href;
   };
 
   return (
-    <section className="relative min-h-[72svh] flex items-center px-4 sm:px-6 lg:px-8 pt-24 pb-14" id="opening-branch">
+    <section
+      className={`relative px-4 sm:px-6 lg:px-8 ${embedded ? 'py-24' : 'min-h-[72svh] flex items-center pt-24 pb-14'}`}
+      id="opening-branch"
+    >
       <div className="max-w-6xl mx-auto w-full">
+        {embedded ? (
+          <div className="text-center mb-16">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-3xl md:text-5xl font-display font-bold mb-4"
+            >
+              <span className="text-gradient">Contents</span>
+            </motion.h2>
+            <motion.div
+              initial={{ opacity: 0, scaleX: 0 }}
+              whileInView={{ opacity: 1, scaleX: 1 }}
+              viewport={{ once: true }}
+              className="h-1 w-24 bg-gradient-to-r from-accent to-primary mx-auto rounded-full"
+            />
+          </div>
+        ) : null}
+
         {isTikTokInAppBrowser ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className={`relative mb-8 overflow-hidden rounded-3xl border border-amber-300/30 bg-black/60 shadow-2xl ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
+            className={`relative ${embedded ? 'mb-10' : 'mb-8'} overflow-hidden rounded-3xl border border-amber-300/30 bg-black/60 shadow-2xl ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
           >
             {/* 背景装飾 */}
             <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-amber-500/20 blur-3xl" />
@@ -121,7 +167,29 @@ const OpeningBranchSection = () => {
         <div className="grid gap-5 sm:gap-7 md:grid-cols-2 xl:grid-cols-3">
           {branchCards.map((card, index) => {
             const optimizedHref = getOptimizedHref(card);
-            return (
+            const cardBody = (
+              <>
+                <div className={`absolute inset-0 opacity-20 group-hover:opacity-35 transition-opacity duration-300 bg-gradient-to-br ${card.accent}`} />
+                {useLowEffectsMode ? null : (
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_45%)]" />
+                )}
+
+                <div className="relative z-10">
+                  <p className="inline-block text-[11px] tracking-[0.18em] uppercase text-white/65 border border-white/20 rounded-full px-2.5 py-1 mb-4">
+                    {card.chip}
+                  </p>
+                  <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-3 whitespace-pre-line">{card.title}</h2>
+                  <p className="text-white/70 leading-relaxed min-h-14 sm:min-h-16">{card.description}</p>
+
+                  <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white group-hover:bg-white/20 transition-colors">
+                    {card.buttonText}
+                    <span className="group-hover:translate-x-1 transition-transform">{card.icon}</span>
+                  </span>
+                </div>
+              </>
+            );
+
+            return optimizedHref ? (
               <motion.a
                 key={card.title}
                 href={optimizedHref}
@@ -134,24 +202,19 @@ const OpeningBranchSection = () => {
                 whileTap={{ scale: 0.99 }}
                 className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 p-7 sm:p-9 ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
               >
-                <div className={`absolute inset-0 opacity-20 group-hover:opacity-35 transition-opacity duration-300 bg-gradient-to-br ${card.accent}`} />
-                {useLowEffectsMode ? null : (
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_45%)]" />
-                )}
-
-                <div className="relative z-10">
-                  <p className="inline-block text-[11px] tracking-[0.18em] uppercase text-white/65 border border-white/20 rounded-full px-2.5 py-1 mb-4">
-                    {card.chip}
-                  </p>
-                  <h2 className="text-2xl sm:text-3xl font-display font-bold text-white mb-3">{card.title}</h2>
-                  <p className="text-white/70 leading-relaxed min-h-14 sm:min-h-16">{card.description}</p>
-
-                  <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white group-hover:bg-white/20 transition-colors">
-                    {card.buttonText}
-                    <span className="group-hover:translate-x-1 transition-transform">{card.icon}</span>
-                  </span>
-                </div>
+                {cardBody}
               </motion.a>
+            ) : (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 + index * 0.12, ease: 'easeOut' }}
+                whileHover={{ y: -6, scale: 1.01 }}
+                className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-black/35 p-7 sm:p-9 ${useLowEffectsMode ? '' : 'backdrop-blur-xl'}`}
+              >
+                {cardBody}
+              </motion.div>
             );
           })}
         </div>

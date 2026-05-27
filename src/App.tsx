@@ -1,15 +1,10 @@
 
 import HeroSection from './components/HeroSection';
-import AboutSection from './components/AboutSection';
 import LinksSection from './components/LinksSection';
 import OpeningBranchSection from './components/OpeningBranchSection';
 import { shouldUseLowEffectsMode } from './utils/browser';
 
-const ABOUT_PAGE_PATH = '/about-yukinojo';
-
 function App() {
-  const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/';
-  const isAboutPage = normalizedPath === ABOUT_PAGE_PATH;
   const useLowEffectsMode = shouldUseLowEffectsMode();
 
   return (
@@ -41,15 +36,11 @@ function App() {
       </div>
 
       <main className="relative z-10">
-        {isAboutPage ? (
-          <>
-            <HeroSection />
-            <AboutSection />
-            <LinksSection />
-          </>
-        ) : (
-          <OpeningBranchSection />
-        )}
+        <>
+          <HeroSection />
+          <OpeningBranchSection embedded />
+          <LinksSection />
+        </>
       </main>
 
       <footer className="relative z-10 py-8 text-center border-t border-white/5 mt-20 glass">
