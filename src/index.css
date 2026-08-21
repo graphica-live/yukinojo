@@ -7,10 +7,13 @@
     scroll-behavior: smooth;
     /* Sticky nav clearance for in-page anchors. */
     scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    @apply bg-ink text-white font-sans antialiased overflow-x-hidden;
+    @apply bg-paper text-ink font-sans antialiased overflow-x-hidden;
+    font-weight: 500;
+    line-height: 1.9;
     text-rendering: optimizeLegibility;
   }
 
@@ -20,123 +23,260 @@
   h4,
   h5,
   h6 {
-    @apply font-display tracking-tight text-white;
+    @apply text-ink;
+    font-weight: 900;
+    letter-spacing: -0.02em;
   }
 
   ::selection {
-    background: rgba(61, 225, 255, 0.28);
-    color: #fff;
+    background: rgba(115, 80, 245, 0.22);
+    color: #333f6d;
   }
 
   :focus-visible {
-    outline: 2px solid #3de1ff;
+    outline: 3px solid #7350f5;
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 }
 
 @layer utilities {
   /*
-   * Frosted panel. This is a web glassmorphism approximation, not a
-   * platform material. Solid fallbacks live under .ua-low-effects and
-   * prefers-reduced-transparency.
+   * Die-cut sticker. The white keyline is what makes an element read as a
+   * sticker rather than a card, so it belongs to the shape, not the shadow.
    */
-  .panel {
-    @apply rounded-panel border border-white/10 bg-white/[0.045];
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.09),
-      0 24px 60px -32px rgba(0, 0, 0, 0.9);
+  .sticker {
+    @apply rounded-sticker bg-white shadow-sticker;
   }
 
-  .panel-hover {
-    @apply transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.075];
+  .sticker-hover {
+    @apply transition-transform duration-300 hover:shadow-sticker-hover;
+    transition-timing-function: cubic-bezier(0.34, 1.4, 0.64, 1);
   }
 
   /*
-   * The only blur entry point. Always use this instead of Tailwind's
-   * backdrop-blur-* so every frosted surface degrades in one place.
+   * The only blur entry point on the page. Always use this instead of
+   * Tailwind's backdrop-blur-* so every frosted surface degrades in one place.
+   * Only the nav uses it; mix-blend-mode and large blur radii are not used at
+   * all, because that combination once rendered the whole page black in the
+   * TikTok webview.
    */
   .frost {
+    background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
   }
 
-  /* Hairline used instead of card chrome where elevation is not meaningful. */
-  .rule {
-    @apply border-t border-white/10;
+  /* Iridescent fill. Decorative only - never used to colour body text. */
+  .iris-fill {
+    background: linear-gradient(96deg, #ff7fb6 2%, #7350f5 46%, #56d7ef 100%);
   }
 
   /* Edge fade for the marquee so text does not collide with the viewport edge. */
   .edge-fade {
-    -webkit-mask-image: linear-gradient(
-      to right,
-      transparent,
-      #000 8%,
-      #000 92%,
-      transparent
-    );
-    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
   }
 
-  /* Technical label: mono, wide tracking. Used sparingly. */
+  /*
+   * Technical label: display face, wide tracking. Uses ink-soft, not
+   * ink-faint - at 11px it is small text and needs the full 4.5:1.
+   */
   .label {
-    @apply font-mono text-[10px] uppercase tracking-[0.28em] text-white/45;
+    @apply font-display text-[11px] uppercase tracking-[0.22em] text-ink-soft;
+    font-weight: 800;
   }
 }
 
 /* ---------------------------------------------------------------------------
-   Ambient background layers.
-   Kept as fixed, pointer-events-none elements only. Never on a scrolling
-   container - continuous GPU repaints destroy mobile framerate.
+   Ambient input -> CSS variables.
+
+   Pointer and scroll are written to exactly three custom properties on ONE
+   node (see useAmbientVars). Every decoration then composes its own offset in
+   pure CSS, so 40+ elements move without a single React re-render.
+
+   Parallax and the idle loop are kept on SEPARATE elements rather than being
+   merged into one `transform`. An animation replaces the whole `transform`
+   property, so anything sharing it has to be repeated inside every keyframe -
+   which is both unreadable and easy to get wrong. Splitting them means:
+
+     - the outer element owns the parallax (pointer + scroll, one transform)
+     - the inner <img> owns the drift / twinkle keyframes
+
+   No property is contested, and no independent-`translate` fallback is needed.
 --------------------------------------------------------------------------- */
 
-.veil-grid {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 72px 72px;
-  -webkit-mask-image: radial-gradient(ellipse 78% 62% at 50% 32%, #000 0%, transparent 72%);
-  mask-image: radial-gradient(ellipse 78% 62% at 50% 32%, #000 0%, transparent 72%);
+/*
+ * One layer per section, filling it exactly. It carries `--sy0` - the scroll
+ * position at which this section is centred in the viewport - measured by the
+ * component. Scroll parallax is the distance from THAT point, not raw scrollY:
+ * using the absolute value gives every section further down the page a large
+ * constant offset, which is a translation, not parallax.
+ */
+.deco-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Overwritten inline before first paint; this keeps the calc valid if the
+     measurement is ever skipped. */
+  --sy0: 0px;
 }
 
-.veil-scanlines {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.032) 0px,
-    rgba(255, 255, 255, 0.032) 1px,
-    transparent 1px,
-    transparent 3px
+.deco {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  transform: translate3d(
+    calc(var(--px, 0px) * var(--depth, 0)),
+    calc(
+      var(--py, 0px) * var(--depth, 0) + (var(--sy, 0px) - var(--sy0, 0px)) * var(--speed, 0)
+    ),
+    0
   );
 }
 
-.veil-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+.deco > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes deco-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--r0, 0deg));
+  }
+  50% {
+    transform: translate3d(var(--dx, 8px), var(--dy, -18px), 0) rotate(var(--r1, 6deg));
+  }
+}
+
+@keyframes deco-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.86);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+.deco-drift > img {
+  animation: deco-drift var(--dur, 11s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.deco-twinkle > img {
+  animation: deco-twinkle var(--dur, 3.4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Character rig.
+
+   The source PSD splits the character into mutually exclusive layers - a
+   cut-out with zero overlap and therefore zero glue margin. Rotating a part
+   straight out of that PSD exposes the background at every joint.
+
+   Two things fix it, both baked into the assets by scripts/build-rig.mjs:
+     - the stacking order was rebuilt so every moving part sits UNDER
+       torso/head/hat (the original layers never overlapped, so reordering
+       leaves the static image byte-identical);
+     - each moving part's outline was pushed out up to 34px, but only into
+       the area the covering layers occupy, so the glue is invisible at rest.
+
+   Consequently only the covered parts may rotate. torso / head / hat stay
+   put; the whole body tilts together on the wrapper instead.
+--------------------------------------------------------------------------- */
+
+/*
+ * Three nested elements, one transform each, so nothing is contested:
+ *   .chibi-parallax  pointer parallax for the WHOLE figure
+ *   .chibi-hover     the idle float
+ *   .chibi > img     per-part swing
+ *
+ * The parallax deliberately applies to the whole figure rather than per part.
+ * Giving each part its own depth would shear the figure, and any relative
+ * offset between two parts eats into the 34px glue margin that keeps the
+ * joints closed.
+ */
+.chibi-parallax {
+  transform: translate3d(
+    calc(var(--px, 0px) * var(--depth, 0)),
+    calc(var(--py, 0px) * var(--depth, 0)),
+    0
+  );
+}
+
+.chibi {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1223 / 1286;
+}
+
+.chibi-part {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes chibi-swing {
+  0%,
+  100% {
+    transform: rotate(calc(var(--a, 2deg) * -1));
+  }
+  50% {
+    transform: rotate(var(--a, 2deg));
+  }
+}
+
+.chibi-swing {
+  transform-origin: var(--o, 50% 50%);
+  animation: chibi-swing var(--dur, 5s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes chibi-hover {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-1.2deg);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) rotate(1.2deg);
+  }
+}
+
+.chibi-hover {
+  animation: chibi-hover 6.4s ease-in-out infinite;
 }
 
 /* ---------------------------------------------------------------------------
    Degradation axis 1: TikTok / ByteDance in-app webview (.ua-low-effects).
    These webviews choke on backdrop-filter, mix-blend-mode and large blur
    radii - the combination previously rendered the page fully black.
-   Everything expensive collapses to a solid fill here.
 --------------------------------------------------------------------------- */
 
-.ua-low-effects .panel {
-  background: rgba(255, 255, 255, 0.07);
+.ua-low-effects .frost {
+  background: #ffffff;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  box-shadow: none;
-}
-
-.ua-low-effects .panel-hover:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.ua-low-effects .veil-grain,
-.ua-low-effects .veil-scanlines,
-.ua-low-effects .veil-glow {
-  display: none;
 }
 
 .ua-low-effects .edge-fade {
@@ -144,27 +284,31 @@
   mask-image: none;
 }
 
-.ua-low-effects .veil-grid {
-  -webkit-mask-image: none;
-  mask-image: none;
-  opacity: 0.35;
+.ua-low-effects .aurora-blob {
+  display: none;
 }
 
 .ua-low-effects [data-blend] {
   mix-blend-mode: normal !important;
 }
 
-.ua-low-effects .animate-ticker,
-.ua-low-effects .animate-ticker-reverse,
-.ua-low-effects .animate-drift,
-.ua-low-effects .animate-sweep {
+/*
+ * Belt and braces. Every one of these is already gated on `ambient` in JS, but
+ * a stray animation left running in this webview is the failure mode that took
+ * the whole page down before, so the CSS kills them independently.
+ */
+.ua-low-effects .deco-drift > img,
+.ua-low-effects .deco-twinkle > img,
+.ua-low-effects .chibi-swing,
+.ua-low-effects .chibi-hover,
+.ua-low-effects [class*='animate-'] {
   animation: none !important;
 }
 
 /* ---------------------------------------------------------------------------
    Degradation axis 2: prefers-reduced-motion.
-   Independent of the webview axis - either one alone must produce a
-   usable page. JS-driven motion is additionally gated by useMotionProfile().
+   Independent of the webview axis - either one alone must produce a usable
+   page. JS-driven motion is additionally gated by useMotionProfile().
 --------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -184,8 +328,8 @@
 
 /* Transparency preference: drop the frost, keep the contrast. */
 @media (prefers-reduced-transparency: reduce) {
-  .panel {
-    background: rgba(20, 23, 33, 0.96);
+  .frost {
+    background: #ffffff;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -196,18 +340,18 @@
 --------------------------------------------------------------------------- */
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #08080c;
+  background: #eaf1ff;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #23262f;
+  background: #c3d0ec;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #33374a;
+  background: #a9b9de;
 }

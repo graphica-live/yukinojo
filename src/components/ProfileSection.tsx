@@ -1,7 +1,7 @@
 import { motion, type Variants } from 'framer-motion'
-import { Code, MicrophoneStage } from '@phosphor-icons/react'
+import DecoField from './Deco'
+import { profileDeco } from '../data/deco'
 import { useMotionProfile, revealProps } from '../hooks/useMotionProfile'
-import { useSpotlight } from '../hooks/useSpotlight'
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -13,99 +13,114 @@ const stagger: Variants = {
   visible: { transition: { staggerChildren: 0.12 } },
 }
 
+const chip = (label: string) => (
+  <span
+    key={label}
+    className="rounded-full bg-gradient-to-br from-[#FDF0F8] to-[#EAF3FF] px-3.5 py-1.5 text-[11.5px] font-bold text-ink-soft shadow-[inset_0_0_0_1.5px_rgba(255,255,255,0.9)]"
+  >
+    {label}
+  </span>
+)
+
 const ProfileSection = () => {
-  const { reveal, ambient, spotlight } = useMotionProfile()
-  const engineer = useSpotlight(spotlight)
-  const liver = useSpotlight(spotlight)
+  const { reveal } = useMotionProfile()
 
   return (
-    <section id="profile" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <motion.h2
+    <section
+      id="profile"
+      className="relative overflow-hidden px-4 py-[86px] sm:px-6 lg:px-8"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_78%_18%,rgba(255,214,238,0.5),transparent_62%)]"
+      />
+      <DecoField items={profileDeco} />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <motion.div
           variants={reveal ? fadeUp : undefined}
           {...revealProps(reveal)}
-          className="font-display text-3xl font-bold sm:text-4xl lg:text-5xl"
+          className="relative mb-12"
         >
-          二つの顔
-        </motion.h2>
+          <span className="label block">Two Sides</span>
+          <h2 className="mt-2.5 text-[clamp(2rem,6vw,3.5rem)] leading-[1.06]">二つの顔</h2>
+          <span className="absolute right-0 top-[-6px] font-hand text-[clamp(1.4rem,4vw,2.1rem)] font-bold text-grape [rotate:-7deg]">
+            SE × LIVER
+          </span>
+        </motion.div>
 
         <motion.div
           variants={reveal ? stagger : undefined}
           {...revealProps(reveal)}
-          className="mt-12 grid gap-4 md:grid-cols-12"
+          className="grid gap-8 md:grid-cols-[1.08fr_0.92fr] md:gap-9"
         >
-          {/* Engineer. The wider cell - 28 years is the number that anchors
-              the whole page's credibility. */}
+          {/* Engineer. The wider cell - 28 years is the number that anchors the
+              whole page's credibility. */}
           <motion.article
             variants={reveal ? fadeUp : undefined}
-            {...engineer.handlers}
-            className="panel panel-hover relative overflow-hidden p-7 sm:p-9 md:col-span-7"
+            className="sticker sticker-hover relative bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-9 pl-10 hover:-translate-y-2 [rotate:-1.1deg] hover:[rotate:0deg]"
           >
-            {spotlight ? (
-              <motion.div
-                aria-hidden="true"
-                style={engineer.spotlightStyle}
-                className="pointer-events-none absolute inset-0 transition-opacity duration-300"
-              />
-            ) : null}
+            <span
+              aria-hidden="true"
+              className="iris-fill absolute bottom-8 left-3.5 top-8 w-1.5 rounded-full"
+            />
+            <span
+              aria-hidden="true"
+              className="absolute -top-6 left-1/2 w-[132px] -translate-x-1/2 [rotate:-3deg]"
+            >
+              <img src="/deco/washi-1.webp" alt="" loading="lazy" decoding="async" className="w-full" />
+            </span>
 
-            {ambient ? (
-              <div
-                aria-hidden="true"
-                className="veil-glow pointer-events-none absolute -right-16 -top-24 h-64 w-64 rounded-full bg-signal/10 blur-3xl"
-              />
-            ) : null}
+            <p
+              aria-hidden="true"
+              className="absolute right-6 top-6 font-display text-[clamp(3rem,9vw,5.4rem)] font-extrabold leading-[0.8] tracking-[-0.04em] text-[rgba(140,160,215,0.16)]"
+            >
+              28<span className="text-[0.34em]">年</span>
+            </p>
 
-            <div className="relative flex h-full flex-col">
-              <div className="flex items-start justify-between gap-6">
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 text-signal">
-                  <Code size={28} weight="duotone" />
-                </div>
-                <p className="font-display text-5xl font-black leading-none text-white/[0.12] sm:text-7xl">
-                  28
-                  <span className="ml-1 text-2xl sm:text-3xl">年</span>
-                </p>
-              </div>
+            <div className="grid h-[60px] w-[60px] place-items-center rounded-plate bg-gradient-to-br from-[#FFF0F8] to-[#E9F2FF] shadow-plate">
+              <img src="/deco/gem-1.webp" alt="" loading="lazy" decoding="async" className="w-[70%]" />
+            </div>
 
-              <h3 className="mt-8 font-display text-2xl font-bold sm:text-3xl">SE</h3>
-              <p className="mt-2 text-sm font-medium text-signal sm:text-base">
-                初めてのコーディングから28年。実務経験14年。
-              </p>
-              <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
-                システムの開発・保守、プロジェクトマネジメントを経験。IT国家資格高度区分を多数保有。
-              </p>
+            <h3 className="mt-6 text-[clamp(1.5rem,4vw,2rem)]">SE</h3>
+            <p className="mt-1 text-balance text-sm font-bold text-grape-deep">
+              初めてのコーディングから28年。実務経験14年。
+            </p>
+            <p className="mt-4 text-pretty text-[14.5px] leading-[1.95] text-ink-soft">
+              システムの開発・保守、プロジェクトマネジメントを経験。IT国家資格高度区分を多数保有。
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {['開発 / 保守', 'PM', '高度区分 多数'].map(chip)}
             </div>
           </motion.article>
 
           {/* Streamer */}
           <motion.article
             variants={reveal ? fadeUp : undefined}
-            {...liver.handlers}
-            className="panel panel-hover relative overflow-hidden p-7 sm:p-9 md:col-span-5"
+            className="sticker sticker-hover relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-9 pl-10 hover:-translate-y-2 md:mt-4 [rotate:1.4deg] hover:[rotate:0deg]"
           >
-            {spotlight ? (
-              <motion.div
-                aria-hidden="true"
-                style={liver.spotlightStyle}
-                className="pointer-events-none absolute inset-0 transition-opacity duration-300"
-              />
-            ) : null}
-
-            <div
+            <span
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(139,107,255,0.16),transparent_58%)]"
+              className="iris-fill absolute bottom-8 left-3.5 top-8 w-1.5 rounded-full"
             />
+            <span
+              aria-hidden="true"
+              className="absolute -top-6 left-1/2 w-[132px] -translate-x-1/2 [rotate:4deg]"
+            >
+              <img src="/deco/washi-4.webp" alt="" loading="lazy" decoding="async" className="w-full" />
+            </span>
 
-            <div className="relative flex h-full flex-col">
-              <div className="w-fit rounded-xl border border-white/10 bg-white/5 p-3 text-violet">
-                <MicrophoneStage size={28} weight="duotone" />
-              </div>
+            <div className="grid h-[60px] w-[60px] place-items-center rounded-plate bg-gradient-to-br from-[#FFF0F8] to-[#E9F2FF] shadow-plate">
+              <img src="/deco/star-gold.webp" alt="" loading="lazy" decoding="async" className="w-[70%]" />
+            </div>
 
-              <h3 className="mt-8 font-display text-2xl font-bold sm:text-3xl">ライバー</h3>
-              <p className="mt-2 text-sm font-medium text-signal sm:text-base">サニプリ所属</p>
-              <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
-                2025年1月18日より活動開始。毎日6〜8時間、賑やかでテクニカルな配信をお届けしています。
-              </p>
+            <h3 className="mt-6 text-[clamp(1.5rem,4vw,2rem)]">ライバー</h3>
+            <p className="mt-1 text-balance text-sm font-bold text-grape-deep">サニプリ所属</p>
+            <p className="mt-4 text-pretty text-[14.5px] leading-[1.95] text-ink-soft">
+              2025年1月18日より活動開始。毎日6〜8時間、賑やかでテクニカルな配信をお届けしています。
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {['毎日 6〜8H', 'TikTok LIVE'].map(chip)}
             </div>
           </motion.article>
         </motion.div>

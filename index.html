@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="theme-color" content="#08080C" />
+    <!-- Matches `paper` in the Tailwind palette, so the browser chrome blends
+         into the page rather than framing it. -->
+    <meta name="theme-color" content="#F6F9FF" />
 
     <title>ゆきのじょー | High Quality × Entertainment × Engineering</title>
     <meta
@@ -31,19 +33,25 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Only the weights the page actually uses:
+        Zen Maru Gothic  400 body / 700 bold / 900 display
+                         (`font-extrabold` requests 800; with no 800 face the
+                         CSS font-matching algorithm resolves it to 900)
+        Bricolage Grotesque  700-800, labels and the hero kicker only
+        Caveat               400-700, the two handwritten accents
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700..800&family=Caveat:wght@400..700&family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
       rel="stylesheet"
     />
 
-    <link
-      rel="preload"
-      as="image"
-      href="/images/portrait-768.webp"
-      imagesrcset="/images/portrait-480.webp 480w, /images/portrait-768.webp 768w, /images/portrait-1080.webp 1080w"
-      imagesizes="(min-width: 1024px) 440px, 208px"
-      fetchpriority="high"
-    />
+    <!--
+      The character is the hero's LCP element. It is the only image on the page
+      worth preloading - the decorations are deliberately lazy so they never
+      compete with it for bandwidth.
+    -->
+    <link rel="preload" as="image" href="/chibi/body.webp" fetchpriority="high" />
   </head>
   <body>
     <div id="root"></div>

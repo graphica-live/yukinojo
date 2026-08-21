@@ -1,41 +1,42 @@
+import { motion } from 'framer-motion'
+import BuddyMascot from './components/BuddyMascot'
+import FinaleSection from './components/FinaleSection'
 import HeroSection from './components/HeroSection'
 import LinksSection from './components/LinksSection'
 import OpeningBranchSection from './components/OpeningBranchSection'
 import ProfileSection from './components/ProfileSection'
 import SignalTicker from './components/SignalTicker'
 import SiteNav from './components/SiteNav'
+import { useAmbientVars } from './hooks/useAmbientVars'
 import { useMotionProfile } from './hooks/useMotionProfile'
 
 function App() {
   const { ambient } = useMotionProfile()
+  // Pointer and scroll are published here as --px / --py / --sy and consumed
+  // by every decoration in CSS. One node, one style write per frame.
+  const ambientStyle = useAmbientVars()
 
   return (
-    <div className="relative min-h-screen bg-ink text-white">
+    <motion.div style={ambientStyle} className="relative min-h-screen bg-paper text-ink">
       {/*
-        Ambient layers. Fixed and pointer-events-none so they never repaint
-        with scroll. Static gradients carry the colour; only the drift and the
-        film grain are conditional.
+        Ambient background. Fixed and pointer-events-none so it never repaints
+        with scroll. The static gradients carry the colour; only the two slowly
+        rotating blobs are conditional.
       */}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_15%_-5%,rgba(139,107,255,0.20),transparent_60%),radial-gradient(ellipse_60%_45%_at_90%_25%,rgba(61,225,255,0.14),transparent_62%),radial-gradient(ellipse_80%_50%_at_50%_105%,rgba(139,107,255,0.12),transparent_65%)]" />
-
-        {ambient ? (
-          <div className="veil-glow absolute -left-[15%] top-[-10%] h-[55%] w-[55%] animate-drift rounded-full bg-violet/10 blur-[120px]" />
-        ) : null}
-
-        <div className="veil-grid absolute inset-0" />
+        <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_12%_0%,#FFF2FA_0%,rgba(255,242,250,0)_55%),radial-gradient(110%_76%_at_92%_8%,#E6F3FF_0%,rgba(230,243,255,0)_58%),radial-gradient(120%_90%_at_50%_110%,#EEF8F4_0%,rgba(238,248,244,0)_60%)]" />
 
         {ambient ? (
           <>
-            <div className="veil-scanlines absolute inset-0 opacity-40" />
-            <div className="veil-grain absolute inset-0 opacity-[0.035]" />
+            <div className="aurora-blob absolute -left-[14vw] -top-[16vw] h-[60vw] w-[60vw] animate-[spin-slow_46s_linear_infinite] rounded-full bg-[conic-gradient(from_40deg,#ffd7ec,#d9ecff,#d3f6ea,#fff0c6,#e6dcff,#ffd7ec)] opacity-50 blur-[70px]" />
+            <div className="aurora-blob absolute -right-[16vw] top-[34vh] h-[52vw] w-[52vw] animate-[spin-slow_62s_linear_infinite_reverse] rounded-full bg-[conic-gradient(from_200deg,#d9ecff,#ffe3f2,#e8ddff,#d5f7ee,#d9ecff)] opacity-50 blur-[70px]" />
           </>
         ) : null}
       </div>
 
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-signal focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-ink"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-grape focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
       >
         本文へスキップ
       </a>
@@ -46,21 +47,20 @@ function App() {
         <HeroSection />
         <SignalTicker />
         <ProfileSection />
-        <OpeningBranchSection embedded />
+        <OpeningBranchSection />
         <LinksSection />
+        <FinaleSection />
       </main>
 
-      <footer className="relative z-10 border-t border-white/10 px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row">
-          <span className="font-display text-sm font-bold tracking-tight text-white/70">
-            ゆきのじょー
-          </span>
-          <p className="font-mono text-[11px] text-white/40">
-            &copy; {new Date().getFullYear()} Yukinojo. All rights reserved.
-          </p>
+      <footer className="relative z-10 px-4 pb-14 pt-9 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-[12px] font-bold text-ink-faint sm:flex-row lg:pr-48">
+          <span>ゆきのじょー / Yukinojo</span>
+          <p>&copy; {new Date().getFullYear()} Yukinojo. All rights reserved.</p>
         </div>
       </footer>
-    </div>
+
+      <BuddyMascot />
+    </motion.div>
   )
 }
 

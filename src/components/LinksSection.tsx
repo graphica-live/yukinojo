@@ -1,44 +1,40 @@
 import { motion, type Variants } from 'framer-motion'
-import {
-  ArrowUpRight,
-  ChatCircleText,
-  Coin,
-  InstagramLogo,
-  TiktokLogo,
-} from '@phosphor-icons/react'
+import { ArrowUpRight, ChatCircleText, Coin, InstagramLogo, TiktokLogo } from '@phosphor-icons/react'
+import DecoField from './Deco'
+import { linksDeco } from '../data/deco'
 import { useMotionProfile, revealProps } from '../hooks/useMotionProfile'
 
 /**
  * Brand colours stay on the platform marks only. Everything else on the page
- * uses the single `signal` accent.
+ * uses the palette in tailwind.config.js.
  */
 const links = [
   {
     name: 'TikTok',
     url: 'https://www.tiktok.com/@yu_ki_nojo',
-    icon: <TiktokLogo size={26} weight="fill" />,
-    color: 'from-[#00f2fe] to-[#4facfe]',
+    icon: <TiktokLogo size={24} weight="fill" />,
+    mark: 'from-[#00f2fe] to-[#4facfe]',
     desc: '毎日6〜8時間のライブ配信',
   },
   {
     name: 'Instagram',
     url: 'https://www.instagram.com/yu_ki_nojo/',
-    icon: <InstagramLogo size={26} weight="fill" />,
-    color: 'from-[#f09433] via-[#dc2743] to-[#bc1888]',
+    icon: <InstagramLogo size={24} weight="fill" />,
+    mark: 'from-[#f09433] via-[#dc2743] to-[#bc1888]',
     desc: '日常や裏側の様子をお届け',
   },
   {
     name: 'LINE オープンチャット',
     url: 'https://line.me/ti/g2/BTEbz2kKwB2NbZhj4Rf4GAmSITXAigTxm_cAFw',
-    icon: <ChatCircleText size={26} weight="fill" />,
-    color: 'from-[#00c300] to-[#00a300]',
+    icon: <ChatCircleText size={24} weight="fill" />,
+    mark: 'from-[#06c755] to-[#00a300]',
     desc: 'TikTokLIVEでの活動や配信通知を発信中',
   },
   {
     name: 'TikTok コイン カスタムチャージ',
     url: 'https://www.tiktok.com/coin',
-    icon: <Coin size={26} weight="fill" />,
-    color: 'from-[#f6d365] to-[#fda085]',
+    icon: <Coin size={24} weight="fill" />,
+    mark: 'from-[#f6d365] to-[#fda085]',
     desc: '手数料なしでTikTokのコインをチャージ',
   },
 ]
@@ -57,57 +53,61 @@ const LinksSection = () => {
   const { reveal } = useMotionProfile()
 
   return (
-    <section id="links" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
-      {/* Same max-width as the other sections so every section headline sits
-          on the same left edge; the list itself stays narrower. */}
-      <div className="mx-auto max-w-7xl">
-        <motion.h2
+    <section id="links" className="relative overflow-hidden px-4 py-[86px] sm:px-6 lg:px-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_84%_26%,rgba(200,246,228,0.5),transparent_62%)]"
+      />
+      <DecoField items={linksDeco} />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <motion.div
           variants={reveal ? fadeUp : undefined}
           {...revealProps(reveal)}
-          className="font-display text-3xl font-bold sm:text-4xl lg:text-5xl"
+          className="relative mb-12"
         >
-          SNS Links
-        </motion.h2>
+          <span className="label block">SNS Links</span>
+          <h2 className="mt-2.5 text-[clamp(2rem,6vw,3.5rem)] leading-[1.06]">会いにきてね。</h2>
+          <span className="absolute right-0 top-[-6px] font-hand text-[clamp(1.4rem,4vw,2.1rem)] font-bold text-grape [rotate:-7deg]">
+            see you!
+          </span>
+        </motion.div>
 
         <motion.ul
           variants={reveal ? stagger : undefined}
           {...revealProps(reveal)}
-          className="mt-10 max-w-4xl border-t border-white/10"
+          className="grid gap-4 lg:grid-cols-2 lg:gap-x-5"
         >
           {links.map((link) => (
-            <motion.li
-              key={link.url}
-              variants={reveal ? fadeUp : undefined}
-              className="border-b border-white/10"
-            >
+            <motion.li key={link.url} variants={reveal ? fadeUp : undefined}>
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex items-center gap-4 py-5 pl-4 pr-2 transition-colors hover:bg-white/[0.03] sm:gap-6 sm:py-6 sm:pl-6"
+                className="group flex h-full items-center gap-4 rounded-[22px] bg-white p-4 px-5 shadow-[0_0_0_5px_#fff,0_10px_24px_-14px_rgba(78,100,168,0.6)] transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_0_0_5px_#fff,22px_30px_48px_-26px_rgba(78,100,168,0.6)] sm:gap-[18px]"
               >
                 <span
                   aria-hidden="true"
-                  className="absolute inset-y-0 left-0 w-0.5 origin-center scale-y-0 bg-signal transition-transform duration-300 group-hover:scale-y-100"
-                />
-
-                <span
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white ${link.color} sm:h-14 sm:w-14`}
+                  className={`grid h-[50px] w-[50px] shrink-0 place-items-center rounded-[16px] bg-gradient-to-br text-white ${link.mark}`}
                 >
                   {link.icon}
                 </span>
-
-                <span className="min-w-0 flex-1">
-                  <span className="block font-display text-base font-bold leading-tight transition-colors group-hover:text-signal sm:text-lg">
-                    {link.name}
-                  </span>
-                  <span className="mt-1 block text-xs text-white/55 sm:text-sm">{link.desc}</span>
+                {/*
+                  `break-keep` (word-break: keep-all) stops the longest label
+                  breaking mid-katakana on a narrow phone - it wraps at the
+                  spaces instead, which are the meaningful boundaries. Safe
+                  here because every label is short and space-separated; it
+                  would overflow on running Japanese prose.
+                */}
+                <span className="min-w-0">
+                  <span className="block break-keep text-[15.5px] font-black">{link.name}</span>
+                  <span className="block text-pretty text-[12.5px] text-ink-soft">{link.desc}</span>
                 </span>
-
                 <ArrowUpRight
-                  size={20}
+                  size={18}
                   weight="bold"
-                  className="shrink-0 text-white/35 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
+                  aria-hidden="true"
+                  className="ml-auto shrink-0 text-ink-faint transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-grape"
                 />
               </a>
             </motion.li>
