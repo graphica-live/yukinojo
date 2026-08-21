@@ -1,124 +1,121 @@
-import { motion, type Variants } from 'framer-motion';
-import { TiktokLogo, InstagramLogo, ChatCircleText, Coin } from '@phosphor-icons/react';
-import { shouldUseLowEffectsMode } from '../utils/browser';
+import { motion, type Variants } from 'framer-motion'
+import {
+  ArrowUpRight,
+  ChatCircleText,
+  Coin,
+  InstagramLogo,
+  TiktokLogo,
+} from '@phosphor-icons/react'
+import { useMotionProfile, revealProps } from '../hooks/useMotionProfile'
+
+/**
+ * Brand colours stay on the platform marks only. Everything else on the page
+ * uses the single `signal` accent.
+ */
+const links = [
+  {
+    name: 'TikTok',
+    url: 'https://www.tiktok.com/@yu_ki_nojo',
+    icon: <TiktokLogo size={26} weight="fill" />,
+    color: 'from-[#00f2fe] to-[#4facfe]',
+    desc: '毎日6〜8時間のライブ配信',
+  },
+  {
+    name: 'Instagram',
+    url: 'https://www.instagram.com/yu_ki_nojo/',
+    icon: <InstagramLogo size={26} weight="fill" />,
+    color: 'from-[#f09433] via-[#dc2743] to-[#bc1888]',
+    desc: '日常や裏側の様子をお届け',
+  },
+  {
+    name: 'LINE オープンチャット',
+    url: 'https://line.me/ti/g2/BTEbz2kKwB2NbZhj4Rf4GAmSITXAigTxm_cAFw',
+    icon: <ChatCircleText size={26} weight="fill" />,
+    color: 'from-[#00c300] to-[#00a300]',
+    desc: 'TikTokLIVEでの活動や配信通知を発信中',
+  },
+  {
+    name: 'TikTok コイン カスタムチャージ',
+    url: 'https://www.tiktok.com/coin',
+    icon: <Coin size={26} weight="fill" />,
+    color: 'from-[#f6d365] to-[#fda085]',
+    desc: '手数料なしでTikTokのコインをチャージ',
+  },
+]
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+}
+
+const stagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+}
 
 const LinksSection = () => {
-  const useLowEffectsMode = shouldUseLowEffectsMode();
-  const links = [
-    {
-      name: 'TikTok',
-      url: 'https://www.tiktok.com/@yu_ki_nojo',
-      icon: <TiktokLogo size={32} weight="fill" />,
-      color: 'from-[#00f2fe] to-[#4facfe]',
-      desc: '毎日6〜8時間のライブ配信'
-    },
-    {
-      name: 'Instagram',
-      url: 'https://www.instagram.com/yu_ki_nojo/',
-      icon: <InstagramLogo size={32} weight="fill" />,
-      color: 'from-[#f09433] via-[#dc2743] to-[#bc1888]',
-      desc: '日常や裏側の様子をお届け'
-    },
-    {
-      name: 'LINE オープンチャット',
-      url: 'https://line.me/ti/g2/BTEbz2kKwB2NbZhj4Rf4GAmSITXAigTxm_cAFw',
-      icon: <ChatCircleText size={32} weight="fill" />,
-      color: 'from-[#00c300] to-[#00a300]',
-      desc: 'TikTokLIVEでの活動や配信通知を発信中'
-    },
-    {
-      name: 'TikTok コイン カスタムチャージ',
-      url: 'https://www.tiktok.com/coin',
-      icon: <Coin size={32} weight="fill" />,
-      color: 'from-[#f6d365] to-[#fda085]',
-      desc: '手数料なしでTikTokのコインをチャージ'
-    }
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.9, y: 30, rotateX: 10 },
-    visible: { opacity: 1, scale: 1, y: 0, rotateX: 0, transition: { type: 'spring', stiffness: 120, damping: 14 } }
-  };
+  const { reveal } = useMotionProfile()
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 relative z-10" id="links">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-display font-bold mb-4"
-          >
-            SNS <span className="text-gradient">Links</span>
-          </motion.h2>
-          <motion.div 
-            initial={{ opacity: 0, scaleX: 0 }}
-            whileInView={{ opacity: 1, scaleX: 1 }}
-            viewport={{ once: true }}
-            className="h-1 w-24 bg-gradient-to-r from-secondary to-primary mx-auto rounded-full"
-          />
-        </div>
-
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid gap-6"
+    <section id="links" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+      {/* Same max-width as the other sections so every section headline sits
+          on the same left edge; the list itself stays narrower. */}
+      <div className="mx-auto max-w-7xl">
+        <motion.h2
+          variants={reveal ? fadeUp : undefined}
+          {...revealProps(reveal)}
+          className="font-display text-3xl font-bold sm:text-4xl lg:text-5xl"
         >
-          {links.map((link, index) => (
-            <motion.a
-              key={index}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              variants={itemVariants}
-              whileHover={{ 
-                scale: 1.05,
-                y: -5,
-                boxShadow: useLowEffectsMode
-                  ? '0 20px 40px -14px rgba(0, 0, 0, 0.55)'
-                  : "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.1)",
-                transition: { type: "spring", stiffness: 400, damping: 17 }
-              }}
-              whileTap={{ scale: 0.98 }}
-              className={`glass glass-hover p-6 rounded-2xl flex items-center group relative overflow-hidden transition-all duration-300 border border-white/5 hover:border-white/20`}
+          SNS Links
+        </motion.h2>
+
+        <motion.ul
+          variants={reveal ? stagger : undefined}
+          {...revealProps(reveal)}
+          className="mt-10 max-w-4xl border-t border-white/10"
+        >
+          {links.map((link) => (
+            <motion.li
+              key={link.url}
+              variants={reveal ? fadeUp : undefined}
+              className="border-b border-white/10"
             >
-              <div className={`absolute inset-0 bg-gradient-to-r ${link.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-              
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-tr ${link.color} shrink-0 mr-6 shadow-lg shadow-black/50 group-hover:scale-110 transition-transform duration-300`}>
-                {link.icon}
-              </div>
-              
-              <div className="flex-1">
-                <h3 className="text-xl font-bold font-display mb-1 group-hover:text-white transition-colors">
-                  {link.name}
-                </h3>
-                <p className="text-white/60 font-light text-sm">
-                  {link.desc}
-                </p>
-              </div>
-              
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-white/10 transition-colors">
-                <svg className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </motion.a>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative flex items-center gap-4 py-5 pl-4 pr-2 transition-colors hover:bg-white/[0.03] sm:gap-6 sm:py-6 sm:pl-6"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-0.5 origin-center scale-y-0 bg-signal transition-transform duration-300 group-hover:scale-y-100"
+                />
+
+                <span
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white ${link.color} sm:h-14 sm:w-14`}
+                >
+                  {link.icon}
+                </span>
+
+                <span className="min-w-0 flex-1">
+                  <span className="block font-display text-base font-bold leading-tight transition-colors group-hover:text-signal sm:text-lg">
+                    {link.name}
+                  </span>
+                  <span className="mt-1 block text-xs text-white/55 sm:text-sm">{link.desc}</span>
+                </span>
+
+                <ArrowUpRight
+                  size={20}
+                  weight="bold"
+                  className="shrink-0 text-white/35 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-signal"
+                />
+              </a>
+            </motion.li>
           ))}
-        </motion.div>
+        </motion.ul>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default LinksSection;
+export default LinksSection

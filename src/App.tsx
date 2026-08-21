@@ -1,55 +1,67 @@
-
-import HeroSection from './components/HeroSection';
-import LinksSection from './components/LinksSection';
-import OpeningBranchSection from './components/OpeningBranchSection';
-import { shouldUseLowEffectsMode } from './utils/browser';
+import HeroSection from './components/HeroSection'
+import LinksSection from './components/LinksSection'
+import OpeningBranchSection from './components/OpeningBranchSection'
+import ProfileSection from './components/ProfileSection'
+import SignalTicker from './components/SignalTicker'
+import SiteNav from './components/SiteNav'
+import { useMotionProfile } from './hooks/useMotionProfile'
 
 function App() {
-  const useLowEffectsMode = shouldUseLowEffectsMode();
+  const { ambient } = useMotionProfile()
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-primary/30 selection:text-white">
-      {/* Dynamic Glamorous Background */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#05050a]">
-        {/* Global Abstract Background Image */}
-        <img 
-          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
-          alt="Global Background" 
-          className={`absolute inset-0 w-full h-full object-cover ${useLowEffectsMode ? 'opacity-12' : 'opacity-30 mix-blend-screen'}`}
-        />
-        
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#05050a]/60 to-[#05050a]/90"></div>
-        
-        {/* Moving glowing orbs (Masculine & Premium: Deep Blue, Rich Purple, Subtle Gold) */}
-        {useLowEffectsMode ? null : (
+    <div className="relative min-h-screen bg-ink text-white">
+      {/*
+        Ambient layers. Fixed and pointer-events-none so they never repaint
+        with scroll. Static gradients carry the colour; only the drift and the
+        film grain are conditional.
+      */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_15%_-5%,rgba(139,107,255,0.20),transparent_60%),radial-gradient(ellipse_60%_45%_at_90%_25%,rgba(61,225,255,0.14),transparent_62%),radial-gradient(ellipse_80%_50%_at_50%_105%,rgba(139,107,255,0.12),transparent_65%)]" />
+
+        {ambient ? (
+          <div className="veil-glow absolute -left-[15%] top-[-10%] h-[55%] w-[55%] animate-drift rounded-full bg-violet/10 blur-[120px]" />
+        ) : null}
+
+        <div className="veil-grid absolute inset-0" />
+
+        {ambient ? (
           <>
-            <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/15 rounded-full blur-[120px] mix-blend-screen opacity-60 animate-pulse-slow"></div>
-            <div className="absolute top-[30%] right-[-10%] w-[50%] h-[50%] bg-purple-600/15 rounded-full blur-[150px] mix-blend-screen opacity-50 animate-pulse-slow object-right" style={{ animationDelay: '2s' }}></div>
-            <div className="absolute bottom-[-20%] left-[10%] w-[70%] h-[70%] bg-amber-500/10 rounded-full blur-[130px] mix-blend-screen opacity-40 animate-pulse-slow" style={{ animationDelay: '4s' }}></div>
+            <div className="veil-scanlines absolute inset-0 opacity-40" />
+            <div className="veil-grain absolute inset-0 opacity-[0.035]" />
           </>
-        )}
-        
-        {/* Grain overlay for texture */}
-        {useLowEffectsMode ? null : (
-          <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\"/%3E%3C/svg%3E')" }}></div>
-        )}
+        ) : null}
       </div>
 
-      <main className="relative z-10">
-        <>
-          <HeroSection />
-          <OpeningBranchSection embedded />
-          <LinksSection />
-        </>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-signal focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-ink"
+      >
+        本文へスキップ
+      </a>
+
+      <SiteNav />
+
+      <main id="main" className="relative z-10">
+        <HeroSection />
+        <SignalTicker />
+        <ProfileSection />
+        <OpeningBranchSection embedded />
+        <LinksSection />
       </main>
 
-      <footer className="relative z-10 py-8 text-center border-t border-white/5 mt-20 glass">
-        <p className="text-white/40 text-sm font-light">
-          &copy; {new Date().getFullYear()} Yukinojo. All rights reserved.
-        </p>
+      <footer className="relative z-10 border-t border-white/10 px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row">
+          <span className="font-display text-sm font-bold tracking-tight text-white/70">
+            ゆきのじょー
+          </span>
+          <p className="font-mono text-[11px] text-white/40">
+            &copy; {new Date().getFullYear()} Yukinojo. All rights reserved.
+          </p>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

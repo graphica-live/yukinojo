@@ -1,83 +1,213 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Outfit:wght@400;500;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-black text-white font-sans antialiased overflow-x-hidden;
+  html {
+    scroll-behavior: smooth;
+    /* Sticky nav clearance for in-page anchors. */
+    scroll-padding-top: 5rem;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  body {
+    @apply bg-ink text-white font-sans antialiased overflow-x-hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display tracking-tight text-white;
+  }
+
+  ::selection {
+    background: rgba(61, 225, 255, 0.28);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid #3de1ff;
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
-  }
-  
-  .glass-hover {
-    @apply hover:bg-white/10 hover:border-white/20 transition-all duration-300;
-  }
-  
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary via-white to-accent;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+  /*
+   * Frosted panel. This is a web glassmorphism approximation, not a
+   * platform material. Solid fallbacks live under .ua-low-effects and
+   * prefers-reduced-transparency.
+   */
+  .panel {
+    @apply rounded-panel border border-white/10 bg-white/[0.045];
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.09),
+      0 24px 60px -32px rgba(0, 0, 0, 0.9);
   }
 
-  .ua-chrome .text-gradient {
-    background-image: none;
-    -webkit-text-fill-color: currentColor;
-    color: #fff;
+  .panel-hover {
+    @apply transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.075];
   }
 
-  .glyph-safe {
-    display: inline-block;
-    line-height: 1;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-font-smoothing: antialiased;
+  /*
+   * The only blur entry point. Always use this instead of Tailwind's
+   * backdrop-blur-* so every frosted surface degrades in one place.
+   */
+  .frost {
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  /* Hairline used instead of card chrome where elevation is not meaningful. */
+  .rule {
+    @apply border-t border-white/10;
+  }
+
+  /* Edge fade for the marquee so text does not collide with the viewport edge. */
+  .edge-fade {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  /* Technical label: mono, wide tracking. Used sparingly. */
+  .label {
+    @apply font-mono text-[10px] uppercase tracking-[0.28em] text-white/45;
   }
 }
 
-.ua-low-effects .glass {
-  background: rgba(255, 255, 255, 0.08);
+/* ---------------------------------------------------------------------------
+   Ambient background layers.
+   Kept as fixed, pointer-events-none elements only. Never on a scrolling
+   container - continuous GPU repaints destroy mobile framerate.
+--------------------------------------------------------------------------- */
+
+.veil-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 78% 62% at 50% 32%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 78% 62% at 50% 32%, #000 0%, transparent 72%);
+}
+
+.veil-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.032) 0px,
+    rgba(255, 255, 255, 0.032) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.veil-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------------------------------
+   Degradation axis 1: TikTok / ByteDance in-app webview (.ua-low-effects).
+   These webviews choke on backdrop-filter, mix-blend-mode and large blur
+   radii - the combination previously rendered the page fully black.
+   Everything expensive collapses to a solid fill here.
+--------------------------------------------------------------------------- */
+
+.ua-low-effects .panel {
+  background: rgba(255, 255, 255, 0.07);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  box-shadow: none;
 }
 
-.ua-low-effects .glass-hover:hover {
-  background: rgba(255, 255, 255, 0.12);
+.ua-low-effects .panel-hover:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.ua-low-effects .text-gradient {
-  background-image: none;
-  -webkit-text-fill-color: currentColor;
-  color: #fff;
+.ua-low-effects .veil-grain,
+.ua-low-effects .veil-scanlines,
+.ua-low-effects .veil-glow {
+  display: none;
 }
 
-/* Custom Scrollbar for Webkit */
+.ua-low-effects .edge-fade {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.ua-low-effects .veil-grid {
+  -webkit-mask-image: none;
+  mask-image: none;
+  opacity: 0.35;
+}
+
+.ua-low-effects [data-blend] {
+  mix-blend-mode: normal !important;
+}
+
+.ua-low-effects .animate-ticker,
+.ua-low-effects .animate-ticker-reverse,
+.ua-low-effects .animate-drift,
+.ua-low-effects .animate-sweep {
+  animation: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Degradation axis 2: prefers-reduced-motion.
+   Independent of the webview axis - either one alone must produce a
+   usable page. JS-driven motion is additionally gated by useMotionProfile().
+--------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Transparency preference: drop the frost, keep the contrast. */
+@media (prefers-reduced-transparency: reduce) {
+  .panel {
+    background: rgba(20, 23, 33, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbar
+--------------------------------------------------------------------------- */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000;
+  background: #08080c;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
+  background: #23262f;
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #33374a;
 }
