@@ -1,7 +1,7 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
-import { Code, Martini, MicrophoneStage } from '@phosphor-icons/react';
+import { Code, MicrophoneStage } from '@phosphor-icons/react';
 import { shouldUseLowEffectsMode } from '../utils/browser';
 
 const HeroSection = () => {
@@ -65,12 +65,6 @@ const HeroSection = () => {
       title: 'SE',
       subtitle: 'IT業界で13年',
       description: 'システムの開発、PM、フリーランスを経験。IT国家資格高度区分を多数保有。',
-    },
-    {
-      icon: <Martini size={32} weight="duotone" className="text-accent" />,
-      title: 'ホスト',
-      subtitle: '歌舞伎町',
-      description: 'gd-colors 「club yellow」 にてリクエスト出勤中。',
     },
     {
       icon: <MicrophoneStage size={32} weight="duotone" className="text-secondary" />,
@@ -188,7 +182,7 @@ const HeroSection = () => {
             >
               <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-3xl -mr-12 -mt-12 group-hover:bg-primary/20 transition-colors duration-500 group-hover:scale-150" />
 
-              <div className="relative z-10 grid grid-cols-3 gap-2 sm:gap-3 md:gap-8">
+              <div className="relative z-10 grid grid-cols-2 gap-2 sm:gap-3 md:gap-8">
                 {traits.map((trait, index) => (
                   <div
                     key={index}
