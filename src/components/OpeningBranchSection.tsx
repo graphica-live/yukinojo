@@ -30,15 +30,6 @@ const branchCards: BranchCard[] = [
     icon: <PlayCircle size={20} weight="fill" />,
   },
   {
-    title: 'PC配信総合支援ツール「TikEffect」',
-    description: '各種オーバーレイ、読み上げ、字幕など',
-    isExternal: false,
-    accent: 'from-fuchsia-400/75 to-sky-500/70',
-    chip: 'Streaming Tool',
-    buttonText: '開発中',
-    icon: <PlayCircle size={20} weight="fill" />,
-  },
-  {
     title: 'アイコンフレーム装着サービス\n【TikRing】',
     description: '透過フレームをアップロードして、リスナー向け着せ替えURLを発行。誰でも簡単にアイコンフレームの着せ替えが可能なサービスです。',
     href: 'https://tikring.graphica-produce.com',
