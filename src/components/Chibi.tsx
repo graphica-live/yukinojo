@@ -1,74 +1,50 @@
-import type { CSSProperties } from 'react'
+import { useRef, type CSSProperties } from 'react'
+import { motion } from 'framer-motion'
+import { chibiVariants, type ChibiVariantKey } from '../data/chibi'
+import { useGaze } from '../hooks/useGaze'
 import { useMotionProfile } from '../hooks/useMotionProfile'
 
-/**
- * The character rig.
- *
- * The source PSD splits the character into mutually exclusive layers - a
- * cut-out with zero overlap, and therefore zero glue margin. Rotating a part
- * straight out of that PSD exposes the background at every joint.
- *
- * `scratchpad/build-rig.mjs` fixes that in the assets themselves:
- *
- *   1. The stacking order was rebuilt so every moving part sits UNDER the
- *      body. Because the original layers never overlapped, the reordered
- *      stack is identical to the flattened artwork (verified: 0.03% of pixels
- *      differ, all of them on the antialiased outline).
- *   2. Each moving part's outline was pushed out by up to 34px, but only into
- *      the area the covering layers occupy. Invisible at rest, it plugs the
- *      hole once the part rotates.
- *   3. Each joint was measured as the centroid of the seam between a part and
- *      its parent, rather than eyeballed.
- *   4. Parts that only ever move together were flattened into one file, so the
- *      browser holds five decoded bitmaps instead of nine.
- *
- * `body` (torso + head + hat) does not rotate: those seams - a 522x173px neck
- * and a 653x256px hat brim - are far too long to hide behind a 34px margin.
- * The whole figure tilts on `.chibi-hover` instead.
- */
-type RigPart = {
-  src: string
-  /** transform-origin, measured from the seam. */
-  origin?: string
-  /** Rotation amplitude in degrees. */
-  amp?: number
-  dur?: string
-  delay?: string
-}
-
-const RIG: RigPart[] = [
-  // Bottom to top. A leg and its shoe are one file: splitting them at the
-  // ankle would open a hole there for the same reason as the shoulder.
-  { src: 'legBack', origin: '57.5% 67%', amp: 2, dur: '5.7s', delay: '-3s' },
-  { src: 'legFront', origin: '42.8% 54.6%', amp: 2.6, dur: '5.1s', delay: '-1.8s' },
-  { src: 'armBack', origin: '64.5% 52.3%', amp: 4, dur: '4.7s', delay: '-2.4s' },
-  { src: 'armFront', origin: '40.6% 40.3%', amp: 3.4, dur: '3.9s', delay: '-1.2s' },
-  { src: 'body' },
-]
-
 type ChibiProps = {
-  /** Pointer-parallax weight for the whole figure. 0 disables it. */
+  variant?: ChibiVariantKey
+  /** Pointer parallax weight, as for a decoration. */
   depth?: number
   className?: string
+  /** Set on the one instance that is an LCP candidate. */
+  priority?: boolean
 }
 
 /**
- * The hero character. Announced as an image, because on this page the
- * character *is* the portrait.
+ * A character.
+ *
+ * Three nested transforms, one job each, because an animation replaces the
+ * whole `transform` and they would otherwise fight:
+ *   outer  - pointer parallax (composed in CSS from --px/--py)
+ *   middle - the idle hover keyframes
+ *   inner  - the parts themselves, each with its own swing
+ *
+ * The eyes sit on top as absolutely positioned sockets. Each socket clips to an
+ * ellipse, so however far the gaze pushes a pupil it stays inside the eye.
  */
-const Chibi = ({ depth = 0.85, className = '' }: ChibiProps) => {
+const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }: ChibiProps) => {
   const { ambient } = useMotionProfile()
+  const rig = chibiVariants[variant]
+  const ref = useRef<HTMLDivElement>(null)
+  const gaze = useGaze(ref, rig.head)
 
   return (
     <div
       className={`chibi-parallax ${className}`}
       style={{ '--depth': depth } as CSSProperties}
       role="img"
-      aria-label="ゆきのじょーのキャラクター"
+      aria-label={rig.label}
     >
       <div className={ambient ? 'chibi-hover' : undefined}>
-        <div className="chibi">
-          {RIG.map((part) => (
+        <motion.div
+          ref={ref}
+          className="chibi"
+          style={{ aspectRatio: rig.aspect, ...(ambient ? gaze : undefined) }}
+        >
+          {rig.parts.map((part) => (
             <img
               key={part.src}
               className={`chibi-part ${part.origin && ambient ? 'chibi-swing' : ''}`}
@@ -80,14 +56,50 @@ const Chibi = ({ depth = 0.85, className = '' }: ChibiProps) => {
                   '--delay': part.delay,
                 } as CSSProperties
               }
-              src={`/chibi/${part.src}.webp`}
+              src={`/${rig.dir}/${part.src}.webp`}
               alt=""
-              loading="eager"
+              loading={priority ? 'eager' : 'lazy'}
+              fetchPriority={priority && part.src === 'body' ? 'high' : undefined}
               decoding="async"
               draggable={false}
             />
           ))}
-        </div>
+
+          {rig.eyes.map((eye, index) => (
+            <span
+              key={index}
+              className="chibi-eye"
+              aria-hidden="true"
+              style={
+                {
+                  left: `${eye.box[0]}%`,
+                  top: `${eye.box[1]}%`,
+                  width: `${eye.box[2]}%`,
+                  height: `${eye.box[3]}%`,
+                  // Travel is authored as a share of the socket, but a
+                  // percentage inside `translate` resolves against the element
+                  // being moved - the pupil - so convert.
+                  '--tx': `${(eye.travel[0] / eye.pupil[2]) * 100}%`,
+                  '--ty': `${(eye.travel[1] / eye.pupil[3]) * 100}%`,
+                } as CSSProperties
+              }
+            >
+              <img
+                className="chibi-pupil"
+                style={{
+                  left: `${eye.pupil[0]}%`,
+                  top: `${eye.pupil[1]}%`,
+                  width: `${eye.pupil[2]}%`,
+                }}
+                src={`/${rig.dir}/eye${index === 0 ? 'L' : 'R'}.webp`}
+                alt=""
+                loading={priority ? 'eager' : 'lazy'}
+                decoding="async"
+                draggable={false}
+              />
+            </span>
+          ))}
+        </motion.div>
       </div>
     </div>
   )

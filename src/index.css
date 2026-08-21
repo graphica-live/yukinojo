@@ -223,10 +223,10 @@
   );
 }
 
+/* aspect-ratio is set inline: the two characters have different canvases. */
 .chibi {
   position: relative;
   width: 100%;
-  aspect-ratio: 1223 / 1286;
 }
 
 .chibi-part {
@@ -235,6 +235,37 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/*
+ * Eyes.
+ *
+ * Neither render had an eye layer, so each pupil was cut out and the hole
+ * behind it filled harmonically. That only works because a pupil sits on a
+ * smooth backdrop - a brown disc on one character, a purple iris on the other -
+ * so nothing structural had to be repainted.
+ *
+ * `.chibi-eye` is the socket: it clips to the ellipse of the eye itself, which
+ * means a pupil driven to the far end of its travel slides under the lid rather
+ * than out onto the cheek. `--gx` / `--gy` arrive from useGaze in -1..1.
+ */
+.chibi-eye {
+  position: absolute;
+  display: block;
+  overflow: hidden;
+  clip-path: ellipse(50% 50%);
+  pointer-events: none;
+}
+
+.chibi-pupil {
+  position: absolute;
+  display: block;
+  height: auto;
+  transform: translate3d(
+    calc(var(--tx, 0%) * var(--gx, 0)),
+    calc(var(--ty, 0%) * var(--gy, 0)),
+    0
+  );
 }
 
 @keyframes chibi-swing {

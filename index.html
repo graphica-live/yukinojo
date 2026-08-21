@@ -47,11 +47,12 @@
     />
 
     <!--
-      The character is the hero's LCP element. It is the only image on the page
-      worth preloading - the decorations are deliberately lazy so they never
-      compete with it for bandwidth.
+      The two characters are the hero's LCP candidates, and the only images on
+      the page worth preloading - the decorations are deliberately lazy so they
+      never compete for bandwidth.
     -->
     <link rel="preload" as="image" href="/chibi/body.webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/chibi-b/body.webp" fetchpriority="high" />
   </head>
   <body>
     <div id="root"></div>
