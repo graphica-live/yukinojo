@@ -63,8 +63,8 @@ const HeroSection = () => {
     {
       icon: <Code size={32} weight="duotone" className="text-primary" />,
       title: 'SE',
-      subtitle: 'IT業界で13年',
-      description: 'システムの開発、PM、フリーランスを経験。IT国家資格高度区分を多数保有。',
+      subtitle: '初めてのコーディングから28年。実務経験14年。',
+      description: 'システムの開発・保守、プロジェクトマネジメントを経験。IT国家資格高度区分を多数保有。',
     },
     {
       icon: <MicrophoneStage size={32} weight="duotone" className="text-secondary" />,
