@@ -78,7 +78,12 @@ const ProfileSection = () => {
               <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">SE</h3>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              {['開発 / 保守', 'PM', '高度区分 多数'].map(chip)}
+              {[
+                'IPA／プロジェクトマネージャ',
+                'IPA／情報セキュリティスペシャリスト',
+                'その他資格多数',
+                '実務14年',
+              ].map(chip)}
             </div>
           </motion.article>
 
@@ -98,7 +103,7 @@ const ProfileSection = () => {
               <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">ライバー</h3>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              {['毎日 6〜8H', 'TikTok LIVE'].map(chip)}
+              {['毎日配信', 'TikTokLIVE', 'サニプリ所属'].map(chip)}
             </div>
           </motion.article>
 
@@ -119,7 +124,7 @@ const ProfileSection = () => {
               <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">元ホスト</h3>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              {['歌舞伎町', '接客 / トーク'].map(chip)}
+              {['歌舞伎町', '5年', '2店舗'].map(chip)}
             </div>
           </motion.article>
         </motion.div>
