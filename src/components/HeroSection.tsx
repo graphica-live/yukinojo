@@ -6,9 +6,6 @@ import DecoField from './Deco'
 import { heroDeco } from '../data/deco'
 import { useMotionProfile } from '../hooks/useMotionProfile'
 
-const NAME_TOP = 'ゆきの'
-const NAME_BOTTOM = 'じょー'
-
 /**
  * Weight behind the exit.
  *
@@ -29,41 +26,26 @@ const stagger: Variants = {
   visible: { transition: { staggerChildren: 0.09 } },
 }
 
-/**
- * One line of the logotype.
- *
- * The extrusion and the face have to be separate elements (`.logo3d` explains
- * why), which means the string is in the DOM twice. The shadow copy is hidden
- * from assistive tech so the name is still announced once.
- */
-const LogoLine = ({ children }: { children: string }) => (
-  <span className="logo3d whitespace-nowrap lg:mx-auto">
-    <span className="logo3d__depth" aria-hidden="true">
-      {children}
-    </span>
-    <span className="logo3d__face">{children}</span>
-  </span>
-)
-
 /*
  * Two arrangements of the same three elements.
  *
  * `staged` is the one the page opens on: the pair dead centre, filling the
- * screen, with the copy behind them and the logotype cut in BETWEEN them - the
- * left character behind it, the right one in front. That sandwich is the whole
- * reason the three read as one scene with depth rather than as a stack.
+ * screen, with the copy behind them and the badge/heading cut in BETWEEN
+ * them - the left character behind it, the right one in front. That sandwich
+ * is the whole reason the three read as one scene with depth rather than as
+ * a stack.
  *
  * It is why the copy carries no z-index here. An index would make the block a
- * stacking context and trap the logotype inside it, below both characters;
- * without one, the logotype's own z-30 competes directly with the two character
- * layers, and the rest of the copy still paints underneath them (auto-index
- * content is drawn before any positive index).
+ * stacking context and trap the badge/heading inside it, below both
+ * characters; without one, their own z-30 competes directly with the two
+ * character layers, and the rest of the copy still paints underneath them
+ * (auto-index content is drawn before any positive index).
  *
  * `still` is what runs when ambient motion is off (reduced-motion, or the
  * TikTok webview). Nothing moves there, so a pair parked over the copy would
  * cover it for good. They go back to flanking it, the copy takes a reserve at
  * the foot to stand them in below `lg`, and the copy comes back out on top -
- * one context above both characters, logotype included.
+ * one context above both characters.
  *
  * Both are plain placement; the exit transform always lives on the child, since
  * Framer Motion writes the whole `transform` inline and the two cannot share a
@@ -169,7 +151,7 @@ const HeroSection = () => {
           className={`relative max-w-[30rem] lg:mx-auto lg:max-w-[34rem] lg:text-center ${layout.copy}`}
         >
           {/*
-            Rides the same plane as the logotype - in front of the left
+            Rides the same plane as the heading - in front of the left
             character, behind the right one - so the two pieces of the lockup
             are not split across the pair.
           */}
@@ -191,30 +173,25 @@ const HeroSection = () => {
             The heading is lifted out of the copy's paint order and dropped
             between the two characters (see LAYOUT). z-30 is read against the
             character layers' z-20 / z-40, not against its siblings here - the
-            copy block deliberately has no index of its own.
+            copy block deliberately has no index of its own. The name logotype
+            that used to fill this heading is gone; the pair now carry the
+            visual weight on their own, so this is just the kicker line.
           */}
           <motion.h1
             variants={animate ? fadeUp : undefined}
-            className="relative z-30 mt-5 text-[clamp(3rem,8.4vw,5.6rem)] font-black leading-[0.94] tracking-[-0.035em]"
+            className="title-cut relative z-30 mt-5 font-display text-[clamp(0.72rem,1.6vw,0.92rem)] font-extrabold uppercase leading-[1.7] tracking-[0.12em] text-ink-faint"
           >
-            {/*
-              The kicker is part of the heading, so it stays inside <h1> and is
-              read out with the name rather than as a stray line.
-            */}
-            <span className="title-cut mb-4 block font-display text-[clamp(0.62rem,1.4vw,0.78rem)] font-extrabold uppercase leading-[1.7] tracking-[0.12em] text-ink-faint">
-              High Quality × Entertainment × Engineering
-            </span>
-            {/*
-              The name is set as a dimensional logotype - see `.logo3d`. Each
-              line is two stacked copies of the same string, so the shadow copy
-              is hidden from assistive tech and the heading still reads once.
-
-              Never allowed to wrap: breaking a Japanese name mid-word changes
-              how it reads.
-            */}
-            <LogoLine>{NAME_TOP}</LogoLine>
-            <LogoLine>{NAME_BOTTOM}</LogoLine>
+            High Quality × Entertainment × Engineering
           </motion.h1>
+
+          {/*
+            Silent spacer, exactly the height the two-line name used to take up
+            (same clamp() as the old logotype, doubled for two lines). LAYOUT's
+            `top-1/2` anchors are measured against this block's flow height, so
+            deleting the name without replacing its height would drag the pair
+            up and over the meta line and buttons below.
+          */}
+          <div aria-hidden="true" style={{ height: 'clamp(5.64rem, 15.792vw, 10.528rem)' }} />
 
           <motion.p
             variants={animate ? fadeUp : undefined}
@@ -248,9 +225,9 @@ const HeroSection = () => {
 
         {/*
           The pair, laid over the title zone - one layer EACH, with the
-          logotype's z-30 running between them. A single shared layer would put
-          both characters on the same plane and there would be nothing for the
-          name to sit inside.
+          badge/heading's z-30 running between them. A single shared layer
+          would put both characters on the same plane and there would be
+          nothing for the copy to sit inside.
 
           `pointer-events-none` on both: a limb crossing in front of a link must
           never make it untappable, and neither character has any interaction of
