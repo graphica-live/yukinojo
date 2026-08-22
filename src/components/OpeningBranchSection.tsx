@@ -15,7 +15,6 @@ type BranchCard = {
   description: string
   href: string
   isExternal: boolean
-  chip: string
   buttonText: string
   icon: React.ReactNode
   /** Decorative clip pinned to the corner. */
@@ -31,7 +30,6 @@ const branchCards: BranchCard[] = [
     description: 'TikTok高画質セットアップについてDMで質問する。',
     href: 'https://www.tiktok.com/@yu_ki_nojo',
     isExternal: true,
-    chip: 'Consulting',
     buttonText: 'Open TikTok Profile',
     icon: <MonitorPlay size={22} weight="duotone" />,
     pin: 'clip-binder',
@@ -45,7 +43,6 @@ const branchCards: BranchCard[] = [
       '透過フレームをアップロードして、リスナー向け着せ替えURLを発行。誰でも簡単にアイコンフレームの着せ替えが可能なサービスです。',
     href: 'https://tikring.graphica-produce.com',
     isExternal: false,
-    chip: 'Frame Fitter',
     buttonText: 'Open TikRing',
     icon: <Aperture size={22} weight="duotone" />,
     pin: 'clip-heart',
@@ -58,7 +55,6 @@ const branchCards: BranchCard[] = [
     description: '自作エフェクトに美しいグラデーション透過をかけよう。',
     href: 'https://tikgradation.graphica-produce.com/',
     isExternal: false,
-    chip: 'Gradation',
     buttonText: 'Open TikGradation',
     icon: <Drop size={22} weight="duotone" />,
     pin: 'ribbon-tag-blue',
@@ -110,10 +106,10 @@ const OpeningBranchSection = () => {
         <motion.div
           variants={reveal ? stagger : undefined}
           {...revealProps(reveal)}
-          className="grid gap-7 md:grid-cols-2 xl:grid-cols-3"
+          className="flex flex-col gap-4"
         >
           {branchCards.map((card, index) => (
-            <motion.div key={card.href} variants={reveal ? fadeUp : undefined} className="h-full">
+            <motion.div key={card.href} variants={reveal ? fadeUp : undefined}>
               {/*
                 Link behaviour is deliberate and must not drift: the consulting
                 card opens a new tab, the two web apps navigate in place.
@@ -122,11 +118,11 @@ const OpeningBranchSection = () => {
                 href={card.href}
                 target={card.isExternal ? '_blank' : undefined}
                 rel={card.isExternal ? 'noopener noreferrer' : undefined}
-                className={`sticker sticker-hover group relative flex h-full flex-col bg-gradient-to-br p-7 pb-6 ${card.tint} ${tilt[index]} hover:-translate-y-2.5 hover:[rotate:0deg]`}
+                className={`sticker sticker-hover group relative flex h-full items-center gap-4 bg-gradient-to-br p-5 ${card.tint} ${tilt[index]} hover:-translate-y-2.5 hover:[rotate:0deg]`}
               >
                 <span
                   aria-hidden="true"
-                  className={`absolute -right-3.5 -top-4 ${card.pinClass}`}
+                  className={`absolute -right-2.5 -top-3 w-11 opacity-90 ${card.pinClass.replace(/w-\S+/, '')}`}
                 >
                   <img
                     src={`/deco/${card.pin}.webp`}
@@ -137,25 +133,25 @@ const OpeningBranchSection = () => {
                   />
                 </span>
 
-                <div className="flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-[14px] bg-white text-grape shadow-plate">
-                    {card.icon}
-                  </span>
-                  <span className="label">{card.chip}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2.5">
+                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[12px] bg-white text-grape shadow-plate">
+                      {card.icon}
+                    </span>
+                    <h3 className="text-[clamp(1.05rem,2.6vw,1.28rem)] leading-[1.32]">
+                      <span className="block text-balance">{card.title}</span>
+                      {card.productName && <span className="block">{card.productName}</span>}
+                    </h3>
+                  </div>
+                  <p className="mt-2 text-pretty text-[13px] leading-[1.6] text-ink-soft">
+                    {card.description}
+                  </p>
                 </div>
 
-                <h3 className="mt-4 text-[clamp(1.15rem,2.8vw,1.42rem)] leading-[1.42]">
-                  <span className="block text-balance">{card.title}</span>
-                  {card.productName && <span className="block">{card.productName}</span>}
-                </h3>
-                <p className="mt-3 flex-1 text-pretty text-[13.8px] leading-[1.9] text-ink-soft">
-                  {card.description}
-                </p>
-
-                <span className="mt-6 inline-flex items-center gap-2 self-start rounded-full bg-gradient-to-br from-[#FDEFF7] to-[#ECF3FF] px-[18px] py-3 text-[13px] font-extrabold text-grape-deep transition-all duration-200 group-hover:bg-gradient-to-r group-hover:from-cta-from group-hover:to-cta-to group-hover:text-white group-hover:shadow-[0_12px_22px_-12px_rgba(91,63,217,0.8)]">
-                  {card.buttonText}
+                <span className="grid h-10 w-10 shrink-0 place-items-center self-center rounded-xl bg-gradient-to-br from-[#FDEFF7] to-[#ECF3FF] text-grape-deep transition-all duration-200 group-hover:bg-gradient-to-r group-hover:from-cta-from group-hover:to-cta-to group-hover:text-white group-hover:shadow-[0_12px_22px_-12px_rgba(91,63,217,0.8)]">
+                  <span className="sr-only">{card.buttonText}</span>
                   <ArrowUpRight
-                    size={14}
+                    size={17}
                     weight="bold"
                     className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   />
