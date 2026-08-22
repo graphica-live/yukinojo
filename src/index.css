@@ -1,83 +1,506 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Outfit:wght@400;500;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-black text-white font-sans antialiased overflow-x-hidden;
+  html {
+    scroll-behavior: smooth;
+    /* Sticky nav clearance for in-page anchors. */
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight text-white;
+  body {
+    @apply bg-paper text-ink font-sans antialiased overflow-x-hidden;
+    font-weight: 500;
+    line-height: 1.9;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-ink;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: rgba(115, 80, 245, 0.22);
+    color: #333f6d;
+  }
+
+  :focus-visible {
+    outline: 3px solid #7350f5;
+    outline-offset: 3px;
+    border-radius: 6px;
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
-  }
-  
-  .glass-hover {
-    @apply hover:bg-white/10 hover:border-white/20 transition-all duration-300;
-  }
-  
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary via-white to-accent;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+  /*
+   * Die-cut sticker. The white keyline is what makes an element read as a
+   * sticker rather than a card, so it belongs to the shape, not the shadow.
+   */
+  .sticker {
+    @apply rounded-sticker bg-white shadow-sticker;
   }
 
-  .ua-chrome .text-gradient {
-    background-image: none;
-    -webkit-text-fill-color: currentColor;
-    color: #fff;
+  .sticker-hover {
+    @apply transition-transform duration-300 hover:shadow-sticker-hover;
+    transition-timing-function: cubic-bezier(0.34, 1.4, 0.64, 1);
   }
 
-  .glyph-safe {
-    display: inline-block;
-    line-height: 1;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-font-smoothing: antialiased;
+  /*
+   * The only blur entry point on the page. Always use this instead of
+   * Tailwind's backdrop-blur-* so every frosted surface degrades in one place.
+   * Only the nav uses it; mix-blend-mode and large blur radii are not used at
+   * all, because that combination once rendered the whole page black in the
+   * TikTok webview.
+   */
+  .frost {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  /* Iridescent fill. Decorative only - never used to colour body text. */
+  .iris-fill {
+    background: linear-gradient(96deg, #ff7fb6 2%, #7350f5 46%, #56d7ef 100%);
+  }
+
+  /* Edge fade for the marquee so text does not collide with the viewport edge. */
+  .edge-fade {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  }
+
+  /*
+   * Die-cut keyline on text.
+   *
+   * The hero characters are laid over the title zone, so a glyph can end up
+   * against a black boot or a cow-print hat. `paint-order: stroke fill` draws
+   * the stroke behind the fill, so this reads as an outline rather than
+   * fattening the letterform.
+   *
+   * Over the page background it is all but invisible - white on near-white -
+   * so it costs nothing where it is not needed, and where it is, it is the same
+   * white keyline the stickers are cut with.
+   *
+   * The width is in `em` so it tracks the type: 9px at the desktop display
+   * size, under 2px on the small lines.
+   */
+  .title-cut {
+    paint-order: stroke fill;
+    -webkit-text-stroke: 0.1em #ffffff;
+  }
+
+  /*
+   * The name, built as an object rather than a heading.
+   *
+   * It is the one piece of type on the page that has to hold its own with a
+   * character standing in front of it, so it gets mass: a pearl face, an ink
+   * keyline, and a grape extrusion running down-right, away from the same
+   * top-left light the stickers are lit by.
+   *
+   * TWO stacked copies, not one element. The face is a gradient clipped to the
+   * glyphs, and a background always paints BEHIND text-shadow - an extrusion on
+   * the same element would be drawn over the face. Splitting them puts the
+   * shadow copy underneath, where it belongs.
+   *
+   * They are stacked with grid rather than absolute positioning so the lockup
+   * keeps its intrinsic size and still lays out as a line of text.
+   *
+   * Every depth is in `em`, so the extrusion tracks the type through the
+   * clamp() instead of turning into a slab at the small end.
+   */
+  .logo3d {
+    display: grid;
+    width: fit-content;
+  }
+
+  .logo3d > * {
+    grid-area: 1 / 1;
+  }
+
+  /*
+   * The stroke is centred on the outline, so this copy sits half a keyline
+   * PROUD of the face above it - which is exactly what makes the ink read as an
+   * outline around the letterform rather than a darkening of it. `paint-order`
+   * keeps it behind its own fill for the same reason `.title-cut` does.
+   */
+  .logo3d__depth {
+    color: #ffffff;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 0.05em #2f3a66;
+    text-shadow:
+      0.014em 0.016em 0 #6b4ce6,
+      0.028em 0.032em 0 #6448df,
+      0.042em 0.048em 0 #5d43d8,
+      0.056em 0.064em 0 #563ed1,
+      0.07em 0.08em 0 #4f39c9,
+      0.084em 0.096em 0 #4834c2,
+      0.098em 0.112em 0 #412fbb,
+      0.112em 0.128em 0 #3a2ab3,
+      0.126em 0.144em 0 #3325ac,
+      0.14em 0.16em 0 #2c20a5,
+      0.155em 0.195em 0.14em rgba(52, 40, 112, 0.34);
+  }
+
+  /*
+   * Opaque white by default. `color: transparent` only ever ships together with
+   * a working `background-clip: text` - getting that pair the wrong way round
+   * in a webview that lacks it would erase the name entirely.
+   */
+  .logo3d__face {
+    color: #ffffff;
+  }
+
+  @supports (-webkit-background-clip: text) or (background-clip: text) {
+    .logo3d__face {
+      background: linear-gradient(174deg, #ffffff 0%, #ffffff 44%, #ffeaf5 64%, #e4ecff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  }
+
+  /*
+   * Technical label: display face, wide tracking. Uses ink-soft, not
+   * ink-faint - at 11px it is small text and needs the full 4.5:1.
+   */
+  .label {
+    @apply font-display text-[11px] uppercase tracking-[0.22em] text-ink-soft;
+    font-weight: 800;
   }
 }
 
-.ua-low-effects .glass {
-  background: rgba(255, 255, 255, 0.08);
+/* ---------------------------------------------------------------------------
+   Ambient input -> CSS variables.
+
+   Pointer and scroll are written to exactly three custom properties on ONE
+   node (see useAmbientVars). Every decoration then composes its own offset in
+   pure CSS, so 40+ elements move without a single React re-render.
+
+   Parallax and the idle loop are kept on SEPARATE elements rather than being
+   merged into one `transform`. An animation replaces the whole `transform`
+   property, so anything sharing it has to be repeated inside every keyframe -
+   which is both unreadable and easy to get wrong. Splitting them means:
+
+     - the outer element owns the parallax (pointer + scroll, one transform)
+     - the inner <img> owns the drift / twinkle keyframes
+
+   No property is contested, and no independent-`translate` fallback is needed.
+--------------------------------------------------------------------------- */
+
+/*
+ * One layer per section, filling it exactly. It carries `--sy0` - the scroll
+ * position at which this section is centred in the viewport - measured by the
+ * component. Scroll parallax is the distance from THAT point, not raw scrollY:
+ * using the absolute value gives every section further down the page a large
+ * constant offset, which is a translation, not parallax.
+ */
+.deco-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Overwritten inline before first paint; this keeps the calc valid if the
+     measurement is ever skipped. */
+  --sy0: 0px;
+}
+
+.deco {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  transform: translate3d(
+    calc(var(--px, 0px) * var(--depth, 0)),
+    calc(
+      var(--py, 0px) * var(--depth, 0) + (var(--sy, 0px) - var(--sy0, 0px)) * var(--speed, 0)
+    ),
+    0
+  );
+}
+
+.deco > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes deco-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--r0, 0deg));
+  }
+  50% {
+    transform: translate3d(var(--dx, 8px), var(--dy, -18px), 0) rotate(var(--r1, 6deg));
+  }
+}
+
+@keyframes deco-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.86);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+.deco-drift > img {
+  animation: deco-drift var(--dur, 11s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.deco-twinkle > img {
+  animation: deco-twinkle var(--dur, 3.4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Character rig.
+
+   The source PSD splits the character into mutually exclusive layers - a
+   cut-out with zero overlap and therefore zero glue margin. Rotating a part
+   straight out of that PSD exposes the background at every joint.
+
+   Two things fix it, both baked into the assets by scripts/build-rig.mjs:
+     - the stacking order was rebuilt so every moving part sits UNDER
+       torso/head/hat (the original layers never overlapped, so reordering
+       leaves the static image byte-identical);
+     - each moving part's outline was pushed out up to 34px, but only into
+       the area the covering layers occupy, so the glue is invisible at rest.
+
+   Consequently only the covered parts may rotate. torso / head / hat stay
+   put; the whole body tilts together on the wrapper instead.
+--------------------------------------------------------------------------- */
+
+/*
+ * Three nested elements, one transform each, so nothing is contested:
+ *   .chibi-parallax  pointer parallax for the WHOLE figure
+ *   .chibi-hover     the idle float
+ *   .chibi > img     per-part swing
+ *
+ * The parallax deliberately applies to the whole figure rather than per part.
+ * Giving each part its own depth would shear the figure, and any relative
+ * offset between two parts eats into the 34px glue margin that keeps the
+ * joints closed.
+ */
+.chibi-parallax {
+  transform: translate3d(
+    calc(var(--px, 0px) * var(--depth, 0)),
+    calc(var(--py, 0px) * var(--depth, 0)),
+    0
+  );
+}
+
+/* aspect-ratio is set inline: the two characters have different canvases. */
+.chibi {
+  position: relative;
+  width: 100%;
+}
+
+.chibi-part {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/*
+ * Eyes.
+ *
+ * Neither render had an eye layer, so each pupil was cut out and the hole
+ * behind it filled harmonically. That only works because a pupil sits on a
+ * smooth backdrop - a brown disc on one character, a purple iris on the other -
+ * so nothing structural had to be repainted.
+ *
+ * `.chibi-eye` is the socket: it clips to the ellipse of the eye itself, which
+ * means a pupil driven to the far end of its travel slides under the lid rather
+ * than out onto the cheek. `--gx` / `--gy` arrive from useGaze in -1..1.
+ */
+.chibi-eye {
+  position: absolute;
+  display: block;
+  overflow: hidden;
+  clip-path: ellipse(50% 50%);
+  pointer-events: none;
+}
+
+.chibi-pupil {
+  position: absolute;
+  display: block;
+  height: auto;
+  transform: translate3d(
+    calc(var(--tx, 0%) * var(--gx, 0)),
+    calc(var(--ty, 0%) * var(--gy, 0)),
+    0
+  );
+}
+
+@keyframes chibi-swing {
+  0%,
+  100% {
+    transform: rotate(calc(var(--a, 2deg) * -1));
+  }
+  50% {
+    transform: rotate(var(--a, 2deg));
+  }
+}
+
+.chibi-swing {
+  transform-origin: var(--o, 50% 50%);
+  animation: chibi-swing var(--dur, 5s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/*
+ * Idle drift.
+ *
+ * Deliberately irregular: seven stops at uneven times, with the horizontal,
+ * vertical and rotational components peaking at different ones. A two-keyframe
+ * float reads as a metronome no matter how slow it runs, whereas this never
+ * visibly returns to the same pose - and with the two characters on durations
+ * that share no factor, the pair never falls into step either.
+ *
+ * Offsets are percentages so the drift scales with the character rather than
+ * being twice as strong on a phone.
+ */
+@keyframes chibi-hover {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  13% {
+    transform: translate3d(0.7%, -2.1%, 0) rotate(1.5deg);
+  }
+  29% {
+    transform: translate3d(-0.5%, -0.5%, 0) rotate(-0.6deg);
+  }
+  44% {
+    transform: translate3d(1.2%, -2.9%, 0) rotate(2deg);
+  }
+  61% {
+    transform: translate3d(-1%, -1.1%, 0) rotate(-1.4deg);
+  }
+  78% {
+    transform: translate3d(0.4%, -2.5%, 0) rotate(0.8deg);
+  }
+  91% {
+    transform: translate3d(-0.6%, -0.7%, 0) rotate(-1deg);
+  }
+}
+
+.chibi-hover {
+  animation: chibi-hover var(--dur, 9.5s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ---------------------------------------------------------------------------
+   Degradation axis 1: TikTok / ByteDance in-app webview (.ua-low-effects).
+   These webviews choke on backdrop-filter, mix-blend-mode and large blur
+   radii - the combination previously rendered the page fully black.
+--------------------------------------------------------------------------- */
+
+.ua-low-effects .frost {
+  background: #ffffff;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
-.ua-low-effects .glass-hover:hover {
-  background: rgba(255, 255, 255, 0.12);
+.ua-low-effects .edge-fade {
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
-.ua-low-effects .text-gradient {
-  background-image: none;
-  -webkit-text-fill-color: currentColor;
-  color: #fff;
+.ua-low-effects .aurora-blob {
+  display: none;
 }
 
-/* Custom Scrollbar for Webkit */
+.ua-low-effects [data-blend] {
+  mix-blend-mode: normal !important;
+}
+
+/*
+ * Belt and braces. Every one of these is already gated on `ambient` in JS, but
+ * a stray animation left running in this webview is the failure mode that took
+ * the whole page down before, so the CSS kills them independently.
+ */
+.ua-low-effects .deco-drift > img,
+.ua-low-effects .deco-twinkle > img,
+.ua-low-effects .chibi-swing,
+.ua-low-effects .chibi-hover,
+.ua-low-effects [class*='animate-'] {
+  animation: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Degradation axis 2: prefers-reduced-motion.
+   Independent of the webview axis - either one alone must produce a usable
+   page. JS-driven motion is additionally gated by useMotionProfile().
+--------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Transparency preference: drop the frost, keep the contrast. */
+@media (prefers-reduced-transparency: reduce) {
+  .frost {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbar
+--------------------------------------------------------------------------- */
+
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000;
+  background: #eaf1ff;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
+  background: #c3d0ec;
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #a9b9de;
 }

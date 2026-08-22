@@ -1,124 +1,135 @@
-import { motion, type Variants } from 'framer-motion';
-import { TiktokLogo, InstagramLogo, ChatCircleText, Coin } from '@phosphor-icons/react';
-import { shouldUseLowEffectsMode } from '../utils/browser';
+import { motion, type Variants } from 'framer-motion'
+import {
+  AmazonLogo,
+  ArrowUpRight,
+  ChatCircleText,
+  Coin,
+  InstagramLogo,
+  TiktokLogo,
+} from '@phosphor-icons/react'
+import DecoField from './Deco'
+import { linksDeco } from '../data/deco'
+import { useMotionProfile, revealProps } from '../hooks/useMotionProfile'
+
+/**
+ * Brand colours stay on the platform marks only. Everything else on the page
+ * uses the palette in tailwind.config.js.
+ */
+const links = [
+  {
+    name: 'TikTok',
+    url: 'https://www.tiktok.com/@yu_ki_nojo',
+    icon: <TiktokLogo size={24} weight="fill" />,
+    mark: 'from-[#00f2fe] to-[#4facfe]',
+    desc: '毎日6〜8時間のライブ配信',
+  },
+  {
+    name: 'Instagram',
+    url: 'https://www.instagram.com/yu_ki_nojo/',
+    icon: <InstagramLogo size={24} weight="fill" />,
+    mark: 'from-[#f09433] via-[#dc2743] to-[#bc1888]',
+    desc: '日常や裏側の様子をお届け',
+  },
+  {
+    name: 'LINE オープンチャット',
+    url: 'https://line.me/ti/g2/BTEbz2kKwB2NbZhj4Rf4GAmSITXAigTxm_cAFw',
+    icon: <ChatCircleText size={24} weight="fill" />,
+    mark: 'from-[#06c755] to-[#00a300]',
+    desc: 'TikTokLIVEでの活動や配信通知を発信中',
+  },
+  {
+    name: 'TikTok コイン カスタムチャージ',
+    url: 'https://www.tiktok.com/coin',
+    icon: <Coin size={24} weight="fill" />,
+    mark: 'from-[#f6d365] to-[#fda085]',
+    desc: '手数料なしでTikTokのコインをチャージ',
+  },
+  {
+    name: 'Amazon ほしいものリスト',
+    url: 'https://www.amazon.co.jp/hz/wishlist/ls/UBSN0UTM2CEE?ref_=list_d_wl_lfu_nav_2',
+    icon: <AmazonLogo size={24} weight="fill" />,
+    mark: 'from-[#FFA724] to-[#F2760A]',
+    desc: '配信を支えてくれるアイテムはこちら',
+  },
+]
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+}
+
+const stagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+}
 
 const LinksSection = () => {
-  const useLowEffectsMode = shouldUseLowEffectsMode();
-  const links = [
-    {
-      name: 'TikTok',
-      url: 'https://www.tiktok.com/@yu_ki_nojo',
-      icon: <TiktokLogo size={32} weight="fill" />,
-      color: 'from-[#00f2fe] to-[#4facfe]',
-      desc: '毎日6〜8時間のライブ配信'
-    },
-    {
-      name: 'Instagram',
-      url: 'https://www.instagram.com/yu_ki_nojo/',
-      icon: <InstagramLogo size={32} weight="fill" />,
-      color: 'from-[#f09433] via-[#dc2743] to-[#bc1888]',
-      desc: '日常や裏側の様子をお届け'
-    },
-    {
-      name: 'LINE オープンチャット',
-      url: 'https://line.me/ti/g2/BTEbz2kKwB2NbZhj4Rf4GAmSITXAigTxm_cAFw',
-      icon: <ChatCircleText size={32} weight="fill" />,
-      color: 'from-[#00c300] to-[#00a300]',
-      desc: 'TikTokLIVEでの活動や配信通知を発信中'
-    },
-    {
-      name: 'TikTok コイン カスタムチャージ',
-      url: 'https://www.tiktok.com/coin',
-      icon: <Coin size={32} weight="fill" />,
-      color: 'from-[#f6d365] to-[#fda085]',
-      desc: '手数料なしでTikTokのコインをチャージ'
-    }
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.9, y: 30, rotateX: 10 },
-    visible: { opacity: 1, scale: 1, y: 0, rotateX: 0, transition: { type: 'spring', stiffness: 120, damping: 14 } }
-  };
+  const { reveal } = useMotionProfile()
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 relative z-10" id="links">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-display font-bold mb-4"
-          >
-            SNS <span className="text-gradient">Links</span>
-          </motion.h2>
-          <motion.div 
-            initial={{ opacity: 0, scaleX: 0 }}
-            whileInView={{ opacity: 1, scaleX: 1 }}
-            viewport={{ once: true }}
-            className="h-1 w-24 bg-gradient-to-r from-secondary to-primary mx-auto rounded-full"
-          />
-        </div>
+    <section id="links" className="relative overflow-hidden px-4 py-[86px] sm:px-6 lg:px-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_84%_26%,rgba(200,246,228,0.5),transparent_62%)]"
+      />
+      <DecoField items={linksDeco} />
 
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid gap-6"
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <motion.div
+          variants={reveal ? fadeUp : undefined}
+          {...revealProps(reveal)}
+          className="relative mb-12"
         >
-          {links.map((link, index) => (
-            <motion.a
-              key={index}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              variants={itemVariants}
-              whileHover={{ 
-                scale: 1.05,
-                y: -5,
-                boxShadow: useLowEffectsMode
-                  ? '0 20px 40px -14px rgba(0, 0, 0, 0.55)'
-                  : "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.1)",
-                transition: { type: "spring", stiffness: 400, damping: 17 }
-              }}
-              whileTap={{ scale: 0.98 }}
-              className={`glass glass-hover p-6 rounded-2xl flex items-center group relative overflow-hidden transition-all duration-300 border border-white/5 hover:border-white/20`}
-            >
-              <div className={`absolute inset-0 bg-gradient-to-r ${link.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-              
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-tr ${link.color} shrink-0 mr-6 shadow-lg shadow-black/50 group-hover:scale-110 transition-transform duration-300`}>
-                {link.icon}
-              </div>
-              
-              <div className="flex-1">
-                <h3 className="text-xl font-bold font-display mb-1 group-hover:text-white transition-colors">
-                  {link.name}
-                </h3>
-                <p className="text-white/60 font-light text-sm">
-                  {link.desc}
-                </p>
-              </div>
-              
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-white/10 transition-colors">
-                <svg className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </motion.a>
-          ))}
+          <span className="label block">SNS Links</span>
+          <h2 className="mt-2.5 text-[clamp(2rem,6vw,3.5rem)] leading-[1.06]">会いにきてね。</h2>
+          <span className="absolute right-0 top-[-6px] font-hand text-[clamp(1.4rem,4vw,2.1rem)] font-bold text-grape [rotate:-7deg]">
+            see you!
+          </span>
         </motion.div>
+
+        <motion.ul
+          variants={reveal ? stagger : undefined}
+          {...revealProps(reveal)}
+          className="grid gap-4 lg:grid-cols-2 lg:gap-x-5"
+        >
+          {links.map((link) => (
+            <motion.li key={link.url} variants={reveal ? fadeUp : undefined}>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-full items-center gap-4 rounded-[22px] bg-white p-4 px-5 shadow-[0_0_0_5px_#fff,0_10px_24px_-14px_rgba(78,100,168,0.6)] transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_0_0_5px_#fff,22px_30px_48px_-26px_rgba(78,100,168,0.6)] sm:gap-[18px]"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`grid h-[50px] w-[50px] shrink-0 place-items-center rounded-[16px] bg-gradient-to-br text-white ${link.mark}`}
+                >
+                  {link.icon}
+                </span>
+                {/*
+                  `break-keep` (word-break: keep-all) stops the longest label
+                  breaking mid-katakana on a narrow phone - it wraps at the
+                  spaces instead, which are the meaningful boundaries. Safe
+                  here because every label is short and space-separated; it
+                  would overflow on running Japanese prose.
+                */}
+                <span className="min-w-0">
+                  <span className="block break-keep text-[15.5px] font-black">{link.name}</span>
+                  <span className="block text-pretty text-[12.5px] text-ink-soft">{link.desc}</span>
+                </span>
+                <ArrowUpRight
+                  size={18}
+                  weight="bold"
+                  aria-hidden="true"
+                  className="ml-auto shrink-0 text-ink-faint transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-grape"
+                />
+              </a>
+            </motion.li>
+          ))}
+        </motion.ul>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default LinksSection;
+export default LinksSection

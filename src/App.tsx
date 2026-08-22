@@ -1,55 +1,67 @@
-
-import HeroSection from './components/HeroSection';
-import LinksSection from './components/LinksSection';
-import OpeningBranchSection from './components/OpeningBranchSection';
-import { shouldUseLowEffectsMode } from './utils/browser';
+import { motion } from 'framer-motion'
+import BuddyMascot from './components/BuddyMascot'
+import FinaleSection from './components/FinaleSection'
+import HeroSection from './components/HeroSection'
+import LinksSection from './components/LinksSection'
+import OpeningBranchSection from './components/OpeningBranchSection'
+import ProfileSection from './components/ProfileSection'
+import SignalTicker from './components/SignalTicker'
+import SiteNav from './components/SiteNav'
+import { useAmbientVars } from './hooks/useAmbientVars'
+import { useMotionProfile } from './hooks/useMotionProfile'
 
 function App() {
-  const useLowEffectsMode = shouldUseLowEffectsMode();
+  const { ambient } = useMotionProfile()
+  // Pointer and scroll are published here as --px / --py / --sy and consumed
+  // by every decoration in CSS. One node, one style write per frame.
+  const ambientStyle = useAmbientVars()
 
   return (
-    <div className="min-h-screen bg-background text-white selection:bg-primary/30 selection:text-white">
-      {/* Dynamic Glamorous Background */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#05050a]">
-        {/* Global Abstract Background Image */}
-        <img 
-          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
-          alt="Global Background" 
-          className={`absolute inset-0 w-full h-full object-cover ${useLowEffectsMode ? 'opacity-12' : 'opacity-30 mix-blend-screen'}`}
-        />
-        
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#05050a]/60 to-[#05050a]/90"></div>
-        
-        {/* Moving glowing orbs (Masculine & Premium: Deep Blue, Rich Purple, Subtle Gold) */}
-        {useLowEffectsMode ? null : (
+    <motion.div style={ambientStyle} className="relative min-h-screen bg-paper text-ink">
+      {/*
+        Ambient background. Fixed and pointer-events-none so it never repaints
+        with scroll. The static gradients carry the colour; only the two slowly
+        rotating blobs are conditional.
+      */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_12%_0%,#FFF2FA_0%,rgba(255,242,250,0)_55%),radial-gradient(110%_76%_at_92%_8%,#E6F3FF_0%,rgba(230,243,255,0)_58%),radial-gradient(120%_90%_at_50%_110%,#EEF8F4_0%,rgba(238,248,244,0)_60%)]" />
+
+        {ambient ? (
           <>
-            <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/15 rounded-full blur-[120px] mix-blend-screen opacity-60 animate-pulse-slow"></div>
-            <div className="absolute top-[30%] right-[-10%] w-[50%] h-[50%] bg-purple-600/15 rounded-full blur-[150px] mix-blend-screen opacity-50 animate-pulse-slow object-right" style={{ animationDelay: '2s' }}></div>
-            <div className="absolute bottom-[-20%] left-[10%] w-[70%] h-[70%] bg-amber-500/10 rounded-full blur-[130px] mix-blend-screen opacity-40 animate-pulse-slow" style={{ animationDelay: '4s' }}></div>
+            <div className="aurora-blob absolute -left-[14vw] -top-[16vw] h-[60vw] w-[60vw] animate-[spin-slow_46s_linear_infinite] rounded-full bg-[conic-gradient(from_40deg,#ffd7ec,#d9ecff,#d3f6ea,#fff0c6,#e6dcff,#ffd7ec)] opacity-50 blur-[70px]" />
+            <div className="aurora-blob absolute -right-[16vw] top-[34vh] h-[52vw] w-[52vw] animate-[spin-slow_62s_linear_infinite_reverse] rounded-full bg-[conic-gradient(from_200deg,#d9ecff,#ffe3f2,#e8ddff,#d5f7ee,#d9ecff)] opacity-50 blur-[70px]" />
           </>
-        )}
-        
-        {/* Grain overlay for texture */}
-        {useLowEffectsMode ? null : (
-          <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\"/%3E%3C/svg%3E')" }}></div>
-        )}
+        ) : null}
       </div>
 
-      <main className="relative z-10">
-        <>
-          <HeroSection />
-          <OpeningBranchSection embedded />
-          <LinksSection />
-        </>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-grape focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
+      >
+        本文へスキップ
+      </a>
+
+      <SiteNav />
+
+      <main id="main" className="relative z-10">
+        <HeroSection />
+        <SignalTicker />
+        <ProfileSection />
+        <OpeningBranchSection />
+        <LinksSection />
+        <FinaleSection />
       </main>
 
-      <footer className="relative z-10 py-8 text-center border-t border-white/5 mt-20 glass">
-        <p className="text-white/40 text-sm font-light">
-          &copy; {new Date().getFullYear()} Yukinojo. All rights reserved.
-        </p>
+      <footer className="relative z-10 px-4 pb-14 pt-9 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-[12px] font-bold text-ink-faint sm:flex-row lg:pr-48">
+          <span>ゆきのじょー / Yukinojo</span>
+          <p>&copy; {new Date().getFullYear()} Yukinojo. All rights reserved.</p>
+        </div>
       </footer>
-    </div>
-  );
+
+      <BuddyMascot />
+    </motion.div>
+  )
 }
 
-export default App;
+export default App

@@ -4,14 +4,10 @@ import './index.css'
 import App from './App.tsx'
 import { shouldUseLowEffectsMode } from './utils/browser'
 
-const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg|OPR|Brave/.test(navigator.userAgent)
-const useLowEffectsMode = shouldUseLowEffectsMode()
-
-if (isChrome) {
-  document.documentElement.classList.add('ua-chrome')
-}
-
-if (useLowEffectsMode) {
+// Applied before React renders so the expensive-effect fallbacks are in place
+// on the very first paint. TikTok / ByteDance webviews previously rendered the
+// page fully black when backdrop-filter and mix-blend-mode landed together.
+if (shouldUseLowEffectsMode()) {
   document.documentElement.classList.add('ua-low-effects')
 }
 
