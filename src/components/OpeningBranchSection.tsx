@@ -68,6 +68,15 @@ const fadeUp: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 }
 
+/**
+ * Cards alternate their entrance side by index (even = left, odd = right),
+ * `custom` on each motion.div feeds the index into this function variant.
+ */
+const sideIn: Variants = {
+  hidden: (index: number) => ({ opacity: 0, x: index % 2 === 0 ? -48 : 48 }),
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+}
+
 const stagger: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1 } },
@@ -109,7 +118,7 @@ const OpeningBranchSection = () => {
           className="flex flex-col gap-4"
         >
           {branchCards.map((card, index) => (
-            <motion.div key={card.href} variants={reveal ? fadeUp : undefined}>
+            <motion.div key={card.href} custom={index} variants={reveal ? sideIn : undefined}>
               {/*
                 Link behaviour is deliberate and must not drift: the consulting
                 card opens a new tab, the two web apps navigate in place.
