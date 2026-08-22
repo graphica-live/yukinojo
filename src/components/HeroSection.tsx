@@ -154,11 +154,13 @@ const HeroSection = () => {
       */}
       <div className="relative mx-auto w-full max-w-6xl">
         {/*
-          With the pair staged, the copy sits UNDER them: on open the characters
-          own the screen and the title is backing for them, and a couple of
-          hundred pixels of scroll clears them so the whole block - name, both
-          lines, both buttons - is readable in one screen. The layer above is
-          `pointer-events-none`, so the buttons are tappable even while covered.
+          With the pair staged, the copy sits between and under them. Badge and
+          logotype take z-30 - clear of the left character, still behind the
+          right one - and everything below the name (meta line, buttons) stays
+          under both, so the characters own the screen on open. A couple of
+          hundred pixels of scroll clears them and the whole block reads in one
+          screen. Both character layers are `pointer-events-none`, so the
+          buttons are tappable even while covered.
         */}
         <motion.div
           variants={animate ? stagger : undefined}
@@ -166,9 +168,14 @@ const HeroSection = () => {
           animate={animate ? 'visible' : undefined}
           className={`relative max-w-[30rem] lg:mx-auto lg:max-w-[34rem] lg:text-center ${layout.copy}`}
         >
+          {/*
+            Rides the same plane as the logotype - in front of the left
+            character, behind the right one - so the two pieces of the lockup
+            are not split across the pair.
+          */}
           <motion.span
             variants={animate ? fadeUp : undefined}
-            className="inline-flex items-center gap-2.5 rounded-full bg-white px-4 py-2.5 pl-3 text-xs font-bold text-ink-soft shadow-[0_0_0_5px_rgba(255,255,255,0.75),0_10px_24px_-14px_rgba(78,100,168,0.6)]"
+            className="relative z-30 inline-flex items-center gap-2.5 rounded-full bg-white px-4 py-2.5 pl-3 text-xs font-bold text-ink-soft shadow-[0_0_0_5px_rgba(255,255,255,0.75),0_10px_24px_-14px_rgba(78,100,168,0.6)]"
           >
             <span
               aria-hidden="true"
