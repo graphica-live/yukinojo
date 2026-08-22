@@ -231,12 +231,6 @@ const HeroSection = () => {
             >
               提供サービスを見る
             </a>
-            <a
-              href="#opening-branch"
-              className="inline-flex items-center rounded-full bg-white/90 px-7 py-4 text-[15px] font-bold leading-none text-ink shadow-[inset_0_0_0_2px_rgba(140,160,215,0.35),0_10px_24px_-14px_rgba(78,100,168,0.6)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-[inset_0_0_0_2px_#7350F5,0_10px_24px_-14px_rgba(78,100,168,0.6)]"
-            >
-              コンテンツを見る
-            </a>
           </motion.div>
         </motion.div>
 

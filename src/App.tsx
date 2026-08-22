@@ -46,8 +46,8 @@ function App() {
       <main id="main" className="relative z-10">
         <HeroSection />
         <SignalTicker />
-        <ProfileSection />
         <OpeningBranchSection />
+        <ProfileSection />
         <LinksSection />
         <FinaleSection />
       </main>
