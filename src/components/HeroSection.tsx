@@ -116,7 +116,7 @@ const HeroSection = () => {
           variants={sentence}
           initial="hidden"
           animate="visible"
-          className="text-4xl md:text-6xl font-display font-bold mb-3 tracking-tight leading-tight flex items-center justify-center space-x-1"
+          className="text-2xl md:text-4xl font-display font-bold mb-3 tracking-tight leading-tight flex items-center justify-center space-x-1"
         >
           {titleText.split('').map((char, index) => (
             <motion.span
