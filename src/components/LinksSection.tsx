@@ -67,7 +67,7 @@ const LinksSection = () => {
   const { reveal } = useMotionProfile()
 
   return (
-    <section id="links" className="relative overflow-hidden px-4 py-[86px] sm:px-6 lg:px-8">
+    <section id="links" className="relative overflow-hidden px-4 pb-5 pt-[86px] sm:px-6 lg:px-8">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_84%_26%,rgba(200,246,228,0.5),transparent_62%)]"
@@ -87,46 +87,69 @@ const LinksSection = () => {
           </span>
         </motion.div>
 
-        <motion.ul
-          variants={reveal ? stagger : undefined}
+        <motion.div
+          variants={reveal ? fadeUp : undefined}
           {...revealProps(reveal)}
-          className="flex flex-col gap-3"
+          className="relative overflow-hidden rounded-[44px] bg-gradient-to-br from-[#FFEAF5] via-[#EAF1FF] via-[44%] to-[#E6FAF3] px-6 py-10 shadow-[24px_34px_60px_-34px_rgba(78,100,168,0.55)] sm:px-10"
         >
-          {links.map((link) => (
-            <motion.li key={link.url} variants={reveal ? fadeUp : undefined}>
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-3.5 rounded-2xl bg-white px-4 py-3 shadow-[0_0_0_4px_#fff,0_8px_18px_-12px_rgba(78,100,168,0.55)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_0_0_4px_#fff,16px_20px_32px_-22px_rgba(78,100,168,0.6)]"
-              >
-                <span
-                  aria-hidden="true"
-                  className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white ${link.mark}`}
+          <img
+            src="/deco/band.webp"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className="pointer-events-none absolute inset-x-0 -bottom-[8%] w-full opacity-[0.72]"
+          />
+          {/*
+            Scrim. The band is dense enough to drop the link cards below AA
+            contrast, so a white radial sits between the artwork and the list.
+          */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[86%] w-[min(96%,820px)] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.94)_0%,rgba(255,255,255,0.78)_46%,rgba(255,255,255,0)_74%)]"
+          />
+
+          <motion.ul
+            variants={reveal ? stagger : undefined}
+            {...revealProps(reveal)}
+            className="relative z-10 flex flex-col gap-3"
+          >
+            {links.map((link) => (
+              <motion.li key={link.url} variants={reveal ? fadeUp : undefined}>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3.5 rounded-2xl bg-white px-4 py-3 shadow-[0_0_0_4px_#fff,0_8px_18px_-12px_rgba(78,100,168,0.55)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_0_0_4px_#fff,16px_20px_32px_-22px_rgba(78,100,168,0.6)]"
                 >
-                  {link.icon}
-                </span>
-                {/*
-                  `break-keep` (word-break: keep-all) stops the longest label
-                  breaking mid-katakana on a narrow phone - it wraps at the
-                  spaces instead, which are the meaningful boundaries. Safe
-                  here because every label is short and space-separated; it
-                  would overflow on running Japanese prose.
-                */}
-                <span className="min-w-0">
-                  <span className="block break-keep text-[14px] font-black">{link.name}</span>
-                  <span className="block truncate text-[11.5px] text-ink-soft">{link.desc}</span>
-                </span>
-                <ArrowUpRight
-                  size={16}
-                  weight="bold"
-                  aria-hidden="true"
-                  className="ml-auto shrink-0 text-ink-faint transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-grape"
-                />
-              </a>
-            </motion.li>
-          ))}
-        </motion.ul>
+                  <span
+                    aria-hidden="true"
+                    className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white ${link.mark}`}
+                  >
+                    {link.icon}
+                  </span>
+                  {/*
+                    `break-keep` (word-break: keep-all) stops the longest label
+                    breaking mid-katakana on a narrow phone - it wraps at the
+                    spaces instead, which are the meaningful boundaries. Safe
+                    here because every label is short and space-separated; it
+                    would overflow on running Japanese prose.
+                  */}
+                  <span className="min-w-0">
+                    <span className="block break-keep text-[14px] font-black">{link.name}</span>
+                    <span className="block truncate text-[11.5px] text-ink-soft">{link.desc}</span>
+                  </span>
+                  <ArrowUpRight
+                    size={16}
+                    weight="bold"
+                    aria-hidden="true"
+                    className="ml-auto shrink-0 text-ink-faint transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-grape"
+                  />
+                </a>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </motion.div>
       </div>
     </section>
   )

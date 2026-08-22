@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import BuddyMascot from './components/BuddyMascot'
-import FinaleSection from './components/FinaleSection'
 import HeroSection from './components/HeroSection'
 import LinksSection from './components/LinksSection'
 import OpeningBranchSection from './components/OpeningBranchSection'
@@ -49,7 +48,6 @@ function App() {
         <OpeningBranchSection />
         <ProfileSection />
         <LinksSection />
-        <FinaleSection />
       </main>
 
       <footer className="relative z-10 px-4 pb-14 pt-9 sm:px-6 lg:px-8">
