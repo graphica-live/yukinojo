@@ -90,7 +90,7 @@ const LinksSection = () => {
         <motion.ul
           variants={reveal ? stagger : undefined}
           {...revealProps(reveal)}
-          className="grid gap-4 lg:grid-cols-2 lg:gap-x-5"
+          className="flex flex-col gap-3"
         >
           {links.map((link) => (
             <motion.li key={link.url} variants={reveal ? fadeUp : undefined}>
@@ -98,11 +98,11 @@ const LinksSection = () => {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex h-full items-center gap-4 rounded-[22px] bg-white p-4 px-5 shadow-[0_0_0_5px_#fff,0_10px_24px_-14px_rgba(78,100,168,0.6)] transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_0_0_5px_#fff,22px_30px_48px_-26px_rgba(78,100,168,0.6)] sm:gap-[18px]"
+                className="group flex items-center gap-3.5 rounded-2xl bg-white px-4 py-3 shadow-[0_0_0_4px_#fff,0_8px_18px_-12px_rgba(78,100,168,0.55)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_0_0_4px_#fff,16px_20px_32px_-22px_rgba(78,100,168,0.6)]"
               >
                 <span
                   aria-hidden="true"
-                  className={`grid h-[50px] w-[50px] shrink-0 place-items-center rounded-[16px] bg-gradient-to-br text-white ${link.mark}`}
+                  className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white ${link.mark}`}
                 >
                   {link.icon}
                 </span>
@@ -114,11 +114,11 @@ const LinksSection = () => {
                   would overflow on running Japanese prose.
                 */}
                 <span className="min-w-0">
-                  <span className="block break-keep text-[15.5px] font-black">{link.name}</span>
-                  <span className="block text-pretty text-[12.5px] text-ink-soft">{link.desc}</span>
+                  <span className="block break-keep text-[14px] font-black">{link.name}</span>
+                  <span className="block truncate text-[11.5px] text-ink-soft">{link.desc}</span>
                 </span>
                 <ArrowUpRight
-                  size={18}
+                  size={16}
                   weight="bold"
                   aria-hidden="true"
                   className="ml-auto shrink-0 text-ink-faint transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-grape"
