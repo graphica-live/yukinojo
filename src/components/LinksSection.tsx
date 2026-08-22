@@ -81,7 +81,6 @@ const LinksSection = () => {
           className="relative mb-12"
         >
           <span className="label block">SNS Links</span>
-          <h2 className="mt-2.5 text-[clamp(2rem,6vw,3.5rem)] leading-[1.06]">会いにきてね。</h2>
           <span className="absolute right-0 top-[-6px] font-hand text-[clamp(1.4rem,4vw,2.1rem)] font-bold text-grape [rotate:-7deg]">
             see you!
           </span>
