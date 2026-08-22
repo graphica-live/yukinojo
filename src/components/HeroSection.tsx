@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
-import { ArrowUpRight } from '@phosphor-icons/react'
 import Chibi from './Chibi'
 import DecoField from './Deco'
 import { heroDeco } from '../data/deco'
@@ -227,13 +226,10 @@ const HeroSection = () => {
             className="mt-8 flex flex-wrap gap-3.5 lg:justify-center"
           >
             <a
-              href="https://www.tiktok.com/@yu_ki_nojo"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#opening-branch"
               className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-cta-from to-cta-to px-7 py-4 text-[15px] font-bold leading-none text-white shadow-[0_0_0_4px_rgba(255,255,255,0.9),0_14px_26px_-12px_rgba(91,63,217,0.8)] transition-transform duration-200 hover:-translate-y-0.5 hover:scale-[1.03]"
             >
-              TikTok LIVEを見る
-              <ArrowUpRight size={16} weight="bold" />
+              提供サービスを見る
             </a>
             <a
               href="#opening-branch"
