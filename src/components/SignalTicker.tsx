@@ -1,12 +1,6 @@
 import { useMotionProfile } from '../hooks/useMotionProfile'
 
-const items = [
-  'TikTok LIVE 毎日6〜8時間',
-  'サニプリ所属',
-  '2025.01.18 活動開始',
-  'IT国家資格 高度区分 多数保有',
-  '実務経験14年',
-]
+const items = ['サニプリ所属', '2025.01.18 活動開始', '実務経験14年']
 
 const Item = ({ label }: { label: string }) => (
   <span className="flex items-center gap-3.5 whitespace-nowrap px-5 text-[12.5px] font-bold text-ink-soft">
