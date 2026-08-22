@@ -80,7 +80,7 @@ const ProfileSection = () => {
           <m.article
             custom={0}
             variants={reveal ? sideIn : undefined}
-            className="sticker sticker-hover relative bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:-1.1deg] hover:[rotate:0deg]"
+            className="sticker relative bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-6 pl-7 [rotate:-1.1deg]"
           >
             <span
               aria-hidden="true"
@@ -113,7 +113,7 @@ const ProfileSection = () => {
           <m.article
             custom={1}
             variants={reveal ? sideIn : undefined}
-            className="sticker sticker-hover relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:1.4deg] hover:[rotate:0deg]"
+            className="sticker relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-6 pl-7 [rotate:1.4deg]"
           >
             <span
               aria-hidden="true"
@@ -135,7 +135,7 @@ const ProfileSection = () => {
           <m.article
             custom={2}
             variants={reveal ? sideIn : undefined}
-            className="sticker sticker-hover relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#F4F0FF] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:-0.9deg] hover:[rotate:0deg]"
+            className="sticker relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#F4F0FF] via-[76%] to-[#EFF5FF] p-6 pl-7 [rotate:-0.9deg]"
           >
             <span
               aria-hidden="true"
