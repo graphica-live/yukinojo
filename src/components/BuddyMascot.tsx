@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { m, useScroll, useTransform } from 'framer-motion'
 import { useIsPhone } from '../hooks/useIsPhone'
 import { useMotionProfile } from '../hooks/useMotionProfile'
 
@@ -33,7 +33,7 @@ const BuddyMascot = () => {
   if (!ambient || isPhone) return null
 
   return (
-    <motion.div
+    <m.div
       aria-hidden="true"
       style={{ opacity: progress, y: lift, willChange: 'transform, opacity' }}
       className="pointer-events-none fixed bottom-6 right-6 z-40 w-36"
@@ -53,7 +53,7 @@ const BuddyMascot = () => {
           className="w-full"
         />
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 

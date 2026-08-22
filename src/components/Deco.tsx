@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, type CSSProperties } from 'react'
-import { motion, useMotionValue, useTransform, type MotionValue } from 'framer-motion'
+import { m, useMotionValue, useTransform, type MotionValue } from 'framer-motion'
 import { LAYERS, type DecoItem, type DecoLayer } from '../data/deco'
 import { decoSizes } from '../data/decoSizes'
 import { useAmbient } from '../hooks/useAmbientVars'
@@ -39,7 +39,7 @@ const DecoGroup = ({
   )
 
   return (
-    <motion.div className="deco-group" style={{ x, y }}>
+    <m.div className="deco-group" style={{ x, y }}>
       {items.map((item, index) => {
         const size = decoSizes[item.src]
         const style = {
@@ -79,7 +79,7 @@ const DecoGroup = ({
           </span>
         )
       })}
-    </motion.div>
+    </m.div>
   )
 }
 

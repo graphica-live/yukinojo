@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
+import { m, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import Chibi from './Chibi'
 import DecoField from './Deco'
 import { heroDeco } from '../data/deco'
@@ -164,7 +164,7 @@ const HeroSection = () => {
           screen. Both character layers are `pointer-events-none`, so the
           buttons are tappable even while covered.
         */}
-        <motion.div
+        <m.div
           variants={animate ? stagger : undefined}
           initial={animate ? 'hidden' : false}
           animate={animate ? 'visible' : undefined}
@@ -175,7 +175,7 @@ const HeroSection = () => {
             character, behind the right one - so the two pieces of the lockup
             are not split across the pair.
           */}
-          <motion.span
+          <m.span
             variants={animate ? fadeUp : undefined}
             className="relative z-30 inline-flex items-center gap-2.5 rounded-full bg-white px-4 py-2.5 pl-3 text-xs font-bold text-ink-soft shadow-[0_0_0_5px_rgba(255,255,255,0.75),0_10px_24px_-14px_rgba(78,100,168,0.6)]"
           >
@@ -187,7 +187,7 @@ const HeroSection = () => {
               style={{ ['--dur' as string]: '2s' }}
             />
             ライブ配信 ／ SE14年 ／ 元ホスト5年
-          </motion.span>
+          </m.span>
 
           {/*
             The heading is lifted out of the copy's paint order and dropped
@@ -197,12 +197,12 @@ const HeroSection = () => {
             that used to fill this heading is gone; the pair now carry the
             visual weight on their own, so this is just the kicker line.
           */}
-          <motion.h1
+          <m.h1
             variants={animate ? fadeUp : undefined}
             className="title-cut relative z-30 mt-5 font-display text-[clamp(0.72rem,1.6vw,0.92rem)] font-extrabold uppercase leading-[1.7] tracking-[0.12em] text-ink-faint"
           >
             High Quality × Entertainment × Engineering
-          </motion.h1>
+          </m.h1>
 
           {/*
             Silent spacer, exactly the height the two-line name used to take up
@@ -213,15 +213,15 @@ const HeroSection = () => {
           */}
           <div aria-hidden="true" style={{ height: 'clamp(5.64rem, 15.792vw, 10.528rem)' }} />
 
-          <motion.p
+          <m.p
             variants={animate ? fadeUp : undefined}
             className="title-cut mt-7 text-[13.5px] text-ink-soft"
           >
             TikTok LIVER × System Engineer ／{' '}
             <b className="font-display font-bold text-grape">2025.01.18</b> 活動開始
-          </motion.p>
+          </m.p>
 
-          <motion.div
+          <m.div
             variants={animate ? fadeUp : undefined}
             className="relative z-30 mt-8 flex flex-wrap gap-3.5 lg:justify-center"
           >
@@ -231,8 +231,8 @@ const HeroSection = () => {
             >
               提供サービスを見る
             </a>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
 
         {/*
           The pair, laid over the title zone - one layer EACH, with the
@@ -251,15 +251,15 @@ const HeroSection = () => {
         */}
         <div className="pointer-events-none absolute inset-0 z-20">
           <div className={`absolute ${layout.left}`}>
-            <motion.div
+            <m.div
               variants={animate ? enterLeft : undefined}
               initial={animate ? 'hidden' : false}
               animate={animate ? 'visible' : undefined}
             >
-              <motion.div style={{ x: leftX, y: leftY, rotate: leftTilt, willChange: 'transform' }}>
+              <m.div style={{ x: leftX, y: leftY, rotate: leftTilt, willChange: 'transform' }}>
                 <Chibi variant="a" depth={0.9} priority />
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </div>
         </div>
 
@@ -270,15 +270,15 @@ const HeroSection = () => {
         */}
         <div className={`pointer-events-none absolute inset-0 ${layout.rightZ}`}>
           <div className={`absolute ${layout.right}`}>
-            <motion.div
+            <m.div
               variants={animate ? enterRight : undefined}
               initial={animate ? 'hidden' : false}
               animate={animate ? 'visible' : undefined}
             >
-              <motion.div style={{ x: rightX, y: rightY, rotate: rightTilt, willChange: 'transform' }}>
+              <m.div style={{ x: rightX, y: rightY, rotate: rightTilt, willChange: 'transform' }}>
                 <Chibi variant="b" depth={0.7} priority />
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </div>
         </div>
       </div>

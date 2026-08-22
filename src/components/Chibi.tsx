@@ -1,5 +1,5 @@
 import { useRef, type CSSProperties } from 'react'
-import { motion, useTransform } from 'framer-motion'
+import { m, useTransform } from 'framer-motion'
 import { chibiVariants, type ChibiVariantKey } from '../data/chibi'
 import { useAmbient } from '../hooks/useAmbientVars'
 import { useGaze } from '../hooks/useGaze'
@@ -39,7 +39,7 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
   const y = useTransform(py, (v) => v * depth)
 
   return (
-    <motion.div
+    <m.div
       className={`chibi-parallax ${className}`}
       style={{ x, y }}
       role="img"
@@ -49,7 +49,7 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
         className={ambient ? 'chibi-hover' : undefined}
         style={{ '--dur': rig.hover.dur, '--delay': rig.hover.delay } as CSSProperties}
       >
-        <motion.div
+        <m.div
           ref={ref}
           className="chibi"
           style={{ aspectRatio: rig.aspect, ...(ambient ? gaze : undefined) }}
@@ -109,9 +109,9 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
               />
             </span>
           ))}
-        </motion.div>
+        </m.div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 
