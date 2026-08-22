@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 
 const sections = [
-  { label: '二つの顔', href: '#profile' },
+  { label: '三つの経歴', href: '#profile' },
   { label: 'Contents', href: '#opening-branch' },
   { label: 'Links', href: '#links' },
 ]

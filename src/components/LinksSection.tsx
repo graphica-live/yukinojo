@@ -1,5 +1,12 @@
 import { motion, type Variants } from 'framer-motion'
-import { ArrowUpRight, ChatCircleText, Coin, InstagramLogo, TiktokLogo } from '@phosphor-icons/react'
+import {
+  AmazonLogo,
+  ArrowUpRight,
+  ChatCircleText,
+  Coin,
+  InstagramLogo,
+  TiktokLogo,
+} from '@phosphor-icons/react'
 import DecoField from './Deco'
 import { linksDeco } from '../data/deco'
 import { useMotionProfile, revealProps } from '../hooks/useMotionProfile'
@@ -36,6 +43,13 @@ const links = [
     icon: <Coin size={24} weight="fill" />,
     mark: 'from-[#f6d365] to-[#fda085]',
     desc: '手数料なしでTikTokのコインをチャージ',
+  },
+  {
+    name: 'Amazon ほしいものリスト',
+    url: 'https://www.amazon.co.jp/hz/wishlist/ls/UBSN0UTM2CEE?ref_=list_d_wl_lfu_nav_2',
+    icon: <AmazonLogo size={24} weight="fill" />,
+    mark: 'from-[#FFA724] to-[#F2760A]',
+    desc: '配信を支えてくれるアイテムはこちら',
   },
 ]
 

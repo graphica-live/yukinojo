@@ -29,17 +29,41 @@ const stagger: Variants = {
   visible: { transition: { staggerChildren: 0.09 } },
 }
 
+/**
+ * One line of the logotype.
+ *
+ * The extrusion and the face have to be separate elements (`.logo3d` explains
+ * why), which means the string is in the DOM twice. The shadow copy is hidden
+ * from assistive tech so the name is still announced once.
+ */
+const LogoLine = ({ children }: { children: string }) => (
+  <span className="logo3d whitespace-nowrap lg:mx-auto">
+    <span className="logo3d__depth" aria-hidden="true">
+      {children}
+    </span>
+    <span className="logo3d__face">{children}</span>
+  </span>
+)
+
 /*
  * Two arrangements of the same three elements.
  *
  * `staged` is the one the page opens on: the pair dead centre, filling the
- * screen, with the copy behind them. It only works because they leave - the
- * title is unreadable until they do.
+ * screen, with the copy behind them and the logotype cut in BETWEEN them - the
+ * left character behind it, the right one in front. That sandwich is the whole
+ * reason the three read as one scene with depth rather than as a stack.
+ *
+ * It is why the copy carries no z-index here. An index would make the block a
+ * stacking context and trap the logotype inside it, below both characters;
+ * without one, the logotype's own z-30 competes directly with the two character
+ * layers, and the rest of the copy still paints underneath them (auto-index
+ * content is drawn before any positive index).
  *
  * `still` is what runs when ambient motion is off (reduced-motion, or the
  * TikTok webview). Nothing moves there, so a pair parked over the copy would
  * cover it for good. They go back to flanking it, the copy takes a reserve at
- * the foot to stand them in below `lg`, and the copy comes back out on top.
+ * the foot to stand them in below `lg`, and the copy comes back out on top -
+ * one context above both characters, logotype included.
  *
  * Both are plain placement; the exit transform always lives on the child, since
  * Framer Motion writes the whole `transform` inline and the two cannot share a
@@ -47,7 +71,8 @@ const stagger: Variants = {
  */
 const LAYOUT = {
   staged: {
-    copy: 'z-20',
+    copy: '',
+    rightZ: 'z-40',
     left:
       'left-1/2 top-1/2 w-[88%] -translate-x-[88%] -translate-y-[42%] ' +
       'sm:w-[64%] lg:w-[47%] lg:-translate-x-[92%] lg:-translate-y-[44%]',
@@ -57,6 +82,7 @@ const LAYOUT = {
   },
   still: {
     copy: 'z-30 pb-[56vw] sm:pb-[44vw] lg:pb-0',
+    rightZ: 'z-20',
     left: 'bottom-0 left-[-14%] w-[54%] sm:left-[-10%] sm:w-[46%] lg:bottom-auto lg:left-[-9%] lg:top-[1%] lg:w-[47%]',
     right:
       'bottom-[2%] right-[-20%] w-[68%] sm:right-[-12%] sm:w-[56%] lg:bottom-auto lg:right-[-14%] lg:top-[-6%] lg:w-[48%]',
@@ -154,9 +180,15 @@ const HeroSection = () => {
             毎日 6〜8時間 配信中 ／ サニプリ所属
           </motion.span>
 
+          {/*
+            The heading is lifted out of the copy's paint order and dropped
+            between the two characters (see LAYOUT). z-30 is read against the
+            character layers' z-20 / z-40, not against its siblings here - the
+            copy block deliberately has no index of its own.
+          */}
           <motion.h1
             variants={animate ? fadeUp : undefined}
-            className="mt-5 text-[clamp(3rem,8.4vw,5.6rem)] font-black leading-[0.94] tracking-[-0.035em]"
+            className="relative z-30 mt-5 text-[clamp(3rem,8.4vw,5.6rem)] font-black leading-[0.94] tracking-[-0.035em]"
           >
             {/*
               The kicker is part of the heading, so it stays inside <h1> and is
@@ -166,27 +198,20 @@ const HeroSection = () => {
               High Quality × Entertainment × Engineering
             </span>
             {/*
+              The name is set as a dimensional logotype - see `.logo3d`. Each
+              line is two stacked copies of the same string, so the shadow copy
+              is hidden from assistive tech and the heading still reads once.
+
               Never allowed to wrap: breaking a Japanese name mid-word changes
               how it reads.
             */}
-            <span className="title-cut block w-fit whitespace-nowrap lg:mx-auto">{NAME_TOP}</span>
-            <span className="title-cut block w-fit whitespace-nowrap lg:mx-auto">
-              {NAME_BOTTOM}
-            </span>
+            <LogoLine>{NAME_TOP}</LogoLine>
+            <LogoLine>{NAME_BOTTOM}</LogoLine>
           </motion.h1>
 
           <motion.p
             variants={animate ? fadeUp : undefined}
-            className="title-cut mt-7 max-w-[24ch] text-[clamp(1.05rem,2.6vw,1.32rem)] font-bold leading-[1.7] lg:mx-auto"
-          >
-            1日の始まりと
-            <br />
-            終わりの場所に。
-          </motion.p>
-
-          <motion.p
-            variants={animate ? fadeUp : undefined}
-            className="title-cut mt-3 text-[13.5px] text-ink-soft"
+            className="title-cut mt-7 text-[13.5px] text-ink-soft"
           >
             TikTok LIVER × System Engineer ／{' '}
             <b className="font-display font-bold text-grape">2025.01.18</b> 活動開始
@@ -215,28 +240,34 @@ const HeroSection = () => {
         </motion.div>
 
         {/*
-          The pair, laid over the title zone.
+          The pair, laid over the title zone - one layer EACH, with the
+          logotype's z-30 running between them. A single shared layer would put
+          both characters on the same plane and there would be nothing for the
+          name to sit inside.
 
-          `pointer-events-none` on the whole layer: a limb crossing in front of
-          a link must never make it untappable, and neither character has any
-          interaction of its own - the gaze reads pointer events off `window`.
+          `pointer-events-none` on both: a limb crossing in front of a link must
+          never make it untappable, and neither character has any interaction of
+          its own - the gaze reads pointer events off `window`.
 
           Placement and exit are on separate elements. Framer Motion writes the
           whole `transform` inline, so a Tailwind `translate-*` utility on the
           same node would be silently dropped; the offsets here are all `top` /
           `left` / `right` / `bottom` for that reason.
         */}
-        <div className={`pointer-events-none absolute inset-0 ${ambient ? 'z-30' : 'z-20'}`}>
+        <div className="pointer-events-none absolute inset-0 z-20">
           <div className={`absolute ${layout.left}`}>
             <motion.div style={{ x: leftX, y: leftY, rotate: leftTilt }}>
               <Chibi variant="a" depth={0.9} priority />
             </motion.div>
           </div>
+        </div>
 
-          {/*
-            Deliberately not a mirror of the other: bigger, seated, and hung
-            higher, so the pair does not read as a symmetrical badge.
-          */}
+        {/*
+          Deliberately not a mirror of the other: bigger, seated, hung higher,
+          and now nearest the viewer as well, so the pair does not read as a
+          symmetrical badge.
+        */}
+        <div className={`pointer-events-none absolute inset-0 ${layout.rightZ}`}>
           <div className={`absolute ${layout.right}`}>
             <motion.div style={{ x: rightX, y: rightY, rotate: rightTilt }}>
               <Chibi variant="b" depth={0.7} priority />

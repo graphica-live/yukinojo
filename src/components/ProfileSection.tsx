@@ -42,20 +42,20 @@ const ProfileSection = () => {
           {...revealProps(reveal)}
           className="relative mb-12"
         >
-          <span className="label block">Two Sides</span>
-          <h2 className="mt-2.5 text-[clamp(2rem,6vw,3.5rem)] leading-[1.06]">二つの顔</h2>
+          <span className="label block">Three Chapters</span>
+          <h2 className="mt-2.5 text-[clamp(2rem,6vw,3.5rem)] leading-[1.06]">三つの経歴</h2>
           <span className="absolute right-0 top-[-6px] font-hand text-[clamp(1.4rem,4vw,2.1rem)] font-bold text-grape [rotate:-7deg]">
-            SE × LIVER
+            SE × LIVER × HOST
           </span>
         </motion.div>
 
         <motion.div
           variants={reveal ? stagger : undefined}
           {...revealProps(reveal)}
-          className="grid gap-8 md:grid-cols-[1.08fr_0.92fr] md:gap-9"
+          className="grid gap-8 md:grid-cols-2 md:gap-9 lg:grid-cols-3"
         >
-          {/* Engineer. The wider cell - 28 years is the number that anchors the
-              whole page's credibility. */}
+          {/* Engineer. First of the three - 28 years is the number that anchors
+              the whole page's credibility. */}
           <motion.article
             variants={reveal ? fadeUp : undefined}
             className="sticker sticker-hover relative bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-9 pl-10 hover:-translate-y-2 [rotate:-1.1deg] hover:[rotate:0deg]"
@@ -121,6 +121,37 @@ const ProfileSection = () => {
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {['毎日 6〜8H', 'TikTok LIVE'].map(chip)}
+            </div>
+          </motion.article>
+
+          {/* Host. The chapter that closed - past tense throughout, and the
+              only card lit for night rather than daylight. */}
+          <motion.article
+            variants={reveal ? fadeUp : undefined}
+            className="sticker sticker-hover relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#F4F0FF] via-[76%] to-[#EFF5FF] p-9 pl-10 hover:-translate-y-2 lg:mt-8 [rotate:-0.9deg] hover:[rotate:0deg]"
+          >
+            <span
+              aria-hidden="true"
+              className="iris-fill absolute bottom-8 left-3.5 top-8 w-1.5 rounded-full"
+            />
+            <span
+              aria-hidden="true"
+              className="absolute -top-6 left-1/2 w-[132px] -translate-x-1/2 [rotate:-5deg]"
+            >
+              <img src="/deco/washi-1.webp" alt="" loading="lazy" decoding="async" className="w-full" />
+            </span>
+
+            <div className="grid h-[60px] w-[60px] place-items-center rounded-plate bg-gradient-to-br from-[#F1EBFF] to-[#E9F2FF] shadow-plate">
+              <img src="/deco/moon-crescent.webp" alt="" loading="lazy" decoding="async" className="w-[70%]" />
+            </div>
+
+            <h3 className="mt-6 text-[clamp(1.5rem,4vw,2rem)]">元ホスト</h3>
+            <p className="mt-1 text-balance text-sm font-bold text-grape-deep">歌舞伎町</p>
+            <p className="mt-4 text-pretty text-[14.5px] leading-[1.95] text-ink-soft">
+              歌舞伎町のホストクラブに在籍。そこで身につけた接客と場のつくり方が、今の配信の土台になっています。
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {['歌舞伎町', '接客 / トーク'].map(chip)}
             </div>
           </motion.article>
         </motion.div>
