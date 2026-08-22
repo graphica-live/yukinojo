@@ -120,23 +120,16 @@ const LinksSection = () => {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3.5 rounded-2xl bg-white px-4 py-3 shadow-[0_0_0_4px_#fff,0_8px_18px_-12px_rgba(78,100,168,0.55)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_0_0_4px_#fff,16px_20px_32px_-22px_rgba(78,100,168,0.6)]"
+                  className="group flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3 shadow-[0_0_0_4px_#fff,0_8px_18px_-12px_rgba(78,100,168,0.55)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-[0_0_0_4px_#fff,16px_20px_32px_-22px_rgba(78,100,168,0.6)]"
                 >
                   <span
                     aria-hidden="true"
-                    className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white ${link.mark}`}
+                    className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white ${link.mark}`}
                   >
                     {link.icon}
                   </span>
-                  {/*
-                    `break-keep` (word-break: keep-all) stops the longest label
-                    breaking mid-katakana on a narrow phone - it wraps at the
-                    spaces instead, which are the meaningful boundaries. Safe
-                    here because every label is short and space-separated; it
-                    would overflow on running Japanese prose.
-                  */}
                   <span className="min-w-0">
-                    <span className="block break-keep text-[14px] font-black">{link.name}</span>
+                    <span className="block truncate text-[14px] font-black">{link.name}</span>
                     <span className="block truncate text-[11.5px] text-ink-soft">{link.desc}</span>
                   </span>
                   <ArrowUpRight
