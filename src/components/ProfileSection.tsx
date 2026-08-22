@@ -8,9 +8,30 @@ const fadeUp: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 }
 
+/**
+ * Cards alternate their entrance side by index (even = left, odd = right),
+ * `custom` on each motion.article feeds the index into this function
+ * variant. Matches the Contents section's playful swing-in.
+ */
+const sideIn: Variants = {
+  hidden: (index: number) => ({
+    opacity: 0,
+    x: index % 2 === 0 ? -110 : 110,
+    rotate: index % 2 === 0 ? -8 : 8,
+    scale: 0.9,
+  }),
+  visible: {
+    opacity: 1,
+    x: 0,
+    rotate: 0,
+    scale: 1,
+    transition: { type: 'spring', stiffness: 74, damping: 11, mass: 1 },
+  },
+}
+
 const stagger: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.22 } },
 }
 
 const chip = (label: string) => (
@@ -57,7 +78,8 @@ const ProfileSection = () => {
           {/* Engineer. First of the three - 28 years is the number that anchors
               the whole page's credibility. */}
           <motion.article
-            variants={reveal ? fadeUp : undefined}
+            custom={0}
+            variants={reveal ? sideIn : undefined}
             className="sticker sticker-hover relative bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:-1.1deg] hover:[rotate:0deg]"
           >
             <span
@@ -89,7 +111,8 @@ const ProfileSection = () => {
 
           {/* Streamer */}
           <motion.article
-            variants={reveal ? fadeUp : undefined}
+            custom={1}
+            variants={reveal ? sideIn : undefined}
             className="sticker sticker-hover relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:1.4deg] hover:[rotate:0deg]"
           >
             <span
@@ -110,7 +133,8 @@ const ProfileSection = () => {
           {/* Host. The chapter that closed - past tense throughout, and the
               only card lit for night rather than daylight. */}
           <motion.article
-            variants={reveal ? fadeUp : undefined}
+            custom={2}
+            variants={reveal ? sideIn : undefined}
             className="sticker sticker-hover relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#F4F0FF] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:-0.9deg] hover:[rotate:0deg]"
           >
             <span
