@@ -21,7 +21,7 @@ const SignalTicker = () => {
   const { ambient } = useMotionProfile()
 
   return (
-    <div aria-hidden="true" className="relative overflow-hidden py-4">
+    <div aria-hidden="true" className="relative -mt-[10dvh] overflow-hidden py-4 sm:-mt-[7dvh] lg:-mt-[4dvh]">
       {ambient ? (
         // The fade sits on a full-width wrapper, not on the track itself:
         // masking the track would put the gradient at 8% of the doubled track
