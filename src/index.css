@@ -109,37 +109,52 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Ambient input -> CSS variables.
+   Ambient parallax.
 
-   Pointer and scroll are written to exactly three custom properties on ONE
-   node (see useAmbientVars). Every decoration then composes its own offset in
-   pure CSS, so 40+ elements move without a single React re-render.
+   Pointer and scroll live in three shared MotionValues (see useAmbientVars).
+   They are applied as ONE transform per depth group - `.deco-group`, three per
+   section, and `.chibi-parallax` - never per decoration and never as custom
+   properties on an ancestor. A changed inherited custom property recalcs
+   style for every descendant (on the page root that was the entire document,
+   every pointer and scroll frame); a transform is not inherited, so a frame
+   now costs a dozen single-element recalcs and the decorations themselves
+   are static markup that never re-renders.
 
    Parallax and the idle loop are kept on SEPARATE elements rather than being
    merged into one `transform`. An animation replaces the whole `transform`
    property, so anything sharing it has to be repeated inside every keyframe -
    which is both unreadable and easy to get wrong. Splitting them means:
 
-     - the outer element owns the parallax (pointer + scroll, one transform)
+     - the group owns the parallax (pointer + scroll, one transform)
      - the inner <img> owns the drift / twinkle keyframes
 
    No property is contested, and no independent-`translate` fallback is needed.
 --------------------------------------------------------------------------- */
 
 /*
- * One layer per section, filling it exactly. It carries `--sy0` - the scroll
- * position at which this section is centred in the viewport - measured by the
- * component. Scroll parallax is the distance from THAT point, not raw scrollY:
- * using the absolute value gives every section further down the page a large
- * constant offset, which is a translation, not parallax.
+ * One layer per section, filling it exactly. The component measures the
+ * scroll position at which this section is centred in the viewport; scroll
+ * parallax is the distance from THAT point, not raw scrollY: using the
+ * absolute value gives every section further down the page a large constant
+ * offset, which is a translation, not parallax.
  */
 .deco-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* Overwritten inline before first paint; this keeps the calc valid if the
-     measurement is ever skipped. */
-  --sy0: 0px;
+}
+
+/*
+ * One depth per group, filling the layer so the decorations' percentage
+ * offsets resolve exactly as they would against the layer. The transform is
+ * rewritten here every pointer / scroll frame; pre-promoting the group keeps
+ * that a compositor update rather than a main-thread repaint of the field.
+ */
+.deco-group {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform;
 }
 
 .deco {
@@ -147,18 +162,6 @@
   display: block;
   pointer-events: none;
   user-select: none;
-  /* `--sy` is rewritten on the root element every scroll frame; without this,
-     Chrome repaints every `.deco` from the main thread each tick instead of
-     just recompositing a promoted layer, which is what read as on-scroll
-     flicker across the decoration field. */
-  will-change: transform;
-  transform: translate3d(
-    calc(var(--px, 0px) * var(--depth, 0)),
-    calc(
-      var(--py, 0px) * var(--depth, 0) + (var(--sy, 0px) - var(--sy0, 0px)) * var(--speed, 0)
-    ),
-    0
-  );
 }
 
 .deco > img {
@@ -241,14 +244,10 @@
  * joints closed.
  */
 .chibi-parallax {
-  /* Same reasoning as `.deco`: this reads `--px`/`--py` off the same
-     scroll/pointer-driven root, so it needs to stay pre-promoted too. */
+  /* The transform itself is written inline by the component (pointer x/y
+     scaled by the figure's depth). Same reasoning as `.deco-group`: it is
+     rewritten every pointer frame, so it stays pre-promoted. */
   will-change: transform;
-  transform: translate3d(
-    calc(var(--px, 0px) * var(--depth, 0)),
-    calc(var(--py, 0px) * var(--depth, 0)),
-    0
-  );
 }
 
 /* aspect-ratio is set inline: the two characters have different canvases. */

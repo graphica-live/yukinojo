@@ -2,9 +2,9 @@
  * Decoration placement.
  *
  * These are the illustrated assets cut out of the supplied sheets. Every value
- * here is static: the component turns them into inline custom properties once,
- * and the motion itself is composed in CSS from `--px` / `--py` / `--sy`
- * (see `useAmbientVars`). Nothing in this file causes a re-render.
+ * here is static: the component turns them into inline styles once, and the
+ * parallax is applied per depth group from the shared pointer / scroll values
+ * (see `useAmbientVars`, `Deco.tsx`). Nothing in this file causes a re-render.
  *
  * Coordinates are percentages of the owning section. `x`/`right` and
  * `y`/`bottom` are mutually exclusive - give one of each.

@@ -1,4 +1,4 @@
-import { motion, type Variants } from 'framer-motion'
+import { m, type Variants } from 'framer-motion'
 import DecoField from './Deco'
 import { profileDeco } from '../data/deco'
 import { useMotionProfile, revealProps } from '../hooks/useMotionProfile'
@@ -58,7 +58,7 @@ const ProfileSection = () => {
       <DecoField items={profileDeco} />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
+        <m.div
           variants={reveal ? fadeUp : undefined}
           {...revealProps(reveal)}
           className="relative mb-12"
@@ -68,16 +68,16 @@ const ProfileSection = () => {
           <span className="absolute right-0 top-[-6px] font-hand text-[clamp(1.4rem,4vw,2.1rem)] font-bold text-grape [rotate:-7deg]">
             SE × LIVER × HOST
           </span>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           variants={reveal ? stagger : undefined}
           {...revealProps(reveal)}
           className="grid gap-8 md:grid-cols-2 md:gap-9 lg:grid-cols-3"
         >
           {/* Engineer. First of the three - 28 years is the number that anchors
               the whole page's credibility. */}
-          <motion.article
+          <m.article
             custom={0}
             variants={reveal ? sideIn : undefined}
             className="sticker sticker-hover relative bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:-1.1deg] hover:[rotate:0deg]"
@@ -107,10 +107,10 @@ const ProfileSection = () => {
                 '実務14年',
               ].map(chip)}
             </div>
-          </motion.article>
+          </m.article>
 
           {/* Streamer */}
-          <motion.article
+          <m.article
             custom={1}
             variants={reveal ? sideIn : undefined}
             className="sticker sticker-hover relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#FDF2FA] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:1.4deg] hover:[rotate:0deg]"
@@ -128,11 +128,11 @@ const ProfileSection = () => {
             <div className="mt-3 flex flex-wrap gap-2">
               {['毎日配信', 'TikTokLIVE', 'サニプリ所属'].map(chip)}
             </div>
-          </motion.article>
+          </m.article>
 
           {/* Host. The chapter that closed - past tense throughout, and the
               only card lit for night rather than daylight. */}
-          <motion.article
+          <m.article
             custom={2}
             variants={reveal ? sideIn : undefined}
             className="sticker sticker-hover relative mt-0 bg-gradient-to-br from-white from-[32%] via-[#F4F0FF] via-[76%] to-[#EFF5FF] p-6 pl-7 hover:-translate-y-2 [rotate:-0.9deg] hover:[rotate:0deg]"
@@ -150,8 +150,8 @@ const ProfileSection = () => {
             <div className="mt-3 flex flex-wrap gap-2">
               {['歌舞伎町', '5年', '2店舗'].map(chip)}
             </div>
-          </motion.article>
-        </motion.div>
+          </m.article>
+        </m.div>
       </div>
     </section>
   )

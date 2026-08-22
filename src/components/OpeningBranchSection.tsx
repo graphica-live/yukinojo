@@ -1,4 +1,4 @@
-import { motion, type Variants } from 'framer-motion'
+import { m, type Variants } from 'framer-motion'
 import { Aperture, ArrowUpRight, Drop, MonitorPlay } from '@phosphor-icons/react'
 import DecoField from './Deco'
 import { contentsDeco } from '../data/deco'
@@ -113,7 +113,7 @@ const OpeningBranchSection = () => {
       <DecoField items={contentsDeco} />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
+        <m.div
           variants={reveal ? fadeUp : undefined}
           {...revealProps(reveal)}
           className="mb-12"
@@ -124,15 +124,15 @@ const OpeningBranchSection = () => {
             <br />
             やっていること。
           </h2>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           variants={reveal ? stagger : undefined}
           {...revealProps(reveal)}
           className="flex flex-col gap-4"
         >
           {branchCards.map((card, index) => (
-            <motion.div key={card.href} custom={index} variants={reveal ? sideIn : undefined}>
+            <m.div key={card.href} custom={index} variants={reveal ? sideIn : undefined}>
               {/*
                 Link behaviour is deliberate and must not drift: the consulting
                 card opens a new tab, the two web apps navigate in place.
@@ -180,9 +180,9 @@ const OpeningBranchSection = () => {
                   />
                 </span>
               </a>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

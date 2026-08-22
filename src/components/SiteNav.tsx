@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { m, useScroll, useTransform } from 'framer-motion'
 
 const sections = [
   { label: '三つの経歴', href: '#profile' },
@@ -18,7 +18,7 @@ const SiteNav = () => {
         point: it collapses to a solid fill in the TikTok webview and under
         prefers-reduced-transparency.
       */}
-      <motion.div
+      <m.div
         aria-hidden="true"
         style={{ opacity: chromeOpacity }}
         className="frost absolute inset-0 shadow-[0_1px_0_rgba(140,160,215,0.24)]"

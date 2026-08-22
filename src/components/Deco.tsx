@@ -1,67 +1,47 @@
 import { useLayoutEffect, useRef, type CSSProperties } from 'react'
-import { LAYERS, type DecoItem } from '../data/deco'
+import { m, useMotionValue, useTransform, type MotionValue } from 'framer-motion'
+import { LAYERS, type DecoItem, type DecoLayer } from '../data/deco'
 import { decoSizes } from '../data/decoSizes'
+import { useAmbient } from '../hooks/useAmbientVars'
 import { useIsPhone } from '../hooks/useIsPhone'
 import { useMotionProfile } from '../hooks/useMotionProfile'
 
+/** Back to front, which is also the paint order. */
+const DEPTHS: DecoLayer[] = ['far', 'mid', 'near']
+
 /**
- * A field of decorations for one section.
+ * One depth of decorations, moved as a unit.
  *
- * Everything here is static markup plus inline custom properties. The motion is
- * composed in CSS from the shared `--px` / `--py` / `--sy` published by
- * `useAmbientVars`, so a pointer move or a scroll never re-renders this tree.
- *
- * The one measured value is `--sy0`: the scroll position at which this section
- * is centred in the viewport. Scroll parallax is the distance from that point,
- * not the raw `scrollY` - otherwise every section further down the page starts
- * with a large constant offset and its decorations are simply translated off
- * their intended positions. It is written straight to the node rather than held
- * in state, because it changes only on resize and must not re-render 39
- * children when it does.
- *
- * The owning section must be `relative`; this layer fills it and is
- * `pointer-events: none`.
+ * All the decorations on a depth share the same pointer weight and scroll
+ * speed, so they share one transform. Writing it here rather than on each
+ * decoration is the whole performance story: a `transform` is not inherited,
+ * so a frame costs one style recalc per group instead of one per decoration
+ * (and, in the original root-custom-property version, one per element on
+ * the page).
  */
-const DecoField = ({ items }: { items: DecoItem[] }) => {
+const DecoGroup = ({
+  depth,
+  items,
+  centre,
+}: {
+  depth: DecoLayer
+  items: DecoItem[]
+  centre: MotionValue<number>
+}) => {
   const { ambient } = useMotionProfile()
-  const isPhone = useIsPhone()
-  const layerRef = useRef<HTMLDivElement>(null)
+  const { px, py, sy } = useAmbient()
+  const { pointer, scroll } = LAYERS[depth]
 
-  // Layout effect, not effect: `--sy0` has to be on the node before the first
-  // paint, or a reload part-way down the page shows one frame of decorations
-  // displaced by the full scroll offset.
-  useLayoutEffect(() => {
-    const node = layerRef.current
-    if (!node) return
-
-    const measure = () => {
-      const rect = node.getBoundingClientRect()
-      const centre = rect.top + window.scrollY + rect.height / 2
-      node.style.setProperty('--sy0', `${Math.round(centre - window.innerHeight / 2)}px`)
-    }
-
-    measure()
-
-    // Catches viewport resizes and, via the observer, the section growing when
-    // text reflows or a font finally lands.
-    const observer = new ResizeObserver(measure)
-    observer.observe(node)
-    window.addEventListener('resize', measure, { passive: true })
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('resize', measure)
-    }
-  }, [])
-
-  // Dropped from the markup, not just hidden: `display: none` still lets the
-  // preload scanner fetch every src.
-  const visible = isPhone ? items.filter((item) => item.phone !== false) : items
+  const x = useTransform(px, (v) => v * pointer)
+  const y = useTransform(
+    [py, sy, centre],
+    ([pyV, syV, c]: number[]) => pyV * pointer + (syV - c) * scroll,
+  )
 
   return (
-    <div ref={layerRef} className="deco-layer" aria-hidden="true">
-      {visible.map((item, index) => {
+    <m.div className="deco-group" style={{ x, y }}>
+      {items.map((item, index) => {
         const size = decoSizes[item.src]
-        const layer = LAYERS[item.layer]
         const style = {
           left: item.x,
           right: item.right,
@@ -69,8 +49,6 @@ const DecoField = ({ items }: { items: DecoItem[] }) => {
           bottom: item.bottom,
           width: item.w,
           opacity: item.opacity,
-          '--depth': layer.pointer,
-          '--speed': layer.scroll,
           '--dur': item.dur,
           '--delay': item.delay,
           '--dx': item.dx,
@@ -100,6 +78,72 @@ const DecoField = ({ items }: { items: DecoItem[] }) => {
             />
           </span>
         )
+      })}
+    </m.div>
+  )
+}
+
+/**
+ * A field of decorations for one section.
+ *
+ * The decorations themselves are static markup: their positions are inline,
+ * their idle drift / twinkle is a CSS animation on the <img>. The pointer and
+ * scroll parallax comes from the shared MotionValues in `useAmbientVars`, and
+ * is applied per DEPTH GROUP (see `DecoGroup`) - so a pointer move or a
+ * scroll writes three transforms per section and never re-renders this tree.
+ *
+ * The one measured value is the scroll position at which this section is
+ * centred in the viewport. Scroll parallax is the distance from that point,
+ * not the raw `scrollY` - otherwise every section further down the page starts
+ * with a large constant offset and its decorations are simply translated off
+ * their intended positions. It is a MotionValue rather than state, because it
+ * changes only on resize and must not re-render 39 children when it does.
+ *
+ * The owning section must be `relative`; this layer fills it and is
+ * `pointer-events: none`.
+ */
+const DecoField = ({ items }: { items: DecoItem[] }) => {
+  const isPhone = useIsPhone()
+  const layerRef = useRef<HTMLDivElement>(null)
+  const centre = useMotionValue(0)
+
+  // Layout effect, not effect: the centre has to be known before the first
+  // paint, or a reload part-way down the page shows one frame of decorations
+  // displaced by the full scroll offset.
+  useLayoutEffect(() => {
+    const node = layerRef.current
+    if (!node) return
+
+    const measure = () => {
+      const rect = node.getBoundingClientRect()
+      const mid = rect.top + window.scrollY + rect.height / 2
+      centre.set(Math.round(mid - window.innerHeight / 2))
+    }
+
+    measure()
+
+    // Catches viewport resizes and, via the observer, the section growing when
+    // text reflows or a font finally lands.
+    const observer = new ResizeObserver(measure)
+    observer.observe(node)
+    window.addEventListener('resize', measure, { passive: true })
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [centre])
+
+  // Dropped from the markup, not just hidden: `display: none` still lets the
+  // preload scanner fetch every src.
+  const visible = isPhone ? items.filter((item) => item.phone !== false) : items
+
+  return (
+    <div ref={layerRef} className="deco-layer" aria-hidden="true">
+      {DEPTHS.map((depth) => {
+        const group = visible.filter((item) => item.layer === depth)
+        return group.length ? (
+          <DecoGroup key={depth} depth={depth} items={group} centre={centre} />
+        ) : null
       })}
     </div>
   )

@@ -1,4 +1,4 @@
-import { motion, type Variants } from 'framer-motion'
+import { m, type Variants } from 'framer-motion'
 import {
   AmazonLogo,
   ArrowUpRight,
@@ -75,7 +75,7 @@ const LinksSection = () => {
       <DecoField items={linksDeco} />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
+        <m.div
           variants={reveal ? fadeUp : undefined}
           {...revealProps(reveal)}
           className="relative mb-12"
@@ -85,9 +85,9 @@ const LinksSection = () => {
           <span className="absolute right-0 top-[-6px] font-hand text-[clamp(1.4rem,4vw,2.1rem)] font-bold text-grape [rotate:-7deg]">
             see you!
           </span>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           variants={reveal ? fadeUp : undefined}
           {...revealProps(reveal)}
           className="relative overflow-hidden rounded-[44px] bg-gradient-to-br from-[#FFEAF5] via-[#EAF1FF] via-[44%] to-[#E6FAF3] px-6 py-10 shadow-[24px_34px_60px_-34px_rgba(78,100,168,0.55)] sm:px-10"
@@ -109,13 +109,13 @@ const LinksSection = () => {
             className="pointer-events-none absolute left-1/2 top-1/2 h-[86%] w-[min(96%,820px)] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.94)_0%,rgba(255,255,255,0.78)_46%,rgba(255,255,255,0)_74%)]"
           />
 
-          <motion.ul
+          <m.ul
             variants={reveal ? stagger : undefined}
             {...revealProps(reveal)}
             className="relative z-10 flex flex-col gap-3"
           >
             {links.map((link) => (
-              <motion.li key={link.url} variants={reveal ? fadeUp : undefined}>
+              <m.li key={link.url} variants={reveal ? fadeUp : undefined}>
                 <a
                   href={link.url}
                   target="_blank"
@@ -139,10 +139,10 @@ const LinksSection = () => {
                     className="ml-auto shrink-0 text-ink-faint transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-grape"
                   />
                 </a>
-              </motion.li>
+              </m.li>
             ))}
-          </motion.ul>
-        </motion.div>
+          </m.ul>
+        </m.div>
       </div>
     </section>
   )

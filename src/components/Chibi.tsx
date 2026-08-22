@@ -1,6 +1,7 @@
 import { useRef, type CSSProperties } from 'react'
-import { motion } from 'framer-motion'
+import { m, useTransform } from 'framer-motion'
 import { chibiVariants, type ChibiVariantKey } from '../data/chibi'
+import { useAmbient } from '../hooks/useAmbientVars'
 import { useGaze } from '../hooks/useGaze'
 import { useMotionProfile } from '../hooks/useMotionProfile'
 
@@ -18,7 +19,7 @@ type ChibiProps = {
  *
  * Three nested transforms, one job each, because an animation replaces the
  * whole `transform` and they would otherwise fight:
- *   outer  - pointer parallax (composed in CSS from --px/--py)
+ *   outer  - pointer parallax (a transform derived from the shared px/py)
  *   middle - the idle hover keyframes
  *   inner  - the parts themselves, each with its own swing
  *
@@ -30,11 +31,17 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
   const rig = chibiVariants[variant]
   const ref = useRef<HTMLDivElement>(null)
   const gaze = useGaze(ref, rig.head)
+  // Pointer parallax for the whole figure, as one transform on this wrapper.
+  // Scroll is deliberately not part of it: the hero drives its own scroll
+  // exit on an ancestor.
+  const { px, py } = useAmbient()
+  const x = useTransform(px, (v) => v * depth)
+  const y = useTransform(py, (v) => v * depth)
 
   return (
-    <div
+    <m.div
       className={`chibi-parallax ${className}`}
-      style={{ '--depth': depth } as CSSProperties}
+      style={{ x, y }}
       role="img"
       aria-label={rig.label}
     >
@@ -42,7 +49,7 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
         className={ambient ? 'chibi-hover' : undefined}
         style={{ '--dur': rig.hover.dur, '--delay': rig.hover.delay } as CSSProperties}
       >
-        <motion.div
+        <m.div
           ref={ref}
           className="chibi"
           style={{ aspectRatio: rig.aspect, ...(ambient ? gaze : undefined) }}
@@ -102,9 +109,9 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
               />
             </span>
           ))}
-        </motion.div>
+        </m.div>
       </div>
-    </div>
+    </m.div>
   )
 }
 
