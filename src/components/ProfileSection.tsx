@@ -75,12 +75,7 @@ const ProfileSection = () => {
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-plate bg-gradient-to-br from-[#FFF0F8] to-[#E9F2FF] shadow-plate">
                 <img src="/deco/gem-1.webp" alt="" loading="lazy" decoding="async" className="w-[70%]" />
               </div>
-              <div>
-                <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">SE</h3>
-                <p className="text-balance text-sm font-bold text-grape-deep">
-                  初めてのコーディングから28年
-                </p>
-              </div>
+              <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">SE</h3>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {['開発 / 保守', 'PM', '高度区分 多数'].map(chip)}
@@ -100,10 +95,7 @@ const ProfileSection = () => {
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-plate bg-gradient-to-br from-[#FFF0F8] to-[#E9F2FF] shadow-plate">
                 <img src="/deco/star-gold.webp" alt="" loading="lazy" decoding="async" className="w-[70%]" />
               </div>
-              <div>
-                <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">ライバー</h3>
-                <p className="text-balance text-sm font-bold text-grape-deep">サニプリ所属</p>
-              </div>
+              <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">ライバー</h3>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {['毎日 6〜8H', 'TikTok LIVE'].map(chip)}
@@ -124,10 +116,7 @@ const ProfileSection = () => {
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-plate bg-gradient-to-br from-[#F1EBFF] to-[#E9F2FF] shadow-plate">
                 <img src="/deco/moon-crescent.webp" alt="" loading="lazy" decoding="async" className="w-[70%]" />
               </div>
-              <div>
-                <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">元ホスト</h3>
-                <p className="text-balance text-sm font-bold text-grape-deep">歌舞伎町</p>
-              </div>
+              <h3 className="text-[clamp(1.3rem,3.4vw,1.7rem)]">元ホスト</h3>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {['歌舞伎町', '接客 / トーク'].map(chip)}
