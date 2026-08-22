@@ -26,6 +26,27 @@ const stagger: Variants = {
   visible: { transition: { staggerChildren: 0.09 } },
 }
 
+/**
+ * Mount entrance for the pair - each walks in from its own side rather than
+ * appearing already in place. Lives on a wrapper OUTSIDE the scroll-exit
+ * `motion.div` (see the placement/exit comment below): that node's `x` is
+ * already driven by a scroll-linked MotionValue, and Framer Motion would drop
+ * one of the two `x` sources if they shared a node.
+ */
+const enterLeft: Variants = {
+  hidden: { x: '-38%', opacity: 0 },
+  visible: { x: '0%', opacity: 1, transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] } },
+}
+
+const enterRight: Variants = {
+  hidden: { x: '38%', opacity: 0 },
+  visible: {
+    x: '0%',
+    opacity: 1,
+    transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.12 },
+  },
+}
+
 /*
  * Two arrangements of the same three elements.
  *
@@ -166,7 +187,7 @@ const HeroSection = () => {
               }`}
               style={{ ['--dur' as string]: '2s' }}
             />
-            毎日 6〜8時間 配信中 ／ サニプリ所属
+            ライブ配信 ／ SE14年 ／ 元ホスト5年
           </motion.span>
 
           {/*
@@ -240,8 +261,14 @@ const HeroSection = () => {
         */}
         <div className="pointer-events-none absolute inset-0 z-20">
           <div className={`absolute ${layout.left}`}>
-            <motion.div style={{ x: leftX, y: leftY, rotate: leftTilt }}>
-              <Chibi variant="a" depth={0.9} priority />
+            <motion.div
+              variants={animate ? enterLeft : undefined}
+              initial={animate ? 'hidden' : false}
+              animate={animate ? 'visible' : undefined}
+            >
+              <motion.div style={{ x: leftX, y: leftY, rotate: leftTilt, willChange: 'transform' }}>
+                <Chibi variant="a" depth={0.9} priority />
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -253,8 +280,14 @@ const HeroSection = () => {
         */}
         <div className={`pointer-events-none absolute inset-0 ${layout.rightZ}`}>
           <div className={`absolute ${layout.right}`}>
-            <motion.div style={{ x: rightX, y: rightY, rotate: rightTilt }}>
-              <Chibi variant="b" depth={0.7} priority />
+            <motion.div
+              variants={animate ? enterRight : undefined}
+              initial={animate ? 'hidden' : false}
+              animate={animate ? 'visible' : undefined}
+            >
+              <motion.div style={{ x: rightX, y: rightY, rotate: rightTilt, willChange: 'transform' }}>
+                <Chibi variant="b" depth={0.7} priority />
+              </motion.div>
             </motion.div>
           </div>
         </div>
