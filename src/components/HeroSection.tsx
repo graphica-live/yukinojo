@@ -29,6 +29,40 @@ const stagger: Variants = {
   visible: { transition: { staggerChildren: 0.09 } },
 }
 
+/*
+ * Two arrangements of the same three elements.
+ *
+ * `staged` is the one the page opens on: the pair dead centre, filling the
+ * screen, with the copy behind them. It only works because they leave - the
+ * title is unreadable until they do.
+ *
+ * `still` is what runs when ambient motion is off (reduced-motion, or the
+ * TikTok webview). Nothing moves there, so a pair parked over the copy would
+ * cover it for good. They go back to flanking it, the copy takes a reserve at
+ * the foot to stand them in below `lg`, and the copy comes back out on top.
+ *
+ * Both are plain placement; the exit transform always lives on the child, since
+ * Framer Motion writes the whole `transform` inline and the two cannot share a
+ * node.
+ */
+const LAYOUT = {
+  staged: {
+    copy: 'z-20',
+    left:
+      'left-1/2 top-1/2 w-[88%] -translate-x-[88%] -translate-y-[42%] ' +
+      'sm:w-[64%] lg:w-[47%] lg:-translate-x-[92%] lg:-translate-y-[44%]',
+    right:
+      'left-1/2 top-1/2 w-[100%] -translate-x-[18%] -translate-y-[50%] ' +
+      'sm:w-[74%] lg:w-[52%] lg:-translate-x-[10%] lg:-translate-y-[50%]',
+  },
+  still: {
+    copy: 'z-30 pb-[56vw] sm:pb-[44vw] lg:pb-0',
+    left: 'bottom-0 left-[-14%] w-[54%] sm:left-[-10%] sm:w-[46%] lg:bottom-auto lg:left-[-9%] lg:top-[1%] lg:w-[47%]',
+    right:
+      'bottom-[2%] right-[-20%] w-[68%] sm:right-[-12%] sm:w-[56%] lg:bottom-auto lg:right-[-14%] lg:top-[-6%] lg:w-[48%]',
+  },
+} as const
+
 const HeroSection = () => {
   // `animate` (mount) rather than `reveal` (whileInView): the hero is above the
   // fold, so it must never depend on an IntersectionObserver callback.
@@ -57,13 +91,26 @@ const HeroSection = () => {
   const raw = useTransform(scrollYProgress, (v) => (ambient ? v : 0))
   const part = useSpring(raw, INERTIA)
 
-  const leftX = useTransform(part, [0, 0.3, 0.68, 1], ['0%', '-9%', '-54%', '-148%'])
-  const leftY = useTransform(part, [0, 0.5, 1], ['0%', '3.5%', '-8%'])
-  const leftTilt = useTransform(part, [0, 0.42, 1], [0, -3.5, -17])
+  /*
+   * The pair own the screen on open, so they also have to get out of the way
+   * fast - the copy underneath them is unreadable until they do. Every curve
+   * below finishes at 0.19 of one hero height, around 160px on a phone. That
+   * is the largest exit the copy can afford: any further and the badge at the
+   * top of the block has slid under the sticky nav by the time the pair are
+   * clear. The stops inside the range are still uneven per character, so the
+   * two leave at different moments rather than as one mechanism.
+   */
+  const EXIT = 0.19
 
-  const rightX = useTransform(part, [0, 0.24, 0.74, 1], ['0%', '4%', '46%', '134%'])
-  const rightY = useTransform(part, [0, 0.46, 1], ['0%', '-4.5%', '7%'])
-  const rightTilt = useTransform(part, [0, 0.55, 1], [0, 4.5, 13])
+  const leftX = useTransform(part, [0, 0.05, 0.12, EXIT], ['0%', '-10%', '-58%', '-152%'])
+  const leftY = useTransform(part, [0, 0.1, EXIT], ['0%', '3.5%', '-8%'])
+  const leftTilt = useTransform(part, [0, 0.08, EXIT], [0, -3.5, -17])
+
+  const rightX = useTransform(part, [0, 0.04, 0.13, EXIT], ['0%', '5%', '50%', '140%'])
+  const rightY = useTransform(part, [0, 0.09, EXIT], ['0%', '-4.5%', '7%'])
+  const rightTilt = useTransform(part, [0, 0.11, EXIT], [0, 4.5, 13])
+
+  const layout = ambient ? LAYOUT.staged : LAYOUT.still
 
   return (
     <section
@@ -81,18 +128,17 @@ const HeroSection = () => {
       */}
       <div className="relative mx-auto w-full max-w-6xl">
         {/*
-          The reserve at the foot is what the pair stand in below `lg`; on large
-          screens they overlap the copy horizontally instead, so none is needed.
-
-          `z-30` puts the copy above the pair. Overlap is the whole point, but a
-          name is not something to read through a boot - this way a limb can
-          cross the title zone and every glyph still renders whole on top of it.
+          With the pair staged, the copy sits UNDER them: on open the characters
+          own the screen and the title is backing for them, and a couple of
+          hundred pixels of scroll clears them so the whole block - name, both
+          lines, both buttons - is readable in one screen. The layer above is
+          `pointer-events-none`, so the buttons are tappable even while covered.
         */}
         <motion.div
           variants={animate ? stagger : undefined}
           initial={animate ? 'hidden' : false}
           animate={animate ? 'visible' : undefined}
-          className="relative z-30 max-w-[30rem] pb-[56vw] sm:pb-[44vw] lg:mx-auto lg:max-w-[34rem] lg:pb-0 lg:text-center"
+          className={`relative max-w-[30rem] lg:mx-auto lg:max-w-[34rem] lg:text-center ${layout.copy}`}
         >
           <motion.span
             variants={animate ? fadeUp : undefined}
@@ -180,14 +226,8 @@ const HeroSection = () => {
           same node would be silently dropped; the offsets here are all `top` /
           `left` / `right` / `bottom` for that reason.
         */}
-        <div className="pointer-events-none absolute inset-0 z-20">
-          {/*
-            Below `lg` this one sits low and small on the left. The buttons are
-            left-aligned there, and a head behind a button reads as a bug - so
-            the smaller of the two takes the side the buttons occupy, and stands
-            clear of them.
-          */}
-          <div className="absolute bottom-0 left-[-14%] w-[54%] sm:left-[-10%] sm:w-[46%] lg:bottom-auto lg:left-[-9%] lg:top-[1%] lg:w-[47%]">
+        <div className={`pointer-events-none absolute inset-0 ${ambient ? 'z-30' : 'z-20'}`}>
+          <div className={`absolute ${layout.left}`}>
             <motion.div style={{ x: leftX, y: leftY, rotate: leftTilt }}>
               <Chibi variant="a" depth={0.9} priority />
             </motion.div>
@@ -195,11 +235,9 @@ const HeroSection = () => {
 
           {/*
             Deliberately not a mirror of the other: bigger, seated, and hung
-            higher, so the composition does not read as a symmetrical badge. It
-            is also held a little further out than its partner - the pose throws
-            a boot inwards, and this is what keeps the boot off the buttons.
+            higher, so the pair does not read as a symmetrical badge.
           */}
-          <div className="absolute bottom-[2%] right-[-20%] w-[68%] sm:right-[-12%] sm:w-[56%] lg:bottom-auto lg:right-[-14%] lg:top-[-6%] lg:w-[48%]">
+          <div className={`absolute ${layout.right}`}>
             <motion.div style={{ x: rightX, y: rightY, rotate: rightTilt }}>
               <Chibi variant="b" depth={0.7} priority />
             </motion.div>
