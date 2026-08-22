@@ -12,6 +12,11 @@
  * out and its hole filled harmonically; the pupil rides on a smooth backdrop
  * (a brown disc for `a`, a purple iris for `b`), which is what makes the repair
  * invisible. See scratchpad/build-eyes.mjs.
+ *
+ * Both also carry a hair part, segmented out of the flat body render by the
+ * same color-classification technique as `b`'s limbs, with the hole inpainted.
+ * It renders after `body` (topmost) and swings on its own origin near the
+ * crown, independently of the head. See scratchpad/build_hair.py.
  */
 
 export type RigPart = {
@@ -72,6 +77,7 @@ const A: ChibiVariant = {
     { src: 'armBack', origin: '64.5% 52.3%', amp: 4, dur: '4.7s', delay: '-2.4s' },
     { src: 'armFront', origin: '40.6% 40.3%', amp: 3.4, dur: '3.9s', delay: '-1.2s' },
     { src: 'body' },
+    { src: 'hair', origin: '58% 20%', amp: 3, dur: '5.4s', delay: '-2.9s' },
   ],
   eyes: [
     { box: [50.859, 24.417, 6.95, 6.765], pupil: [15.294, 11.494, 72.941, 79.31], travel: [11.765, 9.195] },
@@ -89,9 +95,10 @@ const B: ChibiVariant = {
     { src: 'under' },
     { src: 'legBack', origin: '45.1% 55.5%', amp: 1.9, dur: '6.1s', delay: '-2.7s' },
     { src: 'legFront', origin: '50.5% 70.3%', amp: 2.3, dur: '5.3s', delay: '-0.9s' },
-    { src: 'armBack', origin: '42.8% 30.0%', amp: 2.1, dur: '4.3s', delay: '-3.1s' },
-    { src: 'armFront', origin: '79.5% 64.1%', amp: 3.1, dur: '3.7s', delay: '-1.7s' },
+    { src: 'armBack', origin: '42.8% 30.0%', amp: 5.6, dur: '3.6s', delay: '-3.1s' },
+    { src: 'armFront', origin: '79.5% 64.1%', amp: 6.4, dur: '3.1s', delay: '-1.7s' },
     { src: 'body' },
+    { src: 'hair', origin: '65% 10%', amp: 3.4, dur: '4.8s', delay: '-1.4s' },
   ],
   eyes: [
     { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71], travel: [17.647, 8.696] },
