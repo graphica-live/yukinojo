@@ -82,7 +82,7 @@ export const heroDeco: DecoItem[] = [
 ]
 
 export const profileDeco: DecoItem[] = [
-  { src: 'moon-crescent', kind: 'drift', layer: 'far', right: '3%', y: '4%', w: '150px', opacity: 0.85, dur: '16s', dx: '-14px', dy: '-20px', r0: '10deg', r1: '-4deg' },
+  { src: 'moon-crescent', kind: 'drift', layer: 'far', right: '3%', y: '18%', w: '150px', opacity: 0.85, dur: '16s', dx: '-14px', dy: '-20px', r0: '10deg', r1: '-4deg' },
   { src: 'star-blue', kind: 'drift', layer: 'far', x: '1%', bottom: '8%', w: '120px', opacity: 0.8, dur: '14s', dx: '16px', dy: '-18px', r0: '-8deg', r1: '6deg' },
   { src: 'cloud-4', kind: 'drift', layer: 'mid', x: '6%', y: '2%', w: '96px', opacity: 0.85, dur: '13s', delay: '-3s', dx: '12px', dy: '-22px', r0: '-14deg', r1: '6deg', phone: false },
   { src: 'glint-2', kind: 'twinkle', layer: 'near', right: '16%', bottom: '20%', w: '58px', dur: '3.4s' },
