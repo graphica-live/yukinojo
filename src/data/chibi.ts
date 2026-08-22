@@ -3,8 +3,10 @@
  *
  * `a` is the rigged one: nine PSD layers restacked and merged into five files,
  * with the limbs able to swing (see the commit that introduced the rig for why
- * the restack is safe). `b` is a flat render with no layer separation, so it
- * gets no limb motion - only the whole-figure hover.
+ * the restack is safe). `b` had no source layers at all - just a flat render -
+ * so its limbs were segmented out of the flat image by color classification,
+ * with the holes left behind repaired by inpainting (see scratchpad/build.py).
+ * Both variants now carry a full limb rig.
  *
  * Both carry an eye rig. Neither render had an eye layer, so each pupil was cut
  * out and its hole filled harmonically; the pupil rides on a smooth backdrop
@@ -83,7 +85,14 @@ const B: ChibiVariant = {
   label: 'ゆきのじょーのキャラクター（デニム）',
   head: [0.62, 0.28],
   hover: { dur: '14.9s', delay: '-8.1s' },
-  parts: [{ src: 'body' }],
+  parts: [
+    { src: 'under' },
+    { src: 'legBack', origin: '45.1% 55.5%', amp: 1.9, dur: '6.1s', delay: '-2.7s' },
+    { src: 'legFront', origin: '50.5% 70.3%', amp: 2.3, dur: '5.3s', delay: '-0.9s' },
+    { src: 'armBack', origin: '42.8% 30.0%', amp: 2.1, dur: '4.3s', delay: '-3.1s' },
+    { src: 'armFront', origin: '79.5% 64.1%', amp: 3.1, dur: '3.7s', delay: '-1.7s' },
+    { src: 'body' },
+  ],
   eyes: [
     { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71], travel: [17.647, 8.696] },
     { box: [69.224, 29.32, 6.654, 5.815], pupil: [26.389, 18.31, 77.778, 60.563], travel: [12.5, 8.451] },
