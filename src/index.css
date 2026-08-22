@@ -217,6 +217,11 @@
   display: block;
   pointer-events: none;
   user-select: none;
+  /* `--sy` is rewritten on the root element every scroll frame; without this,
+     Chrome repaints every `.deco` from the main thread each tick instead of
+     just recompositing a promoted layer, which is what read as on-scroll
+     flicker across the decoration field. */
+  will-change: transform;
   transform: translate3d(
     calc(var(--px, 0px) * var(--depth, 0)),
     calc(
@@ -306,6 +311,9 @@
  * joints closed.
  */
 .chibi-parallax {
+  /* Same reasoning as `.deco`: this reads `--px`/`--py` off the same
+     scroll/pointer-driven root, so it needs to stay pre-promoted too. */
+  will-change: transform;
   transform: translate3d(
     calc(var(--px, 0px) * var(--depth, 0)),
     calc(var(--py, 0px) * var(--depth, 0)),

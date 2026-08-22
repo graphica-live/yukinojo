@@ -35,7 +35,7 @@ const BuddyMascot = () => {
   return (
     <motion.div
       aria-hidden="true"
-      style={{ opacity: progress, y: lift }}
+      style={{ opacity: progress, y: lift, willChange: 'transform, opacity' }}
       className="pointer-events-none fixed bottom-6 right-6 z-40 w-36"
     >
       <span className="absolute -left-1.5 -top-1.5 -translate-x-[86%] whitespace-nowrap rounded-[16px] rounded-bl-[4px] bg-white px-3.5 py-2 text-[11.5px] font-extrabold text-ink shadow-[0_0_0_4px_#fff,0_10px_24px_-14px_rgba(78,100,168,0.6)]">
