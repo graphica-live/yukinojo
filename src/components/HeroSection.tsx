@@ -73,19 +73,27 @@ const HeroSection = () => {
     >
       <DecoField items={heroDeco} />
 
-      <motion.div
-        variants={animate ? stagger : undefined}
-        initial={animate ? 'hidden' : false}
-        animate={animate ? 'visible' : undefined}
-        className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-2 items-center gap-y-4 lg:grid-cols-[0.82fr_1.16fr_0.92fr] lg:gap-x-2"
-      >
+      {/*
+        One stage rather than three columns. The copy and the pair occupy the
+        same box and overlap inside it, which is what makes them read as a
+        single scene - side by side in their own cells, they read as a title
+        with two illustrations parked next to it.
+      */}
+      <div className="relative mx-auto w-full max-w-6xl">
         {/*
-          Source order puts the copy first so it is read and painted before
-          either character; the grid moves the left-hand one back into place on
-          large screens only. Below `lg` the copy spans the full width and the
-          pair share a row underneath it.
+          The reserve at the foot is what the pair stand in below `lg`; on large
+          screens they overlap the copy horizontally instead, so none is needed.
+
+          `z-30` puts the copy above the pair. Overlap is the whole point, but a
+          name is not something to read through a boot - this way a limb can
+          cross the title zone and every glyph still renders whole on top of it.
         */}
-        <div className="order-1 col-span-2 lg:order-2 lg:col-span-1 lg:text-center">
+        <motion.div
+          variants={animate ? stagger : undefined}
+          initial={animate ? 'hidden' : false}
+          animate={animate ? 'visible' : undefined}
+          className="relative z-30 max-w-[30rem] pb-[56vw] sm:pb-[44vw] lg:mx-auto lg:max-w-[34rem] lg:pb-0 lg:text-center"
+        >
           <motion.span
             variants={animate ? fadeUp : undefined}
             className="inline-flex items-center gap-2.5 rounded-full bg-white px-4 py-2.5 pl-3 text-xs font-bold text-ink-soft shadow-[0_0_0_5px_rgba(255,255,255,0.75),0_10px_24px_-14px_rgba(78,100,168,0.6)]"
@@ -108,27 +116,32 @@ const HeroSection = () => {
               The kicker is part of the heading, so it stays inside <h1> and is
               read out with the name rather than as a stray line.
             */}
-            <span className="mb-4 block font-display text-[clamp(0.62rem,1.4vw,0.78rem)] font-extrabold uppercase leading-[1.7] tracking-[0.12em] text-ink-faint">
+            <span className="title-cut mb-4 block font-display text-[clamp(0.62rem,1.4vw,0.78rem)] font-extrabold uppercase leading-[1.7] tracking-[0.12em] text-ink-faint">
               High Quality × Entertainment × Engineering
             </span>
             {/*
               Never allowed to wrap: breaking a Japanese name mid-word changes
               how it reads.
             */}
-            <span className="block w-fit whitespace-nowrap lg:mx-auto">{NAME_TOP}</span>
-            <span className="block w-fit whitespace-nowrap lg:mx-auto">{NAME_BOTTOM}</span>
+            <span className="title-cut block w-fit whitespace-nowrap lg:mx-auto">{NAME_TOP}</span>
+            <span className="title-cut block w-fit whitespace-nowrap lg:mx-auto">
+              {NAME_BOTTOM}
+            </span>
           </motion.h1>
 
           <motion.p
             variants={animate ? fadeUp : undefined}
-            className="mt-7 max-w-[24ch] text-[clamp(1.05rem,2.6vw,1.32rem)] font-bold leading-[1.7] lg:mx-auto"
+            className="title-cut mt-7 max-w-[24ch] text-[clamp(1.05rem,2.6vw,1.32rem)] font-bold leading-[1.7] lg:mx-auto"
           >
             1日の始まりと
             <br />
             終わりの場所に。
           </motion.p>
 
-          <motion.p variants={animate ? fadeUp : undefined} className="mt-3 text-[13.5px] text-ink-soft">
+          <motion.p
+            variants={animate ? fadeUp : undefined}
+            className="title-cut mt-3 text-[13.5px] text-ink-soft"
+          >
             TikTok LIVER × System Engineer ／{' '}
             <b className="font-display font-bold text-grape">2025.01.18</b> 活動開始
           </motion.p>
@@ -153,27 +166,46 @@ const HeroSection = () => {
               コンテンツを見る
             </a>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/*
-          The pair. They are deliberately not mirror images of each other -
-          different sizes and vertical offsets - so the composition does not
-          read as a symmetrical badge.
-        */}
-        <motion.div
-          style={{ x: leftX, y: leftY, rotate: leftTilt }}
-          className="order-2 -mb-12 w-[110%] justify-self-start lg:order-1 lg:mb-0 lg:-mr-[6%] lg:w-[128%] lg:translate-y-[4%]"
-        >
-          <Chibi variant="a" depth={0.9} priority />
-        </motion.div>
+          The pair, laid over the title zone.
 
-        <motion.div
-          style={{ x: rightX, y: rightY, rotate: rightTilt }}
-          className="order-3 -mb-8 w-[104%] justify-self-end lg:order-3 lg:mb-0 lg:-ml-[8%] lg:w-[124%] lg:translate-y-[-6%]"
-        >
-          <Chibi variant="b" depth={0.7} priority />
-        </motion.div>
-      </motion.div>
+          `pointer-events-none` on the whole layer: a limb crossing in front of
+          a link must never make it untappable, and neither character has any
+          interaction of its own - the gaze reads pointer events off `window`.
+
+          Placement and exit are on separate elements. Framer Motion writes the
+          whole `transform` inline, so a Tailwind `translate-*` utility on the
+          same node would be silently dropped; the offsets here are all `top` /
+          `left` / `right` / `bottom` for that reason.
+        */}
+        <div className="pointer-events-none absolute inset-0 z-20">
+          {/*
+            Below `lg` this one sits low and small on the left. The buttons are
+            left-aligned there, and a head behind a button reads as a bug - so
+            the smaller of the two takes the side the buttons occupy, and stands
+            clear of them.
+          */}
+          <div className="absolute bottom-0 left-[-14%] w-[54%] sm:left-[-10%] sm:w-[46%] lg:bottom-auto lg:left-[-9%] lg:top-[1%] lg:w-[47%]">
+            <motion.div style={{ x: leftX, y: leftY, rotate: leftTilt }}>
+              <Chibi variant="a" depth={0.9} priority />
+            </motion.div>
+          </div>
+
+          {/*
+            Deliberately not a mirror of the other: bigger, seated, and hung
+            higher, so the composition does not read as a symmetrical badge. It
+            is also held a little further out than its partner - the pose throws
+            a boot inwards, and this is what keeps the boot off the buttons.
+          */}
+          <div className="absolute bottom-[2%] right-[-20%] w-[68%] sm:right-[-12%] sm:w-[56%] lg:bottom-auto lg:right-[-14%] lg:top-[-6%] lg:w-[48%]">
+            <motion.div style={{ x: rightX, y: rightY, rotate: rightTilt }}>
+              <Chibi variant="b" depth={0.7} priority />
+            </motion.div>
+          </div>
+        </div>
+      </div>
     </section>
   )
 }

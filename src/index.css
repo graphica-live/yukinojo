@@ -79,6 +79,26 @@
   }
 
   /*
+   * Die-cut keyline on text.
+   *
+   * The hero characters are laid over the title zone, so a glyph can end up
+   * against a black boot or a cow-print hat. `paint-order: stroke fill` draws
+   * the stroke behind the fill, so this reads as an outline rather than
+   * fattening the letterform.
+   *
+   * Over the page background it is all but invisible - white on near-white -
+   * so it costs nothing where it is not needed, and where it is, it is the same
+   * white keyline the stickers are cut with.
+   *
+   * The width is in `em` so it tracks the type: 9px at the desktop display
+   * size, under 2px on the small lines.
+   */
+  .title-cut {
+    paint-order: stroke fill;
+    -webkit-text-stroke: 0.1em #ffffff;
+  }
+
+  /*
    * Technical label: display face, wide tracking. Uses ink-soft, not
    * ink-faint - at 11px it is small text and needs the full 4.5:1.
    */
