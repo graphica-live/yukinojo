@@ -144,7 +144,7 @@ const HeroSection = () => {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative flex min-h-[100dvh] items-center overflow-hidden px-4 pb-10 pt-24 sm:px-6 lg:px-8"
+      className="relative flex min-h-[92dvh] items-center overflow-hidden px-4 pb-6 pt-24 sm:px-6 lg:px-8"
     >
       <DecoField items={heroDeco} />
 
@@ -223,7 +223,7 @@ const HeroSection = () => {
 
           <motion.div
             variants={animate ? fadeUp : undefined}
-            className="mt-8 flex flex-wrap gap-3.5 lg:justify-center"
+            className="relative z-30 mt-8 flex flex-wrap gap-3.5 lg:justify-center"
           >
             <a
               href="#opening-branch"
