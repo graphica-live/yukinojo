@@ -38,7 +38,10 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
       role="img"
       aria-label={rig.label}
     >
-      <div className={ambient ? 'chibi-hover' : undefined}>
+      <div
+        className={ambient ? 'chibi-hover' : undefined}
+        style={{ '--dur': rig.hover.dur, '--delay': rig.hover.delay } as CSSProperties}
+      >
         <motion.div
           ref={ref}
           className="chibi"

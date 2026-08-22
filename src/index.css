@@ -284,18 +284,46 @@
   animation-delay: var(--delay, 0s);
 }
 
+/*
+ * Idle drift.
+ *
+ * Deliberately irregular: seven stops at uneven times, with the horizontal,
+ * vertical and rotational components peaking at different ones. A two-keyframe
+ * float reads as a metronome no matter how slow it runs, whereas this never
+ * visibly returns to the same pose - and with the two characters on durations
+ * that share no factor, the pair never falls into step either.
+ *
+ * Offsets are percentages so the drift scales with the character rather than
+ * being twice as strong on a phone.
+ */
 @keyframes chibi-hover {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) rotate(-1.2deg);
+    transform: translate3d(0, 0, 0) rotate(0deg);
   }
-  50% {
-    transform: translate3d(0, -18px, 0) rotate(1.2deg);
+  13% {
+    transform: translate3d(0.7%, -2.1%, 0) rotate(1.5deg);
+  }
+  29% {
+    transform: translate3d(-0.5%, -0.5%, 0) rotate(-0.6deg);
+  }
+  44% {
+    transform: translate3d(1.2%, -2.9%, 0) rotate(2deg);
+  }
+  61% {
+    transform: translate3d(-1%, -1.1%, 0) rotate(-1.4deg);
+  }
+  78% {
+    transform: translate3d(0.4%, -2.5%, 0) rotate(0.8deg);
+  }
+  91% {
+    transform: translate3d(-0.6%, -0.7%, 0) rotate(-1deg);
   }
 }
 
 .chibi-hover {
-  animation: chibi-hover 6.4s ease-in-out infinite;
+  animation: chibi-hover var(--dur, 9.5s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
 }
 
 /* ---------------------------------------------------------------------------

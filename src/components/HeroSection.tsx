@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, type Variants } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform, type Variants } from 'framer-motion'
 import { ArrowUpRight } from '@phosphor-icons/react'
 import Chibi from './Chibi'
 import DecoField from './Deco'
@@ -9,8 +9,15 @@ import { useMotionProfile } from '../hooks/useMotionProfile'
 const NAME_TOP = 'ゆきの'
 const NAME_BOTTOM = 'じょー'
 
-/** How far each character travels before it is clear of the viewport. */
-const EXIT = 138
+/**
+ * Weight behind the exit.
+ *
+ * Mapping scroll straight onto position makes the pair feel welded to the
+ * wheel. Running the progress through a spring first gives them mass: they lag
+ * a fast scroll, keep going for a moment after it stops, and settle back rather
+ * than halting dead.
+ */
+const INERTIA = { stiffness: 58, damping: 16, mass: 1.15 } as const
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 22 },
@@ -34,6 +41,11 @@ const HeroSection = () => {
    * moment the section's bottom edge reaches the top of the viewport - so they
    * are fully clear by the time the next section owns the screen.
    *
+   * Nothing here is linear or symmetric, on purpose. The spring supplies the
+   * weight; the four-stop curves make each character hesitate before it goes;
+   * and the two are given different stops, different drift and different tilt
+   * so they read as two people leaving rather than one mechanism opening.
+   *
    * This lives on a wrapper OUTSIDE `.chibi-parallax`: that element already
    * owns a transform for pointer parallax, and the two would overwrite each
    * other on the same node.
@@ -42,11 +54,16 @@ const HeroSection = () => {
     target: sectionRef,
     offset: ['start start', 'end start'],
   })
-  const partX = useTransform(scrollYProgress, (v) => (ambient ? v : 0))
-  const leftX = useTransform(partX, [0, 1], ['0%', `-${EXIT}%`])
-  const rightX = useTransform(partX, [0, 1], ['0%', `${EXIT}%`])
-  const leftTilt = useTransform(partX, [0, 1], [0, -9])
-  const rightTilt = useTransform(partX, [0, 1], [0, 9])
+  const raw = useTransform(scrollYProgress, (v) => (ambient ? v : 0))
+  const part = useSpring(raw, INERTIA)
+
+  const leftX = useTransform(part, [0, 0.3, 0.68, 1], ['0%', '-9%', '-54%', '-148%'])
+  const leftY = useTransform(part, [0, 0.5, 1], ['0%', '3.5%', '-8%'])
+  const leftTilt = useTransform(part, [0, 0.42, 1], [0, -3.5, -17])
+
+  const rightX = useTransform(part, [0, 0.24, 0.74, 1], ['0%', '4%', '46%', '134%'])
+  const rightY = useTransform(part, [0, 0.46, 1], ['0%', '-4.5%', '7%'])
+  const rightTilt = useTransform(part, [0, 0.55, 1], [0, 4.5, 13])
 
   return (
     <section
@@ -144,17 +161,17 @@ const HeroSection = () => {
           read as a symmetrical badge.
         */}
         <motion.div
-          style={{ x: leftX, rotate: leftTilt }}
-          className="order-2 -mb-8 w-[104%] justify-self-start lg:order-1 lg:mb-0 lg:-mr-[8%] lg:w-[124%] lg:translate-y-[-6%]"
+          style={{ x: leftX, y: leftY, rotate: leftTilt }}
+          className="order-2 -mb-12 w-[110%] justify-self-start lg:order-1 lg:mb-0 lg:-mr-[6%] lg:w-[128%] lg:translate-y-[4%]"
         >
-          <Chibi variant="b" depth={0.7} priority />
+          <Chibi variant="a" depth={0.9} priority />
         </motion.div>
 
         <motion.div
-          style={{ x: rightX, rotate: rightTilt }}
-          className="order-3 -mb-12 w-[110%] justify-self-end lg:order-3 lg:mb-0 lg:-ml-[6%] lg:w-[128%] lg:translate-y-[4%]"
+          style={{ x: rightX, y: rightY, rotate: rightTilt }}
+          className="order-3 -mb-8 w-[104%] justify-self-end lg:order-3 lg:mb-0 lg:-ml-[8%] lg:w-[124%] lg:translate-y-[-6%]"
         >
-          <Chibi variant="a" depth={0.9} priority />
+          <Chibi variant="b" depth={0.7} priority />
         </motion.div>
       </motion.div>
     </section>

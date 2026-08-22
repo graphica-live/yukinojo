@@ -45,6 +45,12 @@ export type ChibiVariant = {
   parts: RigPart[]
   eyes: EyeRig[]
   /**
+   * Idle drift timing. The two characters are given durations with no common
+   * factor so they never fall into step - a pair breathing in sync is the
+   * thing that reads as mechanical.
+   */
+  hover: { dur: string; delay: string }
+  /**
    * Where the head sits in the character box, as [x, y] fractions. Gaze is
    * measured from here, so two characters on opposite sides of the screen
    * converge on the pointer instead of both looking the same way.
@@ -57,6 +63,7 @@ const A: ChibiVariant = {
   aspect: '1223/1286',
   label: 'ゆきのじょーのキャラクター',
   head: [0.6, 0.28],
+  hover: { dur: '11.3s', delay: '-2.4s' },
   parts: [
     { src: 'legBack', origin: '57.5% 67%', amp: 2, dur: '5.7s', delay: '-3s' },
     { src: 'legFront', origin: '42.8% 54.6%', amp: 2.6, dur: '5.1s', delay: '-1.8s' },
@@ -75,6 +82,7 @@ const B: ChibiVariant = {
   aspect: '1082/1221',
   label: 'ゆきのじょーのキャラクター（デニム）',
   head: [0.62, 0.28],
+  hover: { dur: '14.9s', delay: '-8.1s' },
   parts: [{ src: 'body' }],
   eyes: [
     { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71], travel: [17.647, 8.696] },
