@@ -1,23 +1,12 @@
-import { useEffect } from 'react'
-import {
-  useMotionTemplate,
-  useMotionValue,
-  useScroll,
-  useSpring,
-  useTransform,
-  type MotionStyle,
-  type MotionValue,
-} from 'framer-motion'
+import { createContext, useContext, useEffect, useMemo } from 'react'
+import { useMotionValue, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
 import { useMotionProfile } from './useMotionProfile'
 
-/**
- * `MotionStyle` does not include arbitrary custom properties, so the three we
- * publish are declared explicitly rather than cast away.
- */
-export type AmbientStyle = MotionStyle & {
-  '--px': MotionValue<string>
-  '--py': MotionValue<string>
-  '--sy': MotionValue<string>
+/** Pointer offset (px, spring-smoothed) and raw scroll offset (px). */
+export type AmbientValues = {
+  px: MotionValue<number>
+  py: MotionValue<number>
+  sy: MotionValue<number>
 }
 
 /**
@@ -31,28 +20,36 @@ const POINTER_Y = 11
 const SPRING = { stiffness: 110, damping: 26, mass: 0.7 } as const
 
 /**
- * Ambient motion input, published as three custom properties on a single node.
+ * Ambient motion input: one pointer spring and one scroll listener for the
+ * whole page, shared through `AmbientContext` as three MotionValues.
  *
- * Roughly fifty elements react to the pointer and to scroll. Subscribing each
- * of them to a MotionValue would mean fifty subscriptions and fifty style
- * writes per frame; putting the values in `useState` would re-render the whole
- * tree on every mouse move. Instead the values land on ONE element as
- * `--px` / `--py` / `--sy`, and each decoration composes its own offset in CSS
- * using its static `--depth` / `--speed`.
+ * Roughly fifty elements react to the pointer and to scroll. Putting the
+ * values in `useState` would re-render the whole tree on every mouse move, and
+ * giving each element its own subscription would mean fifty style writes per
+ * frame. Instead the consumers (`DecoField`, `Chibi`) derive a `transform` per
+ * DEPTH GROUP with `useTransform` - three groups per section plus one per
+ * character, about fourteen nodes in all - and the decorations inside a group
+ * are plain static markup.
  *
- * `--sy` is the raw scroll offset. It is deliberately NOT the final
- * displacement: each decoration layer subtracts its own `--sy0` (the scroll at
+ * This used to be published as custom properties (`--px` / `--py` / `--sy`) on
+ * the page root, with each decoration composing its own offset in CSS. That
+ * was elegant but expensive: changing an inherited custom property recalcs
+ * style for every descendant, so every pointer and scroll frame re-resolved
+ * the entire document (~350 elements, ~4.5ms). Scoping the properties to the
+ * decoration layers still re-resolved ~100. A `transform` is not inherited, so
+ * writing it to a group node costs exactly one element.
+ *
+ * `sy` is the raw scroll offset. It is deliberately NOT the final
+ * displacement: each decoration layer subtracts its own centre (the scroll at
  * which that section is centred) so parallax is measured from the section, not
  * from the top of the document. See `Deco.tsx`.
- *
- * Returns a style object to spread onto a `motion.*` element.
  *
  * Note that `useScroll` stays subscribed even when ambient motion is off. It
  * is one document-level scroll listener inside framer-motion, not one per
  * decoration, and unsubscribing would mean mounting/unmounting this hook's
  * owner - so the value is pinned to 0 instead.
  */
-export const useAmbientVars = (): AmbientStyle => {
+export const useAmbientVars = (): AmbientValues => {
   const { ambient, pointerFine } = useMotionProfile()
   const pointerEnabled = ambient && pointerFine
 
@@ -81,15 +78,21 @@ export const useAmbientVars = (): AmbientStyle => {
   const { scrollY } = useScroll()
   // Pinned to 0 when ambient motion is off, so the decorations sit exactly
   // where the markup places them.
-  const scrollOffset = useTransform(scrollY, (value) => (ambient ? value : 0))
+  const sy = useTransform(scrollY, (value) => (ambient ? value : 0))
 
-  const pxVar = useMotionTemplate`${px}px`
-  const pyVar = useMotionTemplate`${py}px`
-  const syVar = useMotionTemplate`${scrollOffset}px`
+  // Stable reference: the MotionValues never change identity, so context
+  // consumers only re-render when the provider itself does.
+  return useMemo(() => ({ px, py, sy }), [px, py, sy])
+}
 
-  return {
-    '--px': pxVar,
-    '--py': pyVar,
-    '--sy': syVar,
-  }
+export const AmbientContext = createContext<AmbientValues | null>(null)
+
+/**
+ * The shared ambient values. Outside the provider they are all a constant 0,
+ * so a consumer rendered on its own is simply static.
+ */
+export const useAmbient = (): AmbientValues => {
+  const ctx = useContext(AmbientContext)
+  const zero = useMotionValue(0)
+  return useMemo(() => ctx ?? { px: zero, py: zero, sy: zero }, [ctx, zero])
 }
