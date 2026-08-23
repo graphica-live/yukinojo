@@ -39,8 +39,6 @@ export type EyeRig = {
   box: [number, number, number, number]
   /** The pupil sprite at rest, as [left, top, width, height] in % of the socket. */
   pupil: [number, number, number, number]
-  /** Travel at full gaze, as [x, y] in % of the socket. */
-  travel: [number, number]
 }
 
 export type ChibiVariant = {
@@ -57,19 +55,12 @@ export type ChibiVariant = {
    * thing that reads as mechanical.
    */
   hover: { dur: string; delay: string }
-  /**
-   * Where the head sits in the character box, as [x, y] fractions. Gaze is
-   * measured from here, so two characters on opposite sides of the screen
-   * converge on the pointer instead of both looking the same way.
-   */
-  head: [number, number]
 }
 
 const A: ChibiVariant = {
   dir: 'chibi',
   aspect: '1223/1286',
   label: 'ゆきのじょーのキャラクター',
-  head: [0.6, 0.28],
   hover: { dur: '11.3s', delay: '-2.4s' },
   parts: [
     { src: 'legBack' },
@@ -80,8 +71,8 @@ const A: ChibiVariant = {
     { src: 'hair', origin: '58% 20%', amp: 3, dur: '5.4s', delay: '-2.9s' },
   ],
   eyes: [
-    { box: [50.859, 24.417, 6.95, 6.765], pupil: [15.294, 11.494, 72.941, 79.31], travel: [11.765, 9.195] },
-    { box: [65.495, 29.316, 6.705, 7.076], pupil: [12.195, 12.088, 73.171, 75.824], travel: [12.195, 8.791] },
+    { box: [50.859, 24.417, 6.95, 6.765], pupil: [15.294, 11.494, 72.941, 79.31] },
+    { box: [65.495, 29.316, 6.705, 7.076], pupil: [12.195, 12.088, 73.171, 75.824] },
   ],
 }
 
@@ -89,7 +80,6 @@ const B: ChibiVariant = {
   dir: 'chibi-b',
   aspect: '1082/1221',
   label: 'ゆきのじょーのキャラクター（デニム）',
-  head: [0.62, 0.28],
   hover: { dur: '14.9s', delay: '-8.1s' },
   // armBack (the hand raised near the head) has a block of hair pixels baked
   // into its cut-out that only the hair layer hides, so it stays UNDER hair.
@@ -111,8 +101,8 @@ const B: ChibiVariant = {
     { src: 'hair', origin: '65% 10%', amp: 3.4, dur: '4.8s', delay: '-1.4s' },
   ],
   eyes: [
-    { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71], travel: [17.647, 8.696] },
-    { box: [69.224, 29.32, 6.654, 5.815], pupil: [26.389, 18.31, 77.778, 60.563], travel: [12.5, 8.451] },
+    { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71] },
+    { box: [69.224, 29.32, 6.654, 5.815], pupil: [26.389, 18.31, 77.778, 60.563] },
   ],
 }
 
