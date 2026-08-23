@@ -91,17 +91,24 @@ const B: ChibiVariant = {
   label: 'ゆきのじょーのキャラクター（デニム）',
   head: [0.62, 0.28],
   hover: { dur: '14.9s', delay: '-8.1s' },
-  // Nothing around the head moves. armBack (the hand raised near the head) has
-  // a block of hair pixels baked into its cut-out that only the hair layer
-  // hides, so it stays UNDER hair; and hair itself is frozen, because swinging
-  // it drags strands across the fingers and opens the seam.
+  // armBack (the hand raised near the head) has a block of hair pixels baked
+  // into its cut-out that only the hair layer hides, so it stays UNDER hair.
+  //
+  // The hair is split in two (see scratchpad/split_hair.py). `hairStill` is
+  // everything within reach of the face or the fingers and never moves: the
+  // hairline would otherwise lift off the inpainted scalp, and the strands
+  // over the hand share a blend seam with the fingers that tears the moment
+  // the two move apart. `hair` is the outer mass and the tips, and swings.
+  // The two overlap by 24px along the cut - wider than the 18px the swing
+  // travels there - so the moving piece uncovers held hair, never background.
   parts: [
     { src: 'legBack' },
     { src: 'legFront' },
     { src: 'armBack' },
     { src: 'armFront' },
     { src: 'body' },
-    { src: 'hair' },
+    { src: 'hairStill' },
+    { src: 'hair', origin: '65% 10%', amp: 3.4, dur: '4.8s', delay: '-1.4s' },
   ],
   eyes: [
     { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71], travel: [17.647, 8.696] },
