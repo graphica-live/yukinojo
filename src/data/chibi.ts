@@ -92,8 +92,8 @@ const B: ChibiVariant = {
   head: [0.62, 0.28],
   hover: { dur: '14.9s', delay: '-8.1s' },
   parts: [
-    { src: 'legBack', origin: '45.1% 55.5%', amp: 1.9, dur: '6.1s', delay: '-2.7s' },
-    { src: 'legFront', origin: '50.5% 70.3%', amp: 2.3, dur: '5.3s', delay: '-0.9s' },
+    { src: 'legBack' },
+    { src: 'legFront' },
     { src: 'armBack', origin: '42.8% 30.0%', amp: 5.6, dur: '3.6s', delay: '-3.1s' },
     { src: 'armFront' },
     { src: 'body' },
