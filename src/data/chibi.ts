@@ -72,9 +72,9 @@ const A: ChibiVariant = {
   head: [0.6, 0.28],
   hover: { dur: '11.3s', delay: '-2.4s' },
   parts: [
-    { src: 'legBack', origin: '57.5% 67%', amp: 2, dur: '5.7s', delay: '-3s' },
+    { src: 'legBack' },
     { src: 'legFront', origin: '42.8% 54.6%', amp: 2.6, dur: '5.1s', delay: '-1.8s' },
-    { src: 'armBack', origin: '64.5% 52.3%', amp: 4, dur: '4.7s', delay: '-2.4s' },
+    { src: 'armBack' },
     { src: 'armFront', origin: '40.6% 40.3%', amp: 3.4, dur: '3.9s', delay: '-1.2s' },
     { src: 'body' },
     { src: 'hair', origin: '58% 20%', amp: 3, dur: '5.4s', delay: '-2.9s' },
@@ -91,13 +91,15 @@ const B: ChibiVariant = {
   label: 'ゆきのじょーのキャラクター（デニム）',
   head: [0.62, 0.28],
   hover: { dur: '14.9s', delay: '-8.1s' },
+  // armBack is the hand raised near the head, so it has to render after hair
+  // (and after body) or the hair strands paint over it.
   parts: [
     { src: 'legBack' },
     { src: 'legFront' },
-    { src: 'armBack', origin: '42.8% 30.0%', amp: 5.6, dur: '3.6s', delay: '-3.1s' },
     { src: 'armFront' },
     { src: 'body' },
     { src: 'hair', origin: '65% 10%', amp: 3.4, dur: '4.8s', delay: '-1.4s' },
+    { src: 'armBack', origin: '42.8% 30.0%', amp: 5.6, dur: '3.6s', delay: '-3.1s' },
   ],
   eyes: [
     { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71], travel: [17.647, 8.696] },
