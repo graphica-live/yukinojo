@@ -1,8 +1,7 @@
-import { useRef, type CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
 import { m, useTransform } from 'framer-motion'
 import { chibiVariants, type ChibiVariantKey } from '../data/chibi'
 import { useAmbient } from '../hooks/useAmbientVars'
-import { useGaze } from '../hooks/useGaze'
 import { useMotionProfile } from '../hooks/useMotionProfile'
 
 type ChibiProps = {
@@ -23,14 +22,12 @@ type ChibiProps = {
  *   middle - the idle hover keyframes
  *   inner  - the parts themselves, each with its own swing
  *
- * The eyes sit on top as absolutely positioned sockets. Each socket clips to an
- * ellipse, so however far the gaze pushes a pupil it stays inside the eye.
+ * The eyes sit on top as absolutely positioned sockets, each clipped to an
+ * ellipse.
  */
 const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }: ChibiProps) => {
   const { ambient } = useMotionProfile()
   const rig = chibiVariants[variant]
-  const ref = useRef<HTMLDivElement>(null)
-  const gaze = useGaze(ref, rig.head)
   // Pointer parallax for the whole figure, as one transform on this wrapper.
   // Scroll is deliberately not part of it: the hero drives its own scroll
   // exit on an ancestor.
@@ -49,11 +46,7 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
         className={ambient ? 'chibi-hover' : undefined}
         style={{ '--dur': rig.hover.dur, '--delay': rig.hover.delay } as CSSProperties}
       >
-        <m.div
-          ref={ref}
-          className="chibi"
-          style={{ aspectRatio: rig.aspect, ...(ambient ? gaze : undefined) }}
-        >
+        <m.div className="chibi" style={{ aspectRatio: rig.aspect }}>
           {rig.parts.map((part) => (
             <img
               key={part.src}
@@ -86,11 +79,6 @@ const Chibi = ({ variant = 'a', depth = 0.85, className = '', priority = false }
                   top: `${eye.box[1]}%`,
                   width: `${eye.box[2]}%`,
                   height: `${eye.box[3]}%`,
-                  // Travel is authored as a share of the socket, but a
-                  // percentage inside `translate` resolves against the element
-                  // being moved - the pupil - so convert.
-                  '--tx': `${(eye.travel[0] / eye.pupil[2]) * 100}%`,
-                  '--ty': `${(eye.travel[1] / eye.pupil[3]) * 100}%`,
                 } as CSSProperties
               }
             >
