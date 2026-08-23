@@ -95,7 +95,7 @@ const B: ChibiVariant = {
     { src: 'legBack', origin: '45.1% 55.5%', amp: 1.9, dur: '6.1s', delay: '-2.7s' },
     { src: 'legFront', origin: '50.5% 70.3%', amp: 2.3, dur: '5.3s', delay: '-0.9s' },
     { src: 'armBack', origin: '42.8% 30.0%', amp: 5.6, dur: '3.6s', delay: '-3.1s' },
-    { src: 'armFront', origin: '79.5% 64.1%', amp: 6.4, dur: '3.1s', delay: '-1.7s' },
+    { src: 'armFront' },
     { src: 'body' },
     { src: 'hair', origin: '65% 10%', amp: 3.4, dur: '4.8s', delay: '-1.4s' },
   ],
