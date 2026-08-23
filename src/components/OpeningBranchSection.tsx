@@ -68,34 +68,6 @@ const fadeUp: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 }
 
-/**
- * Cards alternate their entrance side by index (even = left, odd = right),
- * `custom` on each motion.div feeds the index into this function variant.
- * A soft spring (rather than an eased duration) gives the swing a slight
- * overshoot-and-settle bounce; the paired tilt and scale-up sell the sense
- * of the card physically swinging into place instead of just sliding.
- */
-const sideIn: Variants = {
-  hidden: (index: number) => ({
-    opacity: 0,
-    x: index % 2 === 0 ? -110 : 110,
-    rotate: index % 2 === 0 ? -8 : 8,
-    scale: 0.9,
-  }),
-  visible: {
-    opacity: 1,
-    x: 0,
-    rotate: 0,
-    scale: 1,
-    transition: { type: 'spring', stiffness: 74, damping: 11, mass: 1 },
-  },
-}
-
-const stagger: Variants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.22 } },
-}
-
 const tilt = ['[rotate:-1deg]', '[rotate:0.9deg]', '[rotate:-0.6deg]']
 
 const OpeningBranchSection = () => {
@@ -126,13 +98,9 @@ const OpeningBranchSection = () => {
           </h2>
         </m.div>
 
-        <m.div
-          variants={reveal ? stagger : undefined}
-          {...revealProps(reveal)}
-          className="flex flex-col gap-4"
-        >
+        <div className="flex flex-col gap-4">
           {branchCards.map((card, index) => (
-            <m.div key={card.href} custom={index} variants={reveal ? sideIn : undefined}>
+            <div key={card.href}>
               {/*
                 Link behaviour is deliberate and must not drift: the consulting
                 card opens a new tab, the two web apps navigate in place.
@@ -180,9 +148,9 @@ const OpeningBranchSection = () => {
                   />
                 </span>
               </a>
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </section>
   )

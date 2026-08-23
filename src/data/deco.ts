@@ -66,7 +66,6 @@ export const heroDeco: DecoItem[] = [
   { src: 'cloud-3', kind: 'drift', layer: 'far', right: '4%', y: '9%', w: '150px', opacity: 0.8, dur: '17s', dx: '-14px', dy: '20px', r0: '6deg', r1: '-4deg' },
   { src: 'cloud-6', kind: 'drift', layer: 'far', x: '12%', bottom: '12%', w: '210px', opacity: 0.75, dur: '19s', dx: '20px', dy: '-16px', r0: '4deg', r1: '-6deg', phone: false },
   { src: 'bubble-xl', kind: 'drift', layer: 'mid', x: '7%', y: '58%', w: '132px', dur: '12s', dx: '-14px', dy: '-24px', r0: '-10deg', r1: '6deg' },
-  { src: 'bubble-duo', kind: 'drift', layer: 'mid', right: '9%', y: '62%', w: '96px', dur: '10s', delay: '-3s', dx: '12px', dy: '-30px', r0: '8deg', r1: '-6deg' },
   { src: 'bubble-md', kind: 'drift', layer: 'mid', x: '44%', y: '6%', w: '72px', dur: '9s', delay: '-1.4s', dx: '-10px', dy: '-22px', phone: false },
   { src: 'bubble-sm', kind: 'drift', layer: 'mid', right: '30%', bottom: '14%', w: '60px', dur: '11s', delay: '-5s', dx: '14px', dy: '-26px', phone: false },
   { src: 'plane-blue', kind: 'drift', layer: 'near', right: '16%', y: '18%', w: '150px', dur: '13s', dx: '-18px', dy: '16px', r0: '14deg', r1: '2deg' },
@@ -92,7 +91,6 @@ export const profileDeco: DecoItem[] = [
 ]
 
 export const contentsDeco: DecoItem[] = [
-  { src: 'book-open', kind: 'drift', layer: 'far', x: '2%', y: '2%', w: '170px', opacity: 0.85, dur: '17s', dx: '18px', dy: '-16px', r0: '-6deg', r1: '8deg' },
   { src: 'glint-4', kind: 'twinkle', layer: 'near', right: '6%', y: '12%', w: '60px', dur: '3.6s' },
   { src: 'swoosh-b', kind: 'drift', layer: 'far', right: '1%', bottom: '4%', w: '140px', opacity: 0.8, dur: '15s', dx: '-16px', dy: '-22px', r0: '12deg', r1: '-6deg' },
   { src: 'plane-blue', kind: 'drift', layer: 'mid', right: '12%', y: '0%', w: '120px', opacity: 0.85, dur: '14s', dx: '-12px', dy: '-20px', r0: '-8deg', r1: '8deg', phone: false },
