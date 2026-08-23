@@ -91,16 +91,17 @@ const B: ChibiVariant = {
   label: 'ゆきのじょーのキャラクター（デニム）',
   head: [0.62, 0.28],
   hover: { dur: '14.9s', delay: '-8.1s' },
-  // armBack (the hand raised near the head) must stay UNDER hair: its cut-out
-  // carries a block of hair pixels around the fingers, and the hair layer is
-  // what hides it. Rendering it on top exposes the block as a purple slab.
+  // Nothing around the head moves. armBack (the hand raised near the head) has
+  // a block of hair pixels baked into its cut-out that only the hair layer
+  // hides, so it stays UNDER hair; and hair itself is frozen, because swinging
+  // it drags strands across the fingers and opens the seam.
   parts: [
     { src: 'legBack' },
     { src: 'legFront' },
     { src: 'armBack' },
     { src: 'armFront' },
     { src: 'body' },
-    { src: 'hair', origin: '65% 10%', amp: 3.4, dur: '4.8s', delay: '-1.4s' },
+    { src: 'hair' },
   ],
   eyes: [
     { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71], travel: [17.647, 8.696] },
