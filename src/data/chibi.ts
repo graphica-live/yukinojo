@@ -99,7 +99,7 @@ const B: ChibiVariant = {
     { src: 'armFront' },
     { src: 'body' },
     { src: 'hair', origin: '65% 10%', amp: 3.4, dur: '4.8s', delay: '-1.4s' },
-    { src: 'armBack', origin: '42.8% 30.0%', amp: 5.6, dur: '3.6s', delay: '-3.1s' },
+    { src: 'armBack' },
   ],
   eyes: [
     { box: [55.268, 23.669, 4.713, 5.651], pupil: [29.412, 23.188, 78.431, 79.71], travel: [17.647, 8.696] },
